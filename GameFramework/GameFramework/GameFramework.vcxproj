@@ -185,7 +185,6 @@
     <ClCompile Include="DisplayWin.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MySuper3DApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayWin.h" />

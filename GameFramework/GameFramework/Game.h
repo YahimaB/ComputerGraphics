@@ -17,33 +17,37 @@
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
 
+#include "DisplayWin.h"
+
+
 class Game
 {
 public:
-	static Game *Instanse;
+	DisplayWin* Display;
 
 public:
-	Game();
+	Game(LPCWSTR appName);
 	~Game();
 
 	bool Initialize();
-	bool Run();
-	bool Update();
-	bool Exit();
+	void Run();
+	void Update();
+	void Exit();
 
-	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
+	static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
+	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
 
 private:
 	LPCWSTR name;
 	std::chrono::steady_clock::time_point StartTime;
-	std::chrono::steady_clock::time_point TotalTime;
 	std::chrono::steady_clock::time_point PrevTime;
 
-	HRESULT res;
+	float TotalTime;
+	unsigned int FrameCount;
 
 	ID3D11Device* device;
-	ID3D11DeviceContext* deviceContext;
+	ID3D11DeviceContext* context;
 	IDXGISwapChain* swapChain;
 
 	ID3D11RenderTargetView* renderView;
@@ -54,7 +58,11 @@ private:
 	ID3DUserDefinedAnnotation* annotation;
 
 private:
-	bool UpdateInternal();
-
+	bool CreateBackBuffer();
+	void UpdateInternal();
+	void PrepareFrame();
+	void EndFrame();
+	void Draw();
 };
 
+static Game* Instance = 0;

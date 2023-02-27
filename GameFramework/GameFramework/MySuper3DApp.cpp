@@ -23,24 +23,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 	LRESULT result = 0;
 	switch (umessage)
 	{
-	case WM_KEYDOWN:
-	{
-		// If a key is pressed send it to the input object so it can record that state.
-		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
+		case WM_KEYDOWN:
+		{
+			// If a key is pressed send it to the input object so it can record that state.
+			std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
 
-		if (wparam == VK_ESCAPE)
+			if (wparam == VK_ESCAPE) 
+				PostQuitMessage(0);
+			break;
+		}
+		case WM_DESTROY:
+		{
 			PostQuitMessage(0);
-		break;
-	}
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		break;
-	}
-	default:
-	{
-		result = DefWindowProc(hwnd, umessage, wparam, lparam);
-	}
+			break;
+		}
+		default:
+		{
+			result = DefWindowProc(hwnd, umessage, wparam, lparam);
+		}
 	}
 
 	return result;
@@ -153,20 +153,20 @@ int main()
 		res = device->CreateRenderTargetView(backTex, nullptr, &rtv);
 		backTex->Release();
 	}
-
+	
 
 	ID3DBlob* vsBlob;
 	ID3D11VertexShader* vertexShader;
 	{
 		ID3DBlob* vsError;
-		res = D3DCompileFromFile(L"./Shaders/MyVeryFirstShader.hlsl",
-			nullptr /*macros*/,
+		res = D3DCompileFromFile(L"./Shaders/MyVeryFirstShader.hlsl", 
+			nullptr /*macros*/, 
 			nullptr /*include*/,
-			"VSMain",
+			"VSMain", 
 			"vs_5_0",
 			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
 			0,
-			&vsBlob,
+			&vsBlob, 
 			&vsError);
 
 		if (FAILED(res)) {
@@ -202,8 +202,8 @@ int main()
 			"PSMain",
 			"ps_5_0",
 			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-			0,
-			&psBlob,
+			0, 
+			&psBlob, 
 			&psErrors);
 
 		if (FAILED(res)) {
@@ -227,10 +227,10 @@ int main()
 			nullptr, &pixelShader);
 		psBlob->Release();
 	}
-
+	
 	ID3D11InputLayout* inputLayout;
 	{
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
@@ -287,7 +287,7 @@ int main()
 	ID3D11Buffer* indexBuffer;
 	device->CreateBuffer(&indexBufDesc, &indexData, &indexBuffer);
 
-	UINT strides[] = { 4 * sizeof(float) + 4 * sizeof(float) };
+	UINT strides[] = { 4 * sizeof(float) + 4 * sizeof(float)};
 	UINT offsets[] = { 0 };
 
 

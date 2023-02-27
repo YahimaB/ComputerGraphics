@@ -5,17 +5,17 @@
 class DisplayWin
 {
 public:
-	float ClientHeight;
-	float ClientWidth;
+	LONG ClientHeight;
+	LONG ClientWidth;
+	HWND hWnd;
 
 public:
-	DisplayWin();
+	DisplayWin(LPCWSTR appName);
 	~DisplayWin();
 
 
 private:
-	HWND hWnd;
 	HINSTANCE hInstance;
-	WNDCLASSEX wc;
+	WNDCLASSEX wc = {};
 };
 

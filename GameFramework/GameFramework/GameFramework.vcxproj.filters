@@ -14,9 +14,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="MySuper3DApp.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Core</Filter>
     </ClCompile>
