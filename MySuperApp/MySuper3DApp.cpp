@@ -20,21 +20,30 @@
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
+	LRESULT result = 0;
 	switch (umessage)
 	{
-	case WM_KEYDOWN:
-	{
-		// If a key is pressed send it to the input object so it can record that state.
-		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
+		case WM_KEYDOWN:
+		{
+			// If a key is pressed send it to the input object so it can record that state.
+			std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
 
-		if (static_cast<unsigned int>(wparam) == 27) PostQuitMessage(0);
-		return 0;
+			if (wparam == VK_ESCAPE) 
+				PostQuitMessage(0);
+			break;
+		}
+		case WM_DESTROY:
+		{
+			PostQuitMessage(0);
+			break;
+		}
+		default:
+		{
+			result = DefWindowProc(hwnd, umessage, wparam, lparam);
+		}
 	}
-	default:
-	{
-		return DefWindowProc(hwnd, umessage, wparam, lparam);
-	}
-	}
+
+	return result;
 }
 
 
@@ -74,7 +83,9 @@ int main()
 	auto posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
 	auto posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 
-	HWND hWnd = CreateWindowEx(WS_EX_APPWINDOW, applicationName, applicationName,
+	HWND hWnd = CreateWindowEx(WS_EX_APPWINDOW,
+		applicationName,
+		applicationName,
 		dwStyle,
 		posX, posY,
 		windowRect.right - windowRect.left,
@@ -90,7 +101,7 @@ int main()
 #pragma endregion Window init
 
 
-	D3D_FEATURE_LEVEL featureLevel[] = { D3D_FEATURE_LEVEL_11_1 };
+	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_1 };
 
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
 	swapDesc.BufferCount = 2;
@@ -110,7 +121,7 @@ int main()
 	swapDesc.SampleDesc.Quality = 0;
 
 
-	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 	IDXGISwapChain* swapChain;
 
@@ -119,8 +130,8 @@ int main()
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
 		D3D11_CREATE_DEVICE_DEBUG,
-		featureLevel,
-		1,
+		featureLevels,
+		ARRAYSIZE(featureLevels),
 		D3D11_SDK_VERSION,
 		&swapDesc,
 		&swapChain,
@@ -131,92 +142,115 @@ int main()
 	if (FAILED(res))
 	{
 		// Well, that was unexpected
+		MessageBoxA(0, "D3D11CreateDeviceAndSwapChain() failed", "Fatal Error", MB_OK);
+		return GetLastError();
 	}
 
-	ID3D11Texture2D* backTex;
 	ID3D11RenderTargetView* rtv;
-	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backTex);	// __uuidof(ID3D11Texture2D)
-	res = device->CreateRenderTargetView(backTex, nullptr, &rtv);
+	{
+		ID3D11Texture2D* backTex;
+		res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backTex);	// __uuidof(ID3D11Texture2D)
+		res = device->CreateRenderTargetView(backTex, nullptr, &rtv);
+		backTex->Release();
+	}
+	
 
+	ID3DBlob* vsBlob;
+	ID3D11VertexShader* vertexShader;
+	{
+		ID3DBlob* vsError;
+		res = D3DCompileFromFile(L"./Shaders/MyVeryFirstShader.hlsl", 
+			nullptr /*macros*/, 
+			nullptr /*include*/,
+			"VSMain", 
+			"vs_5_0",
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+			0,
+			&vsBlob, 
+			&vsError);
 
-	ID3DBlob* vertexBC = nullptr;
-	ID3DBlob* errorVertexCode = nullptr;
-	res = D3DCompileFromFile(L"./Shaders/MyVeryFirstShader.hlsl",
-		nullptr /*macros*/,
-		nullptr /*include*/,
-		"VSMain",
-		"vs_5_0",
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-		0,
-		&vertexBC,
-		&errorVertexCode);
+		if (FAILED(res)) {
+			// If the shader failed to compile it should have written something to the error message.
+			if (vsError) {
+				char* compileErrors = (char*)(vsError->GetBufferPointer());
+				std::cout << compileErrors << std::endl;
+			}
+			// If there was  nothing in the error message then it simply could not find the shader file itself.
+			else
+			{
+				MessageBox(hWnd, L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
+			}
 
-	if (FAILED(res)) {
-		// If the shader failed to compile it should have written something to the error message.
-		if (errorVertexCode) {
-			char* compileErrors = (char*)(errorVertexCode->GetBufferPointer());
-
-			std::cout << compileErrors << std::endl;
+			return 0;
 		}
-		// If there was  nothing in the error message then it simply could not find the shader file itself.
-		else
-		{
-			MessageBox(hWnd, L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
-		}
 
-		return 0;
+		device->CreateVertexShader(
+			vsBlob->GetBufferPointer(),
+			vsBlob->GetBufferSize(),
+			nullptr, &vertexShader);
 	}
 
-	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
-
-	ID3DBlob* pixelBC;
-	ID3DBlob* errorPixelCode;
-	res = D3DCompileFromFile(L"./Shaders/MyVeryFirstShader.hlsl", Shader_Macros /*macros*/, nullptr /*include*/, "PSMain", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &pixelBC, &errorPixelCode);
-
-	ID3D11VertexShader* vertexShader;
 	ID3D11PixelShader* pixelShader;
-	device->CreateVertexShader(
-		vertexBC->GetBufferPointer(),
-		vertexBC->GetBufferSize(),
-		nullptr, &vertexShader);
+	{
+		D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
 
-	device->CreatePixelShader(
-		pixelBC->GetBufferPointer(),
-		pixelBC->GetBufferSize(),
-		nullptr, &pixelShader);
+		ID3DBlob* psBlob;
+		ID3DBlob* psErrors;
+		res = D3DCompileFromFile(L"./Shaders/MyVeryFirstShader.hlsl",
+			Shader_Macros /*macros*/,
+			nullptr /*include*/,
+			"PSMain",
+			"ps_5_0",
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+			0, 
+			&psBlob, 
+			&psErrors);
 
-	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
-		D3D11_INPUT_ELEMENT_DESC {
-			"POSITION",
-			0,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			0,
-			D3D11_INPUT_PER_VERTEX_DATA,
-			0},
-		D3D11_INPUT_ELEMENT_DESC {
-			"COLOR",
-			0,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			D3D11_APPEND_ALIGNED_ELEMENT,
-			D3D11_INPUT_PER_VERTEX_DATA,
-			0}
-	};
+		if (FAILED(res)) {
+			// If the shader failed to compile it should have written something to the error message.
+			if (psErrors) {
+				char* compileErrors = (char*)(psErrors->GetBufferPointer());
+				std::cout << compileErrors << std::endl;
+			}
+			// If there was  nothing in the error message then it simply could not find the shader file itself.
+			else
+			{
+				MessageBox(hWnd, L"MyVeryFirstShader.hlsl", L"Missing Shader File", MB_OK);
+			}
 
-	ID3D11InputLayout* layout;
-	device->CreateInputLayout(
-		inputElements,
-		2,
-		vertexBC->GetBufferPointer(),
-		vertexBC->GetBufferSize(),
-		&layout);
+			return 0;
+		}
+
+		device->CreatePixelShader(
+			psBlob->GetBufferPointer(),
+			psBlob->GetBufferSize(),
+			nullptr, &pixelShader);
+		psBlob->Release();
+	}
+	
+	ID3D11InputLayout* inputLayout;
+	{
+		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		};
+
+		device->CreateInputLayout(
+			inputElementDesc,
+			ARRAYSIZE(inputElementDesc),
+			vsBlob->GetBufferPointer(),
+			vsBlob->GetBufferSize(),
+			&inputLayout);
+
+		vsBlob->Release();
+	}
 
 	DirectX::XMFLOAT4 points[8] = {
-		DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
+		DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
 		DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
-		DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f),
-		DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f),
+		DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 	};
 
 
@@ -233,8 +267,8 @@ int main()
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	ID3D11Buffer* vb;
-	device->CreateBuffer(&vertexBufDesc, &vertexData, &vb);
+	ID3D11Buffer* vertexBuffer;
+	device->CreateBuffer(&vertexBufDesc, &vertexData, &vertexBuffer);
 
 	int indeces[] = { 0,1,2, 1,0,3 };
 	D3D11_BUFFER_DESC indexBufDesc = {};
@@ -250,24 +284,22 @@ int main()
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
-	ID3D11Buffer* ib;
-	device->CreateBuffer(&indexBufDesc, &indexData, &ib);
+	ID3D11Buffer* indexBuffer;
+	device->CreateBuffer(&indexBufDesc, &indexData, &indexBuffer);
 
-	UINT strides[] = { 32 };
+	UINT strides[] = { 4 * sizeof(float) + 4 * sizeof(float)};
 	UINT offsets[] = { 0 };
 
 
-
-	CD3D11_RASTERIZER_DESC rastDesc = {};
-	rastDesc.CullMode = D3D11_CULL_NONE;
-	rastDesc.FillMode = D3D11_FILL_SOLID;
-
 	ID3D11RasterizerState* rastState;
-	res = device->CreateRasterizerState(&rastDesc, &rastState);
+	{
+		CD3D11_RASTERIZER_DESC rastDesc = {};
+		rastDesc.CullMode = D3D11_CULL_NONE;
+		rastDesc.FillMode = D3D11_FILL_SOLID;
 
-	context->RSSetState(rastState);
-
-
+		res = device->CreateRasterizerState(&rastDesc, &rastState);
+		context->RSSetState(rastState);
+	}
 
 
 	std::chrono::time_point<std::chrono::steady_clock> PrevTime = std::chrono::steady_clock::now();
@@ -275,22 +307,20 @@ int main()
 	unsigned int frameCount = 0;
 
 
-	MSG msg = {};
 	bool isExitRequested = false;
 	while (!isExitRequested) {
+
+		MSG msg = {};
 		// Handle the windows messages.
 		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+			// If windows signals to end the application then exit out.
+			if (msg.message == WM_QUIT)
+				isExitRequested = true;
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 
-		// If windows signals to end the application then exit out.
-		if (msg.message == WM_QUIT) {
-			isExitRequested = true;
-		}
-
 		context->ClearState();
-
 		context->RSSetState(rastState);
 
 		D3D11_VIEWPORT viewport = {};
@@ -300,19 +330,18 @@ int main()
 		viewport.TopLeftY = 0;
 		viewport.MinDepth = 0;
 		viewport.MaxDepth = 1.0f;
-
 		context->RSSetViewports(1, &viewport);
 
-		context->IASetInputLayout(layout);
+		context->IASetInputLayout(inputLayout);
 		context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		context->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
-		context->IASetVertexBuffers(0, 1, &vb, strides, offsets);
+		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		context->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 		context->VSSetShader(vertexShader, nullptr, 0);
 		context->PSSetShader(pixelShader, nullptr, 0);
 
 
-		auto	curTime = std::chrono::steady_clock::now();
-		float	deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - PrevTime).count() / 1000000.0f;
+		auto curTime = std::chrono::steady_clock::now();
+		float deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - PrevTime).count() / 1000000.0f;
 		PrevTime = curTime;
 
 		totalTime += deltaTime;
