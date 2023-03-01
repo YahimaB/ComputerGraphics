@@ -1,6 +1,7 @@
 #include "Game.h"
 
 const float MS_PER_UPDATE = 15;
+Game* Game::Instance = 0;
 
 Game::Game(LPCWSTR appName)
 {

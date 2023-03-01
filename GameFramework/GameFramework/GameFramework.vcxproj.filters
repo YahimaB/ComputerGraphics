@@ -20,12 +20,18 @@
     <ClCompile Include="DisplayWin.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="GameComponent.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="DisplayWin.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponent.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

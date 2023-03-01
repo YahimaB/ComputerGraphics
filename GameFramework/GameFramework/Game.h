@@ -23,6 +23,10 @@
 class Game
 {
 public:
+	static Game* Instance;
+	static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
+
+public:
 	DisplayWin* Display;
 
 public:
@@ -34,7 +38,6 @@ public:
 	void Update();
 	void Exit();
 
-	static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
 
@@ -64,5 +67,3 @@ private:
 	void EndFrame();
 	void Draw();
 };
-
-static Game* Instance = 0;
