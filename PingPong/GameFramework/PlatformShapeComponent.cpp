@@ -1,4 +1,6 @@
 #include "PlatformShapeComponent.h"
+#include "InputManager.h"
+#include "Game.h"
 
 PlatformShapeComponent::PlatformShapeComponent(float posX) : ShapeComponent()
 {
@@ -19,3 +21,29 @@ PlatformShapeComponent::PlatformShapeComponent(float posX) : ShapeComponent()
 	indices[4] = 0;
 	indices[5] = 3;
 }
+
+void PlatformShapeComponent::Update(float deltaTime)
+{
+	auto distance = 0.001f * deltaTime;
+
+	if (InputManager::Instance->IsKeyDown(Keys::Down))
+	{
+		if (offsetY + points[1].pos.y < -1.0f)
+			return;
+
+		offsetY -= distance;
+	}
+
+	if (InputManager::Instance->IsKeyDown(Keys::Up))
+	{
+		if (offsetY + points[0].pos.y > 1.0f)
+			return;
+
+		offsetY += distance;
+	}
+
+	ConstBuf constBuf;
+	constBuf.Offset = float4(0.0f, offsetY, 0.0f, 0.0f);
+	game->context->UpdateSubresource(constBuffer, 0, NULL, &constBuf, 0, 0);
+}
+

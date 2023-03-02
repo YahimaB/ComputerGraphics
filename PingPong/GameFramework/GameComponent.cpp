@@ -21,7 +21,7 @@ void GameComponent::Draw()
 	
 }
 
-void GameComponent::Update()
+void GameComponent::Update(float deltaTime)
 {
 }
 

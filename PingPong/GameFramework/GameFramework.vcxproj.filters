@@ -94,6 +94,9 @@
     <ClInclude Include="InputManager.h">
       <Filter>Core\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Keys.h">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameFramework.rc">

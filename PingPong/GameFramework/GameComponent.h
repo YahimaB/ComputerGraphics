@@ -16,7 +16,7 @@ public:
 
 	void virtual Initialize();
 	void virtual Draw();
-	void virtual Update();
+	void virtual Update(float deltaTime);
 	void virtual DestroyResources();
 
 protected:

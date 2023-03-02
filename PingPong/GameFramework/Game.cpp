@@ -38,6 +38,8 @@ bool Game::Initialize()
 		return false;
 
 	Input = new InputManager();
+	Input->Initialize();
+
 	Shader = new ShaderManager();
 
 	for (int i = 0; i < componentsCount; i++)
@@ -141,9 +143,11 @@ void Game::Run()
 		lag += deltaTimeMs;
 		TotalTime += deltaTimeMs / 1000.0f;
 
+		std::cout << deltaTimeMs << std::endl;
+
 		while (lag >= MS_PER_UPDATE)
 		{
-			Update();
+			Update(deltaTimeMs);
 			lag -= MS_PER_UPDATE;
 		}
 
@@ -151,9 +155,14 @@ void Game::Run()
 	}
 }
 
-void Game::Update()
+void Game::Update(float deltaTime)
 {
 	UpdateInternal();
+
+	for (int i = 0; i < componentsCount; i++)
+	{
+		components_[i]->Update(deltaTime);
+	}
 }
 
 

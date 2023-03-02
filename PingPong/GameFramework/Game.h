@@ -53,7 +53,7 @@ public:
 	void CreateComponent(GameComponent* component);
 	bool Initialize();
 	void Run();
-	void Update();
+	void Update(float deltaTime);
 	void Exit();
 
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);

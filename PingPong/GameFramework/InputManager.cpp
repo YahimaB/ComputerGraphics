@@ -15,7 +15,7 @@ void InputManager::Initialize()
 {
 	for (int i = 0; i < 256; i++)
 	{
-		Keys[i] = false;
+		keys[i] = false;
 	}
 
 	return;
@@ -24,18 +24,23 @@ void InputManager::Initialize()
 void InputManager::KeyDown(unsigned int input)
 {
 	std::cout << "Key pressed: " << input << std::endl;
-	Keys[input] = true;
+	keys[input] = true;
 	return;
 }
 
 void InputManager::KeyUp(unsigned int input)
 {
 	std::cout << "Key released: " << input << std::endl;
-	Keys[input] = false;
+	keys[input] = false;
 	return;
 }
 
 bool InputManager::IsKeyDown(unsigned int key)
 {
-	return Keys[key];
+	return keys[key];
+}
+
+bool InputManager::IsKeyDown(Keys key)
+{
+	return keys[(int) key];
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "Keys.h"
 
 class InputManager
 {
@@ -16,8 +17,9 @@ public:
 	void KeyUp(unsigned int);
 
 	bool IsKeyDown(unsigned int);
+	bool IsKeyDown(Keys key);
 
 private:
-	bool Keys[256];
+	bool keys[256];
 };
 
