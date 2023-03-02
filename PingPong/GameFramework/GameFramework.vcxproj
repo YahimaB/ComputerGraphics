@@ -188,6 +188,7 @@
     <ClCompile Include="DisplayWin.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameComponent.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlatformShapeComponent.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="DisplayWin.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameComponent.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="PlatformShapeComponent.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShaderManager.h" />

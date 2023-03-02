@@ -53,6 +53,9 @@
     <ClCompile Include="CircleShapeComponent.cpp">
       <Filter>Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -87,6 +90,9 @@
     </ClInclude>
     <ClInclude Include="CircleShapeComponent.h">
       <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Core\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

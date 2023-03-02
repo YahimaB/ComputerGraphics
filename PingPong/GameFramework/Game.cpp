@@ -37,6 +37,7 @@ bool Game::Initialize()
 	if (!CreateBackBuffer())
 		return false;
 
+	Input = new InputManager();
 	Shader = new ShaderManager();
 
 	for (int i = 0; i < componentsCount; i++)
@@ -222,24 +223,20 @@ LRESULT CALLBACK Game::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM l
 	LRESULT result = 0;
 	switch (umessage)
 	{
-	case WM_KEYDOWN:
-	{
-		// If a key is pressed send it to the input object so it can record that state.
-		std::cout << "Key: " << static_cast<unsigned int>(wparam) << std::endl;
-
-		if (wparam == VK_ESCAPE)
+		case WM_CLOSE:
+		{
 			PostQuitMessage(0);
-		break;
-	}
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		break;
-	}
-	default:
-	{
-		result = Instance->MessageHandler(hwnd, umessage, wparam, lparam);
-	}
+			break;
+		}
+		case WM_DESTROY:
+		{
+			PostQuitMessage(0);
+			break;
+		}
+		default:
+		{
+			result = Instance->MessageHandler(hwnd, umessage, wparam, lparam);
+		}
 	}
 
 	return result;
@@ -249,9 +246,23 @@ LRESULT Game::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 {
 	switch (umessage)
 	{
-	default:
-	{
-		return DefWindowProc(hwnd, umessage, wparam, lparam);
-	}
+		case WM_KEYDOWN:
+		{
+			// If a key is pressed send it to the input object so it can record that state.
+			Input->KeyDown((unsigned int)wparam);
+			return 0;
+		}
+
+		// Check if a key has been released on the keyboard.
+		case WM_KEYUP:
+		{
+			// If a key is released then send it to the input object so it can unset the state for that key.
+			Input->KeyUp((unsigned int)wparam);
+			return 0;
+		}
+		default:
+		{
+			return DefWindowProc(hwnd, umessage, wparam, lparam);
+		}
 	}
 }
