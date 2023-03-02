@@ -15,6 +15,9 @@
     <Filter Include="Shapes">
       <UniqueIdentifier>{7aa1cabf-2a72-462f-85ab-385ddcfaaab3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Input">
+      <UniqueIdentifier>{e868a6a3-cf09-4d4e-983a-a20a2ee66e27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -47,7 +50,9 @@
     <ClCompile Include="DelimiterShapeComponent.cpp">
       <Filter>Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="CircleShapeComponent.cpp" />
+    <ClCompile Include="CircleShapeComponent.cpp">
+      <Filter>Shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -77,8 +82,16 @@
     <ClInclude Include="DelimiterShapeComponent.h">
       <Filter>Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="CircleShapeComponent.h">
+    <ClInclude Include="resource.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="CircleShapeComponent.h">
+      <Filter>Shapes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameFramework.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
