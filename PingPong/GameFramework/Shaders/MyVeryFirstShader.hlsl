@@ -7,20 +7,24 @@ struct VS_IN
 struct PS_IN
 {
 	float4 pos : SV_POSITION;
- 	float4 col : COLOR;
+	float4 col : COLOR;
 };
 
-PS_IN VSMain( VS_IN input )
+cbuffer ConstBuf {
+	float4 Offset;
+};
+
+PS_IN VSMain(VS_IN input)
 {
 	PS_IN output = (PS_IN)0;
-	
-	output.pos = input.pos;
+
+	output.pos = input.pos + Offset;
 	output.col = input.col;
-	
+
 	return output;
 }
 
-float4 PSMain( PS_IN input ) : SV_Target
+float4 PSMain(PS_IN input) : SV_Target
 {
 	float4 col = input.col;
 #ifdef TEST

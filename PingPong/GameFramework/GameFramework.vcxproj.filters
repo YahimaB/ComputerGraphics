@@ -44,6 +44,10 @@
     <ClCompile Include="PlatformShapeComponent.cpp">
       <Filter>Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="DelimiterShapeComponent.cpp">
+      <Filter>Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleShapeComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -69,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="PlatformShapeComponent.h">
       <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="DelimiterShapeComponent.h">
+      <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleShapeComponent.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

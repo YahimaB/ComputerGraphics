@@ -4,5 +4,5 @@
 class PlatformShapeComponent : public ShapeComponent
 {
 public:
-	PlatformShapeComponent();
+	PlatformShapeComponent(float posX);
 };

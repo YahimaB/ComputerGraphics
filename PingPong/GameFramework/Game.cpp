@@ -52,7 +52,7 @@ bool Game::CreateBackBuffer()
 	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_1 };
 
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
-	swapDesc.BufferCount = 2;
+	swapDesc.BufferCount = 1;
 	swapDesc.BufferDesc.Width = Display->ClientWidth;
 	swapDesc.BufferDesc.Height = Display->ClientHeight;
 	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -63,8 +63,8 @@ bool Game::CreateBackBuffer()
 	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapDesc.OutputWindow = Display->hWnd;
 	swapDesc.Windowed = true;
-	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	swapDesc.Flags = 0;
 	swapDesc.SampleDesc.Count = 1;
 	swapDesc.SampleDesc.Quality = 0;
 

@@ -183,6 +183,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="CircleShapeComponent.cpp" />
+    <ClCompile Include="DelimiterShapeComponent.cpp" />
     <ClCompile Include="DisplayWin.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameComponent.cpp" />
@@ -194,6 +196,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="CircleShapeComponent.h" />
+    <ClInclude Include="DelimiterShapeComponent.h" />
     <ClInclude Include="DisplayWin.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameComponent.h" />

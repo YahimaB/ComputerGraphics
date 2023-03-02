@@ -37,18 +37,30 @@ void ShapeComponent::Initialize()
 	indexData.SysMemSlicePitch = 0;
 
 	game->device->CreateBuffer(&indexBufDesc, &indexData, &indexBuffer);
+
+	D3D11_BUFFER_DESC constBufDesc = {};
+	constBufDesc.Usage = D3D11_USAGE_DEFAULT;
+	constBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufDesc.CPUAccessFlags = 0;
+	constBufDesc.MiscFlags = 0;
+	constBufDesc.StructureByteStride = 0;
+	constBufDesc.ByteWidth = sizeof(ConstBuf);
+
+	game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
 }
 
 void ShapeComponent::Draw()
 {
 	ShaderManager::Instance->ApplyShader(ShaderName);
 
-	UINT strides[] = { sizeof(Vertex) };
-	UINT offsets[] = { 0 };
+	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
+	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
+	UINT offsets[] = { 0, 0 };
 
 	game->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	game->context->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
+	game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
+	game->context->VSSetConstantBuffers(0, 1, &constBuffer);
 
 	game->context->DrawIndexed(indicesCount, 0, 0);
 }
