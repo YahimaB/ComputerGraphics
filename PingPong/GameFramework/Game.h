@@ -40,12 +40,15 @@ public:
 	ID3D11RasterizerState* rastState;
 	D3D11_VIEWPORT viewport;
 
-	ShapeComponent* comp;
+	int componentsCount = 0;
+	static const int MAX_COMPONENTS = 4;
+	GameComponent* components_[MAX_COMPONENTS];
 
 public:
 	Game(LPCWSTR appName);
 	~Game();
 
+	void CreateComponent(GameComponent* component);
 	bool Initialize();
 	void Run();
 	void Update();

@@ -5,6 +5,12 @@ int main()
 {
 	Game* MyGame = new Game(L"MySuperApp");
 
+	MyGame->CreateComponent(new ShapeComponent());
+	MyGame->CreateComponent(new ShapeComponent());
+	MyGame->CreateComponent(new ShapeComponent());
+	MyGame->CreateComponent(new ShapeComponent());
+
+
 	if (MyGame->Initialize())
 	{
 		MyGame->Run();

@@ -21,6 +21,12 @@ Game::~Game()
 {
 }
 
+void Game::CreateComponent(GameComponent* component)
+{
+	components_[componentsCount] = component;
+	componentsCount++;
+}
+
 bool Game::Initialize()
 {
 	float totalTime = 0;
@@ -32,6 +38,11 @@ bool Game::Initialize()
 		return false;
 
 	Shader = new ShaderManager();
+
+	for (int i = 0; i < MAX_COMPONENTS; i++)
+	{
+		components_[i]->Initialize();
+	}
 
 	return true;
 }
@@ -107,9 +118,6 @@ bool Game::CreateBackBuffer()
 
 void Game::Run()
 {
-	comp = new ShapeComponent();
-	comp->Initialize();
-
 	StartTime = std::chrono::steady_clock::now();
 	PrevTime = std::chrono::steady_clock::now();
 
@@ -189,7 +197,10 @@ void Game::Draw()
 		FrameCount = 0;
 	}
 
-	comp->Draw();
+	for (int i = 0; i < MAX_COMPONENTS; i++)
+	{
+		components_[i]->Draw();
+	}
 
 	EndFrame();
 }
