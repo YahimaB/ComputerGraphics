@@ -23,14 +23,14 @@ void InputManager::Initialize()
 
 void InputManager::KeyDown(unsigned int input)
 {
-	std::cout << "Key pressed: " << input << std::endl;
+	//std::cout << "Key pressed: " << input << std::endl;
 	keys[input] = true;
 	return;
 }
 
 void InputManager::KeyUp(unsigned int input)
 {
-	std::cout << "Key released: " << input << std::endl;
+	//std::cout << "Key released: " << input << std::endl;
 	keys[input] = false;
 	return;
 }

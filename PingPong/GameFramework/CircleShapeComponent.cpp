@@ -22,6 +22,9 @@ CircleShapeComponent::CircleShapeComponent(float radius, PlatformShapeComponent*
 	Borders[0] = { -1.0f, 1.0f, 1.5f, 1.0f };
 	Borders[1] = { -1.0f, -1.5f, -1.0f, 1.0f };
 
+	scores[0] = 0;
+	scores[1] = 0;
+
 	Restart();
 }
 
@@ -80,11 +83,24 @@ void CircleShapeComponent::Update(float deltaTime)
 		return;
 	}
 
-	if (Intersects(rect0, LoseZones[0]) || Intersects(rect0, LoseZones[1]))
+	bool restart = false;
+	if (Intersects(rect0, LoseZones[0]))
+	{
+		restart = true;
+		scores[1]++;
+	} 
+	
+	if (Intersects(rect0, LoseZones[1]))
+	{
+		restart = true;
+		scores[0]++;
+	}
+
+	if (restart)
 	{
 		Restart();
 		constBuf.Offset = float4(offsetX, offsetY, 0.0f, 0.0f);
-		game->context->UpdateSubresource(constBuffer, 0, NULL, &constBuf, 0, 0);
+		game->context->UpdateSubresource(constBuffer, 0, NULL, &constBuf, 0, 0);		
 		return;
 	}
 
@@ -134,6 +150,8 @@ CustomRect* CircleShapeComponent::GetRect()
 
 void CircleShapeComponent::Restart()
 {
+	std::cout << "SCORE:    " << scores[0] << " : " << scores[1] << std::endl;
+
 	this->currentSpeed = startSpeed;
 	offsetX = 0;
 	offsetY = 0;

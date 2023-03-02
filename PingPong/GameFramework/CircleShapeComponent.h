@@ -30,6 +30,7 @@ private:
 	PlatformShapeComponent* Platforms[2];
 	CustomRect Borders[2];
 	CustomRect LoseZones[2];
+	int scores[2];
 
 	int randNum(int min, int max) { return rand() % (max - min + 1) + min; }
 };
