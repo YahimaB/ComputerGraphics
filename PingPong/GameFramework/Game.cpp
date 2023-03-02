@@ -39,7 +39,7 @@ bool Game::Initialize()
 
 	Shader = new ShaderManager();
 
-	for (int i = 0; i < MAX_COMPONENTS; i++)
+	for (int i = 0; i < componentsCount; i++)
 	{
 		components_[i]->Initialize();
 	}
@@ -175,7 +175,7 @@ void Game::PrepareFrame()
 	viewport.MaxDepth = 1.0f;
 	context->RSSetViewports(1, &viewport);
 
-	float color[] = { TotalTime, 0.1f, 0.1f, 1.0f };
+	float color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	context->OMSetRenderTargets(1, &renderView, nullptr);
 	context->ClearRenderTargetView(renderView, color);
 }
@@ -197,7 +197,7 @@ void Game::Draw()
 		FrameCount = 0;
 	}
 
-	for (int i = 0; i < MAX_COMPONENTS; i++)
+	for (int i = 0; i < componentsCount; i++)
 	{
 		components_[i]->Draw();
 	}

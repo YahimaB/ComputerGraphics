@@ -1,14 +1,14 @@
 #include "Game.h"
-#include "SuperShapeComponent.h"
+#include "PlatformShapeComponent.h"
 
 int main()
 {
 	Game* MyGame = new Game(L"MySuperApp");
 
-	MyGame->CreateComponent(new SuperShapeComponent());
-	MyGame->CreateComponent(new SuperShapeComponent());
-	MyGame->CreateComponent(new SuperShapeComponent());
-	MyGame->CreateComponent(new SuperShapeComponent());
+	MyGame->CreateComponent(new PlatformShapeComponent());
+	/*MyGame->CreateComponent(new PlatformShapeComponent());
+	MyGame->CreateComponent(new PlatformShapeComponent());
+	MyGame->CreateComponent(new PlatformShapeComponent());*/
 
 
 	if (MyGame->Initialize())

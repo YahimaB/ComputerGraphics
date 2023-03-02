@@ -14,7 +14,7 @@ void ShapeComponent::Initialize()
 	vertexBufDesc.CPUAccessFlags = 0;
 	vertexBufDesc.MiscFlags = 0;
 	vertexBufDesc.StructureByteStride = 0;
-	vertexBufDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * pointsCount;
+	vertexBufDesc.ByteWidth = sizeof(Vertex) * pointsCount;
 
 	D3D11_SUBRESOURCE_DATA vertexData = {};
 	vertexData.pSysMem = points;
@@ -43,12 +43,12 @@ void ShapeComponent::Draw()
 {
 	ShaderManager::Instance->ApplyShader(ShaderName);
 
-	UINT strides[] = { 4 * sizeof(float) + 4 * sizeof(float) };
+	UINT strides[] = { sizeof(Vertex) };
 	UINT offsets[] = { 0 };
 
 	game->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	game->context->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 
-	game->context->DrawIndexed(6, 0, 0);
+	game->context->DrawIndexed(indicesCount, 0, 0);
 }

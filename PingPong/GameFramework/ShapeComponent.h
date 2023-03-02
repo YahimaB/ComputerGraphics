@@ -2,9 +2,11 @@
 
 #include "GameComponent.h"
 
+#define float4 DirectX::XMFLOAT4
+
 struct Vertex {
-	DirectX::XMFLOAT4 pos;
-	DirectX::XMFLOAT4 col;
+	float4 pos;
+	float4 col = float4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
 class ShapeComponent : public GameComponent
@@ -23,7 +25,7 @@ protected:
 
 	int pointsCount;
 	int indicesCount;
-	DirectX::XMFLOAT4 points[30];
-	int indices[30];
+	Vertex points[30];
+	int indices[100];
 };
 

@@ -41,6 +41,9 @@
     <ClCompile Include="SuperShapeComponent.cpp">
       <Filter>Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="PlatformShapeComponent.cpp">
+      <Filter>Shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -62,6 +65,9 @@
       <Filter>Shapes</Filter>
     </ClInclude>
     <ClInclude Include="SuperShapeComponent.h">
+      <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformShapeComponent.h">
       <Filter>Shapes</Filter>
     </ClInclude>
   </ItemGroup>
