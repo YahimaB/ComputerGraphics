@@ -47,3 +47,16 @@ void PlatformShapeComponent::Update(float deltaTime)
 	game->context->UpdateSubresource(constBuffer, 0, NULL, &constBuf, 0, 0);
 }
 
+CustomRect* PlatformShapeComponent::GetRect()
+{
+	CustomRect rect = {};
+
+	rect.left = points[2].pos.x;
+	rect.bot = points[2].pos.y + offsetY;
+
+	rect.right = points[3].pos.x;
+	rect.top = points[3].pos.y + offsetY;
+
+	return &rect;
+}
+

@@ -4,10 +4,6 @@
 
 #define float4 DirectX::XMFLOAT4
 
-struct ConstDataStruct {
-	float4 Offset;
-};
-
 struct ConstBuf {
 	float4 Offset;
 };
@@ -17,6 +13,13 @@ struct Vertex {
 	float4 col = float4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
+struct CustomRect {
+	float left;
+	float bot;
+	float top;
+	float right;
+};
+
 class ShapeComponent : public GameComponent
 {
 public:
@@ -24,6 +27,9 @@ public:
 
 	void Initialize() override;
 	void Draw() override;
+
+	virtual CustomRect* GetRect();
+	bool Intersects(const CustomRect& rect1, const CustomRect& rect2);
 
 protected:
 	LPCWSTR ShaderName = L"MyVeryFirstShader.hlsl";

@@ -64,3 +64,23 @@ void ShapeComponent::Draw()
 
 	game->context->DrawIndexed(indicesCount, 0, 0);
 }
+
+CustomRect* ShapeComponent::GetRect()
+{
+	return nullptr;
+}
+
+bool ShapeComponent::Intersects(const CustomRect& rect1, const CustomRect& rect2)
+{
+	bool insideX = false;
+	bool insideY = false;
+
+	insideX = rect1.left > rect2.left && rect1.left < rect2.right
+		|| rect1.right > rect2.left && rect1.right < rect2.right;
+
+
+	insideY = rect1.bot > rect2.bot && rect1.bot < rect2.top
+		|| rect1.top > rect2.bot && rect1.top < rect2.top;
+
+	return insideX && insideY;
+}

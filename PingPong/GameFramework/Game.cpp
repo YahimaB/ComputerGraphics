@@ -143,8 +143,6 @@ void Game::Run()
 		lag += deltaTimeMs;
 		TotalTime += deltaTimeMs / 1000.0f;
 
-		std::cout << deltaTimeMs << std::endl;
-
 		while (lag >= MS_PER_UPDATE)
 		{
 			Update(deltaTimeMs);
