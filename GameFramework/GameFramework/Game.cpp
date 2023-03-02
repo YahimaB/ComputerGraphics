@@ -43,13 +43,6 @@ void Game::Run()
 	bool isExitRequested = false;
 	while (!isExitRequested) {
 
-		auto currentTime = std::chrono::steady_clock::now();
-		auto deltaTimeMs = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - PrevTime).count();
-		PrevTime = currentTime;
-
-		lag += deltaTimeMs;
-		TotalTime += deltaTimeMs / 1000.0f;
-
 		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT)
 				isExitRequested = true;
@@ -57,11 +50,19 @@ void Game::Run()
 			DispatchMessage(&msg);
 		}
 
-		while (lag >= MS_PER_UPDATE)
+		auto currentTime = std::chrono::steady_clock::now();
+		auto deltaTimeMs = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - PrevTime).count();
+		PrevTime = currentTime;
+
+		lag += deltaTimeMs;
+		TotalTime += deltaTimeMs / 1000000.0f;
+
+
+		/*while (lag >= MS_PER_UPDATE)
 		{
 			Update();
 			lag -= MS_PER_UPDATE;
-		}
+		}*/
 
 		Draw();
 	}

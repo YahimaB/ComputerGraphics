@@ -154,6 +154,17 @@ int main()
 		backTex->Release();
 	}
 	
+	ID3D11RasterizerState* rastState;
+	{
+		CD3D11_RASTERIZER_DESC rastDesc = {};
+		rastDesc.CullMode = D3D11_CULL_NONE;
+		rastDesc.FillMode = D3D11_FILL_SOLID;
+
+		res = device->CreateRasterizerState(&rastDesc, &rastState);
+		context->RSSetState(rastState);
+	}
+
+#pragma region shader
 
 	ID3DBlob* vsBlob;
 	ID3D11VertexShader* vertexShader;
@@ -291,16 +302,16 @@ int main()
 	UINT offsets[] = { 0 };
 
 
-	ID3D11RasterizerState* rastState;
-	{
-		CD3D11_RASTERIZER_DESC rastDesc = {};
-		rastDesc.CullMode = D3D11_CULL_NONE;
-		rastDesc.FillMode = D3D11_FILL_SOLID;
+#pragma endregion shader
 
-		res = device->CreateRasterizerState(&rastDesc, &rastState);
-		context->RSSetState(rastState);
-	}
-
+	D3D11_VIEWPORT viewport = {};
+	viewport.Width = static_cast<float>(screenWidth);
+	viewport.Height = static_cast<float>(screenHeight);
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
+	context->RSSetViewports(1, &viewport);
 
 	std::chrono::time_point<std::chrono::steady_clock> PrevTime = std::chrono::steady_clock::now();
 	float totalTime = 0;
@@ -320,17 +331,10 @@ int main()
 			DispatchMessage(&msg);
 		}
 
-		context->ClearState();
+		//context->ClearState();
 		context->RSSetState(rastState);
 
-		D3D11_VIEWPORT viewport = {};
-		viewport.Width = static_cast<float>(screenWidth);
-		viewport.Height = static_cast<float>(screenHeight);
-		viewport.TopLeftX = 0;
-		viewport.TopLeftY = 0;
-		viewport.MinDepth = 0;
-		viewport.MaxDepth = 1.0f;
-		context->RSSetViewports(1, &viewport);
+
 
 		context->IASetInputLayout(inputLayout);
 		context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
