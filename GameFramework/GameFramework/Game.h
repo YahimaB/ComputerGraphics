@@ -19,7 +19,7 @@
 
 #include "DisplayWin.h"
 #include "ShaderManager.h"
-#include "GameComponent.h"
+#include "ShapeComponent.h"
 
 
 class Game
@@ -40,7 +40,7 @@ public:
 	ID3D11RasterizerState* rastState;
 	D3D11_VIEWPORT viewport;
 
-	GameComponent* comp;
+	ShapeComponent* comp;
 
 public:
 	Game(LPCWSTR appName);

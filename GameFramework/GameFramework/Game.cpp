@@ -107,7 +107,7 @@ bool Game::CreateBackBuffer()
 
 void Game::Run()
 {
-	comp = new GameComponent();
+	comp = new ShapeComponent();
 	comp->Initialize();
 
 	StartTime = std::chrono::steady_clock::now();

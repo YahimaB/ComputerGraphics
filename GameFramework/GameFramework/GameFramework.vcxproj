@@ -188,6 +188,7 @@
     <ClCompile Include="GameComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="ShapeComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameComponent.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="ShapeComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

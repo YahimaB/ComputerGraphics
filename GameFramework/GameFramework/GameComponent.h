@@ -14,20 +14,13 @@ public:
 	GameComponent();
 	~GameComponent();
 
-	bool Initialize();
-	void Reload();
-	void Draw();
-	void Update();
-	void DestroyResources();
+	void virtual Initialize();
+	void virtual Draw();
+	void virtual Update();
+	void virtual DestroyResources();
 
+protected:
 	Game* game;
-
-	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
-
-
-private:
-	
 
 };
 

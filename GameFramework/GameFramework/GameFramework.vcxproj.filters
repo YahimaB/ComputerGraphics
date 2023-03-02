@@ -32,6 +32,9 @@
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="ShapeComponent.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -47,6 +50,9 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponent.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
