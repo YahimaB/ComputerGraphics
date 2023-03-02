@@ -12,6 +12,9 @@
     <Filter Include="Actors">
       <UniqueIdentifier>{34c60380-bb91-4846-be6c-be8b00d54715}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shapes">
+      <UniqueIdentifier>{7aa1cabf-2a72-462f-85ab-385ddcfaaab3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,7 +36,10 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="ShapeComponent.cpp">
-      <Filter>Core</Filter>
+      <Filter>Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="SuperShapeComponent.cpp">
+      <Filter>Shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +59,10 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="ShapeComponent.h">
-      <Filter>Core</Filter>
+      <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperShapeComponent.h">
+      <Filter>Shapes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

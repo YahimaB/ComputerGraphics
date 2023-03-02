@@ -19,7 +19,7 @@
 
 #include "DisplayWin.h"
 #include "ShaderManager.h"
-#include "ShapeComponent.h"
+#include "GameComponent.h"
 
 
 class Game

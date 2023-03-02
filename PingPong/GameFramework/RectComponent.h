@@ -2,28 +2,21 @@
 
 #include "GameComponent.h"
 
-struct Vertex {
-	DirectX::XMFLOAT4 pos;
-	DirectX::XMFLOAT4 col;
-};
-
-class ShapeComponent : public GameComponent
+class RectComponent : public GameComponent
 {
 public:
-	ShapeComponent();
+	RectComponent();
+	~RectComponent();
 
 	void Initialize() override;
 	void Draw() override;
+	void Update() override;
+	void DestroyResources() override;
 
 protected:
 	LPCWSTR ShaderName = L"MyVeryFirstShader.hlsl";
 
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
-
-	int pointsCount;
-	int indicesCount;
-	DirectX::XMFLOAT4 points[30];
-	int indices[30];
 };
 

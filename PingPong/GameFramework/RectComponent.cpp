@@ -1,20 +1,31 @@
-#include "ShapeComponent.h"
+#include "RectComponent.h"
 #include "Game.h"
 
-ShapeComponent::ShapeComponent()
+RectComponent::RectComponent()
 {
-	
 }
 
-void ShapeComponent::Initialize()
+RectComponent::~RectComponent()
 {
+}
+
+void RectComponent::Initialize()
+{
+	DirectX::XMFLOAT4 points[8] = {
+		DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
+		DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
+		DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f),
+		DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+	};
+
+
 	D3D11_BUFFER_DESC vertexBufDesc = {};
 	vertexBufDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufDesc.CPUAccessFlags = 0;
 	vertexBufDesc.MiscFlags = 0;
 	vertexBufDesc.StructureByteStride = 0;
-	vertexBufDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * pointsCount;
+	vertexBufDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * std::size(points);
 
 	D3D11_SUBRESOURCE_DATA vertexData = {};
 	vertexData.pSysMem = points;
@@ -23,23 +34,24 @@ void ShapeComponent::Initialize()
 
 	game->device->CreateBuffer(&vertexBufDesc, &vertexData, &vertexBuffer);
 
+	int indeces[] = { 0,1,2, 1,0,3 };
 	D3D11_BUFFER_DESC indexBufDesc = {};
 	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufDesc.CPUAccessFlags = 0;
 	indexBufDesc.MiscFlags = 0;
 	indexBufDesc.StructureByteStride = 0;
-	indexBufDesc.ByteWidth = sizeof(int) * indicesCount;
+	indexBufDesc.ByteWidth = sizeof(int) * std::size(indeces);
 
 	D3D11_SUBRESOURCE_DATA indexData = {};
-	indexData.pSysMem = indices;
+	indexData.pSysMem = indeces;
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
 	game->device->CreateBuffer(&indexBufDesc, &indexData, &indexBuffer);
 }
 
-void ShapeComponent::Draw()
+void RectComponent::Draw()
 {
 	ShaderManager::Instance->ApplyShader(ShaderName);
 
@@ -51,4 +63,12 @@ void ShapeComponent::Draw()
 	game->context->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 
 	game->context->DrawIndexed(6, 0, 0);
+}
+
+void RectComponent::Update()
+{
+}
+
+void RectComponent::DestroyResources()
+{
 }
