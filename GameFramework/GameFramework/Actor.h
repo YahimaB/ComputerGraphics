@@ -9,8 +9,8 @@ public:
 	~Actor();
 
 	bool Initialize();
-	void Draw();
 	void Update();
+	void Draw();
 	void DestroyResources();
 
 private:

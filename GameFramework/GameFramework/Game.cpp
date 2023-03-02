@@ -9,7 +9,11 @@ Game::Game(LPCWSTR appName)
 	{
 		throw "Trying to create another Game instance";
 	}
+
 	name = appName;
+	TotalTime = 0;
+	FrameCount = 0;
+
 	Instance = this;
 }
 
@@ -27,55 +31,9 @@ bool Game::Initialize()
 	if (!CreateBackBuffer())
 		return false;
 
+	Shader = new ShaderManager();
+
 	return true;
-}
-
-void Game::Run()
-{
-	TotalTime = 0;
-	FrameCount = 0;
-	float lag = 0;
-
-	StartTime = std::chrono::steady_clock::now();
-	PrevTime = std::chrono::steady_clock::now();
-
-	MSG msg = {};
-	bool isExitRequested = false;
-	while (!isExitRequested) {
-
-		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-			if (msg.message == WM_QUIT)
-				isExitRequested = true;
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		auto currentTime = std::chrono::steady_clock::now();
-		auto deltaTimeMs = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - PrevTime).count();
-		PrevTime = currentTime;
-
-		lag += deltaTimeMs;
-		TotalTime += deltaTimeMs / 1000000.0f;
-
-
-		/*while (lag >= MS_PER_UPDATE)
-		{
-			Update();
-			lag -= MS_PER_UPDATE;
-		}*/
-
-		Draw();
-	}
-}
-
-void Game::Update()
-{
-	UpdateInternal();
-}
-
-void Game::Exit()
-{
-
 }
 
 bool Game::CreateBackBuffer()
@@ -147,6 +105,49 @@ bool Game::CreateBackBuffer()
 	return true;
 }
 
+void Game::Run()
+{
+	comp = new GameComponent();
+	comp->Initialize();
+
+	StartTime = std::chrono::steady_clock::now();
+	PrevTime = std::chrono::steady_clock::now();
+
+	float lag = 0;
+	MSG msg = {};
+	bool isExitRequested = false;
+	while (!isExitRequested) {
+
+		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+			if (msg.message == WM_QUIT)
+				isExitRequested = true;
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		auto currentTime = std::chrono::steady_clock::now();
+		auto deltaTimeMs = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - PrevTime).count();
+		PrevTime = currentTime;
+
+		lag += deltaTimeMs;
+		TotalTime += deltaTimeMs / 1000.0f;
+
+		while (lag >= MS_PER_UPDATE)
+		{
+			Update();
+			lag -= MS_PER_UPDATE;
+		}
+
+		Draw();
+	}
+}
+
+void Game::Update()
+{
+	UpdateInternal();
+}
+
+
 void Game::UpdateInternal()
 {
 
@@ -165,20 +166,10 @@ void Game::PrepareFrame()
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 	context->RSSetViewports(1, &viewport);
-}
-
-void Game::EndFrame()
-{
-	context->OMSetRenderTargets(1, &renderView, nullptr);
 
 	float color[] = { TotalTime, 0.1f, 0.1f, 1.0f };
+	context->OMSetRenderTargets(1, &renderView, nullptr);
 	context->ClearRenderTargetView(renderView, color);
-
-	context->DrawIndexed(6, 0, 0);
-
-	context->OMSetRenderTargets(0, nullptr, nullptr);
-
-	swapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }
 
 void Game::Draw()
@@ -186,7 +177,6 @@ void Game::Draw()
 	PrepareFrame();
 
 	FrameCount++;
-
 	if (TotalTime > 1.0f) {
 		float fps = FrameCount / TotalTime;
 
@@ -199,7 +189,20 @@ void Game::Draw()
 		FrameCount = 0;
 	}
 
+	comp->Draw();
+
 	EndFrame();
+}
+
+void Game::EndFrame()
+{
+	context->OMSetRenderTargets(0, nullptr, nullptr);
+	swapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
+}
+
+void Game::Exit()
+{
+
 }
 
 

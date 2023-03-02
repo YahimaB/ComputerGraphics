@@ -18,6 +18,8 @@
 #pragma comment(lib, "dxguid.lib")
 
 #include "DisplayWin.h"
+#include "ShaderManager.h"
+#include "GameComponent.h"
 
 
 class Game
@@ -28,6 +30,17 @@ public:
 
 public:
 	DisplayWin* Display;
+	ShaderManager* Shader;
+
+	ID3D11Device* device;
+	ID3D11DeviceContext* context;
+	IDXGISwapChain* swapChain;
+
+	ID3D11RenderTargetView* renderView;
+	ID3D11RasterizerState* rastState;
+	D3D11_VIEWPORT viewport;
+
+	GameComponent* comp;
 
 public:
 	Game(LPCWSTR appName);
@@ -49,13 +62,7 @@ private:
 	float TotalTime;
 	unsigned int FrameCount;
 
-	ID3D11Device* device;
-	ID3D11DeviceContext* context;
-	IDXGISwapChain* swapChain;
-
-	ID3D11RenderTargetView* renderView;
-	ID3D11RasterizerState* rastState;
-	D3D11_VIEWPORT viewport;
+	
 
 	ID3D11Debug* debug;
 	ID3DUserDefinedAnnotation* annotation;
