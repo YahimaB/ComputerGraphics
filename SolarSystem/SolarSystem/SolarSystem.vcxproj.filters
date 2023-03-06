@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Core\DirectXTK">
+      <UniqueIdentifier>{1d603cb9-67f6-4539-b145-b3ad6378a133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\External">
+      <UniqueIdentifier>{cfcc8343-16ba-4eed-88a1-ecacbf160edf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShapeComponents">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Core\Components">
+      <UniqueIdentifier>{94b3b95c-57cd-45a0-a0f4-9f4aa5a66def}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Core\DirectXTK\SimpleMath.cpp">
+      <Filter>Core\DirectXTK</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DisplayWin.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Game.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GameComponent.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\InputManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ShaderManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\ShapeComponent.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\CircleShapeComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\DelimiterShapeComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\PlatformShapeComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\SuperShapeComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\DirectXTK\PlatformHelpers.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\SimpleMath.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\External\Keys.h">
+      <Filter>Core\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DisplayWin.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Game.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameComponent.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\InputManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ShaderManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\ShapeComponent.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\CircleShapeComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\DelimiterShapeComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\PlatformShapeComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\SuperShapeComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core\DirectXTK\SimpleMath.inl">
+      <Filter>Core\DirectXTK</Filter>
+    </None>
+  </ItemGroup>
+</Project>
