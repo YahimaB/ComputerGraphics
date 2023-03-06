@@ -1,13 +1,15 @@
 #pragma once
 
 #include <unordered_set>
+#include "Delegates.h"
 #include "Keys.h"
-#include "Exports.h"
+
+#include "../DirectXTK/SimpleMath.h"
 
 
 class Game;
 
-class GAMEFRAMEWORK_API InputDevice
+class InputDevice
 {
 	friend class Game;
 	

@@ -186,9 +186,10 @@
     <ClCompile Include="Core\Components\ShapeComponent.cpp" />
     <ClCompile Include="Core\DirectXTK\SimpleMath.cpp" />
     <ClCompile Include="Core\DisplayWin.cpp" />
+    <ClCompile Include="Core\External\Delegates.cpp" />
+    <ClCompile Include="Core\External\InputDevice.cpp" />
     <ClCompile Include="Core\Game.cpp" />
     <ClCompile Include="Core\GameComponent.cpp" />
-    <ClCompile Include="Core\InputManager.cpp" />
     <ClCompile Include="Core\ShaderManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ShapeComponents\CircleShapeComponent.cpp" />
@@ -201,10 +202,11 @@
     <ClInclude Include="Core\DirectXTK\PlatformHelpers.h" />
     <ClInclude Include="Core\DirectXTK\SimpleMath.h" />
     <ClInclude Include="Core\DisplayWin.h" />
+    <ClInclude Include="Core\External\Delegates.h" />
+    <ClInclude Include="Core\External\InputDevice.h" />
     <ClInclude Include="Core\External\Keys.h" />
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Core\GameComponent.h" />
-    <ClInclude Include="Core\InputManager.h" />
     <ClInclude Include="Core\ShaderManager.h" />
     <ClInclude Include="ShapeComponents\CircleShapeComponent.h" />
     <ClInclude Include="ShapeComponents\DelimiterShapeComponent.h" />
@@ -213,6 +215,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Core\DirectXTK\SimpleMath.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Core\External\Delegates.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

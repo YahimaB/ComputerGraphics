@@ -33,7 +33,7 @@ public:
 	bool Intersects(const CustomRect& rect1, const CustomRect& rect2);
 
 protected:
-	LPCWSTR ShaderName = L"MyVeryFirstShader.hlsl";
+	LPCWSTR ShaderName = L"./Shaders/MyVeryFirstShader.hlsl";
 
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;

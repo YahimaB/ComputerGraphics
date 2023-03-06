@@ -18,9 +18,9 @@
 #pragma comment(lib, "dxguid.lib")
 
 #include "DisplayWin.h"
-#include "InputManager.h"
 #include "ShaderManager.h"
 #include "GameComponent.h"
+#include "External/InputDevice.h"
 
 
 class Game
@@ -31,8 +31,8 @@ public:
 
 public:
 	DisplayWin* Display;
-	InputManager* Input;
 	ShaderManager* Shader;
+	InputDevice* InputDevice;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;

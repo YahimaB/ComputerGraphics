@@ -24,7 +24,7 @@ DisplayWin::DisplayWin(LPCWSTR appName)
 
 	RegisterClassEx(&wc);
 
-	RECT windowRect = { 0, 0, static_cast<LONG>(ClientWidth), static_cast<LONG>(ClientHeight) };
+	RECT windowRect = { 0, 0, ClientWidth, ClientHeight };
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
 	auto dwStyle = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_THICKFRAME;
@@ -46,6 +46,18 @@ DisplayWin::DisplayWin(LPCWSTR appName)
 	SetFocus(hWnd);
 
 	ShowCursor(true);
+
+	RAWINPUTDEVICE Rid[1];
+
+	Rid[0].usUsagePage = 0x01;          // HID_USAGE_PAGE_GENERIC
+	Rid[0].usUsage = 0x02;              // HID_USAGE_GENERIC_MOUSE
+	Rid[0].dwFlags = 0;
+	Rid[0].hwndTarget = 0;
+
+	if (RegisterRawInputDevices(Rid, 1, sizeof(Rid[0])) == FALSE)
+	{
+		// Registration failed. Call GetLastError for the cause of the error
+	}
 }
 
 DisplayWin::~DisplayWin()

@@ -26,7 +26,7 @@ void ShaderManager::ApplyShader(LPCWSTR shaderName)
 
 		ID3DBlob* vsBlob;
 		{
-			ShaderManager::CompileShaderFromFile(L"./Shaders/MyVeryFirstShader.hlsl", nullptr, "VSMain", "vs_5_0", &vsBlob);
+			ShaderManager::CompileShaderFromFile(shaderName, nullptr, "VSMain", "vs_5_0", &vsBlob);
 
 			game->device->CreateVertexShader(
 				vsBlob->GetBufferPointer(),
@@ -38,7 +38,7 @@ void ShaderManager::ApplyShader(LPCWSTR shaderName)
 		{
 			D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
 
-			ShaderManager::CompileShaderFromFile(L"./Shaders/MyVeryFirstShader.hlsl", Shader_Macros, "PSMain", "ps_5_0", &psBlob);
+			ShaderManager::CompileShaderFromFile(shaderName, Shader_Macros, "PSMain", "ps_5_0", &psBlob);
 			game->device->CreatePixelShader(
 				psBlob->GetBufferPointer(),
 				psBlob->GetBufferSize(),

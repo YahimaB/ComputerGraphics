@@ -37,9 +37,6 @@
     <ClCompile Include="Core\GameComponent.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\InputManager.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\ShaderManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -57,6 +54,12 @@
     </ClCompile>
     <ClCompile Include="ShapeComponents\SuperShapeComponent.cpp">
       <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\External\Delegates.cpp">
+      <Filter>Core\External</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\External\InputDevice.cpp">
+      <Filter>Core\External</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,9 +81,6 @@
     <ClInclude Include="Core\GameComponent.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\InputManager.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\ShaderManager.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -99,10 +99,21 @@
     <ClInclude Include="ShapeComponents\SuperShapeComponent.h">
       <Filter>ShapeComponents</Filter>
     </ClInclude>
+    <ClInclude Include="Core\External\Delegates.h">
+      <Filter>Core\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\External\InputDevice.h">
+      <Filter>Core\External</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Core\DirectXTK\SimpleMath.inl">
       <Filter>Core\DirectXTK</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Core\External\Delegates.natvis">
+      <Filter>Core\External</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

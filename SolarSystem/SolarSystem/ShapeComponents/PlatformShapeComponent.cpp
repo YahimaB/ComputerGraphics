@@ -1,5 +1,4 @@
 #include "PlatformShapeComponent.h"
-#include "../Core/InputManager.h"
 
 PlatformShapeComponent::PlatformShapeComponent(float posX) : ShapeComponent()
 {
@@ -25,7 +24,7 @@ void PlatformShapeComponent::Update(float deltaTime)
 {
 	auto distance = 0.001f * deltaTime;
 
-	if (InputManager::Instance->IsKeyDown(Keys::Down))
+	if (game->InputDevice->IsKeyDown(Keys::Down))
 	{
 		if (offsetY + points[1].pos.y < -1.0f)
 			return;
@@ -33,7 +32,7 @@ void PlatformShapeComponent::Update(float deltaTime)
 		offsetY -= distance;
 	}
 
-	if (InputManager::Instance->IsKeyDown(Keys::Up))
+	if (game->InputDevice->IsKeyDown(Keys::Up))
 	{
 		if (offsetY + points[0].pos.y > 1.0f)
 			return;
