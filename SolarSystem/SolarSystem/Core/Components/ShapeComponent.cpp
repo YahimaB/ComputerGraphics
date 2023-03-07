@@ -1,10 +1,5 @@
 #include "ShapeComponent.h"
 
-ShapeComponent::ShapeComponent()
-{
-	
-}
-
 void ShapeComponent::Initialize()
 {
 	D3D11_BUFFER_DESC vertexBufDesc = {};
@@ -13,10 +8,10 @@ void ShapeComponent::Initialize()
 	vertexBufDesc.CPUAccessFlags = 0;
 	vertexBufDesc.MiscFlags = 0;
 	vertexBufDesc.StructureByteStride = 0;
-	vertexBufDesc.ByteWidth = sizeof(Vertex) * pointsCount;
+	vertexBufDesc.ByteWidth = sizeof(Vertex) * points.size();
 
 	D3D11_SUBRESOURCE_DATA vertexData = {};
-	vertexData.pSysMem = points;
+	vertexData.pSysMem = points.data();
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
@@ -28,10 +23,10 @@ void ShapeComponent::Initialize()
 	indexBufDesc.CPUAccessFlags = 0;
 	indexBufDesc.MiscFlags = 0;
 	indexBufDesc.StructureByteStride = 0;
-	indexBufDesc.ByteWidth = sizeof(int) * indicesCount;
+	indexBufDesc.ByteWidth = sizeof(int) * indices.size();
 
 	D3D11_SUBRESOURCE_DATA indexData = {};
-	indexData.pSysMem = indices;
+	indexData.pSysMem = indices.data();
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
@@ -43,43 +38,23 @@ void ShapeComponent::Initialize()
 	constBufDesc.CPUAccessFlags = 0;
 	constBufDesc.MiscFlags = 0;
 	constBufDesc.StructureByteStride = 0;
-	constBufDesc.ByteWidth = sizeof(ConstBuf);
+	constBufDesc.ByteWidth = sizeof(Matrix);
 
 	game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
 }
 
 void ShapeComponent::Draw()
 {
-	ShaderManager::Instance->ApplyShader(ShaderName);
+	ShaderManager::Instance->ApplyShader(GetShaderName());
 
 	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
 	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
 	UINT offsets[] = { 0, 0 };
 
-	game->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	game->context->IASetPrimitiveTopology(GetTopology());
 	game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
 	game->context->VSSetConstantBuffers(0, 1, &constBuffer);
 
-	game->context->DrawIndexed(indicesCount, 0, 0);
-}
-
-CustomRect* ShapeComponent::GetRect()
-{
-	return nullptr;
-}
-
-bool ShapeComponent::Intersects(const CustomRect& rect1, const CustomRect& rect2)
-{
-	bool insideX = false;
-	bool insideY = false;
-
-	insideX = rect1.left > rect2.left && rect1.left < rect2.right
-		|| rect1.right > rect2.left && rect1.right < rect2.right;
-
-
-	insideY = rect1.bot > rect2.bot && rect1.bot < rect2.top
-		|| rect1.top > rect2.bot && rect1.top < rect2.top;
-
-	return insideX && insideY;
+	game->context->DrawIndexed(indices.size(), 0, 0);
 }

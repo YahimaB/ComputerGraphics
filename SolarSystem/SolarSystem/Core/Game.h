@@ -20,6 +20,8 @@
 #include "DisplayWin.h"
 #include "ShaderManager.h"
 #include "GameComponent.h"
+#include "Components/Camera.h"
+#include "Components/CameraController.h"
 #include "External/InputDevice.h"
 
 
@@ -33,6 +35,8 @@ public:
 	DisplayWin* Display;
 	ShaderManager* Shader;
 	InputDevice* InputDevice;
+	Camera* Camera;
+	CameraController* controller;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
@@ -43,7 +47,7 @@ public:
 	D3D11_VIEWPORT viewport;
 
 	int componentsCount = 0;
-	static const int MAX_COMPONENTS = 4;
+	static const int MAX_COMPONENTS = 500;
 	GameComponent* components_[MAX_COMPONENTS];
 
 public:

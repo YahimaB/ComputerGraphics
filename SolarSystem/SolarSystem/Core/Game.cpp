@@ -41,10 +41,15 @@ bool Game::Initialize()
 
 	Shader = new ShaderManager();
 
+	Camera = new ::Camera();
+	Camera->AspectRatio = static_cast<float>(Display->ClientWidth) / static_cast<float>(Display->ClientHeight);
+
 	for (int i = 0; i < componentsCount; i++)
 	{
 		components_[i]->Initialize();
 	}
+
+	controller = new ::CameraController();
 
 	return true;
 }
@@ -155,6 +160,9 @@ void Game::Run()
 void Game::Update(float deltaTime)
 {
 	UpdateInternal();
+
+	controller->Update();
+	Camera->UpdateMatrix();
 
 	for (int i = 0; i < componentsCount; i++)
 	{

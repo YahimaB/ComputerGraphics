@@ -14,13 +14,13 @@ public:
 	GameComponent();
 	~GameComponent();
 
-	void virtual Initialize();
-	void virtual Draw();
-	void virtual Update(float deltaTime);
-	void virtual DestroyResources();
+	void virtual Initialize() {};
+	void virtual Draw() {};
+	void virtual Update(float deltaTime) {};
+	void virtual DestroyResources() {};
+
 
 protected:
 	Game* game;
-
 };
 

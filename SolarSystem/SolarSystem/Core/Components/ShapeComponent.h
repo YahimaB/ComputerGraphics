@@ -2,47 +2,42 @@
 
 #include "../Game.h"
 #include "../GameComponent.h"
+#include "../DirectXTK/SimpleMath.h"
 
-#define float4 DirectX::XMFLOAT4
+using namespace DirectX;
+using namespace SimpleMath;
 
-struct ConstBuf {
-	float4 Offset;
+
+struct ConstBuff {
+	Matrix World_View_Projection;
 };
 
 struct Vertex {
-	float4 pos;
-	float4 col = float4(1.0f, 1.0f, 1.0f, 1.0f);
-};
-
-struct CustomRect {
-	float left;
-	float bot;
-	float top;
-	float right;
+	Vector4 pos = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+	Vector4 col = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
 class ShapeComponent : public GameComponent
 {
 public:
-	ShapeComponent();
+	ShapeComponent() {};
+	~ShapeComponent() {};
 
 	void Initialize() override;
 	void Draw() override;
 
-	virtual CustomRect* GetRect();
-	bool Intersects(const CustomRect& rect1, const CustomRect& rect2);
-
 protected:
-	LPCWSTR ShaderName = L"./Shaders/MyVeryFirstShader.hlsl";
 
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
 	ID3D11Buffer* constBuffer;
 
+	std::vector<Vertex> points;
+	std::vector<int> indices;
 
-	int pointsCount;
-	int indicesCount;
-	Vertex points[30];
-	int indices[100];
+protected:
+
+	virtual LPCWSTR GetShaderName() { return L"./Shaders/MyVeryFirstShader.hlsl"; }
+	virtual D3D_PRIMITIVE_TOPOLOGY GetTopology() { return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST; }
 };
 

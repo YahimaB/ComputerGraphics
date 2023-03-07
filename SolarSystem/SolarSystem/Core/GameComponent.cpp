@@ -1,6 +1,5 @@
 #include "GameComponent.h"
 #include "Game.h"
-#include "ShaderManager.h"
 
 GameComponent::GameComponent()
 {
@@ -9,22 +8,5 @@ GameComponent::GameComponent()
 
 GameComponent::~GameComponent()
 {
-}
-
-void GameComponent::Initialize()
-{
-	
-}
-
-void GameComponent::Draw()
-{
-	
-}
-
-void GameComponent::Update(float deltaTime)
-{
-}
-
-void GameComponent::DestroyResources()
-{
+	game = nullptr;
 }
