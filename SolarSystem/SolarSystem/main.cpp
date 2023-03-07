@@ -1,21 +1,28 @@
 #include "Core/Game.h"
-#include "ShapeComponents/DelimiterShapeComponent.h"
-#include "ShapeComponents/PlatformShapeComponent.h"
-#include "ShapeComponents/CircleShapeComponent.h"
-#include "ShapeComponents/SuperShapeComponent.h"
+
+#include "ShapeComponents/GridComponent.h"
+#include "ShapeComponents/SphereComponent.h"
+#include "ShapeComponents/CosmicBodyComponent.h"
+
 
 int main()
 {
 	Game* MyGame = new Game(L"MySuperApp");
 
-	PlatformShapeComponent* Platforms[2] = { new PlatformShapeComponent(-0.95f), new PlatformShapeComponent(0.95f) };
+	MyGame->CreateComponent(new GridComponent());
 
-	MyGame->CreateComponent(new DelimiterShapeComponent());
-	MyGame->CreateComponent(Platforms[0]);
-	MyGame->CreateComponent(Platforms[1]);
-	MyGame->CreateComponent(new CircleShapeComponent(0.05f, Platforms));
+	std::vector<CosmicBodyComponent*> bodies;
 
-	/*MyGame->CreateComponent(new SuperShapeComponent());*/
+	bodies.push_back(new CosmicBodyComponent(3.0f));											//0
+	bodies.push_back(new CosmicBodyComponent(0.7f, 4.0f, 2.0f, &bodies[0]->Position));			//1
+	bodies.push_back(new CosmicBodyComponent(1.0f, 7.0f, 1.0f, &bodies[0]->Position));			//2
+	bodies.push_back(new CosmicBodyComponent(1.0f, 10.0f, 0.8f, &bodies[0]->Position));			//3
+	bodies.push_back(new CosmicBodyComponent(0.3f, 2.0f, 8.0f, &bodies[3]->Position));			//4
+
+	for (auto body : bodies)
+	{
+		MyGame->CreateComponent(body);
+	}
 
 	if (MyGame->Initialize())
 	{

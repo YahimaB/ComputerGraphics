@@ -39,10 +39,10 @@ public:
 	DirectX::SimpleMath::Matrix GetViewMatrix() const;
 	DirectX::SimpleMath::Matrix GetProjectionMatrix() const;
 
-	DirectX::SimpleMath::Matrix GetMatrix() const;
+	DirectX::SimpleMath::Matrix GetViewProjectionMatrix() const;
 
 protected:
-	DirectX::SimpleMath::Matrix viewProj = Matrix::Identity;
+	DirectX::SimpleMath::Matrix ViewProjectionMatrix = Matrix::Identity;
 
 };
 

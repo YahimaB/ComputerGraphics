@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
@@ -34,32 +30,35 @@
     <ClCompile Include="Core\Game.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\GameComponent.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\ShaderManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Components\ShapeComponent.cpp">
       <Filter>Core\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ShapeComponents\CircleShapeComponent.cpp">
-      <Filter>ShapeComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="ShapeComponents\DelimiterShapeComponent.cpp">
-      <Filter>ShapeComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="ShapeComponents\PlatformShapeComponent.cpp">
-      <Filter>ShapeComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="ShapeComponents\SuperShapeComponent.cpp">
-      <Filter>ShapeComponents</Filter>
-    </ClCompile>
     <ClCompile Include="Core\External\Delegates.cpp">
       <Filter>Core\External</Filter>
     </ClCompile>
     <ClCompile Include="Core\External\InputDevice.cpp">
       <Filter>Core\External</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\Camera.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\CameraController.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\GridComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\SphereComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GameComponent.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\CosmicBodyComponent.cpp">
+      <Filter>ShapeComponents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,23 +86,26 @@
     <ClInclude Include="Core\Components\ShapeComponent.h">
       <Filter>Core\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ShapeComponents\CircleShapeComponent.h">
-      <Filter>ShapeComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeComponents\DelimiterShapeComponent.h">
-      <Filter>ShapeComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeComponents\PlatformShapeComponent.h">
-      <Filter>ShapeComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeComponents\SuperShapeComponent.h">
-      <Filter>ShapeComponents</Filter>
-    </ClInclude>
     <ClInclude Include="Core\External\Delegates.h">
       <Filter>Core\External</Filter>
     </ClInclude>
     <ClInclude Include="Core\External\InputDevice.h">
       <Filter>Core\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\Camera.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\CameraController.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\GridComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\SphereComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\CosmicBodyComponent.h">
+      <Filter>ShapeComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

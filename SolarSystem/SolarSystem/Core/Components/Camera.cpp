@@ -9,12 +9,12 @@ Camera::Camera()
 
 void Camera::UpdateMatrix()
 {
-	viewProj = GetViewMatrix() * GetProjectionMatrix();
+	ViewProjectionMatrix = GetViewMatrix() * GetProjectionMatrix();
 }
 
-Matrix Camera::GetMatrix() const
+Matrix Camera::GetViewProjectionMatrix() const
 {
-	return viewProj;
+	return ViewProjectionMatrix;
 }
 
 Matrix Camera::GetViewMatrix() const

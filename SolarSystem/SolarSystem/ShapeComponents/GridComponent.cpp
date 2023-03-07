@@ -24,9 +24,10 @@ GridComponent::GridComponent(float cellSize, int lineCount)
 
 void GridComponent::Update(float deltaTime)
 {
-	Matrix worldViewProj = game->Camera->GetMatrix();
-	worldViewProj = worldViewProj.Transpose();
-	game->context->UpdateSubresource(constBuffer, 0, nullptr, &worldViewProj, 0, 0);
+	Matrix worldViewProj = game->Camera->GetViewProjectionMatrix();
+
+	auto buffMatrix = worldViewProj.Transpose();
+	game->context->UpdateSubresource(constBuffer, 0, nullptr, &buffMatrix, 0, 0);
 }
 
 Vector4 GridComponent::GetColor(int index)

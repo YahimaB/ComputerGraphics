@@ -6,11 +6,11 @@
 class SphereComponent : public ShapeComponent
 {
 public:
-	DirectX::SimpleMath::Quaternion Rotation;
-	DirectX::SimpleMath::Vector3 Position;
+	Quaternion Rotation = Quaternion::Identity;
+	Vector3 Position = Vector3::Zero;
 
 public:
-	SphereComponent(float radius, int sliceCount, int stackCount, DirectX::SimpleMath::Vector4 col1, DirectX::SimpleMath::Vector4 col2);
+	SphereComponent(float radius, int sliceCount = 32, int stackCount = 32);
 
 	void Update(float deltaTime) override;
 

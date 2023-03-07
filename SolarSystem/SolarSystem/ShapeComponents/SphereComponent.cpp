@@ -1,11 +1,9 @@
 #include "SphereComponent.h"
 
-SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount, Vector4 col1, Vector4 col2)
-	: Rotation(Quaternion::Identity), Position(Vector3::Zero)
+SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount)
 {
-
-	Vertex topVertex({ Vector4(0.0f, radius, 0.0f, 1.0f), Vector4(0.0f, radius, 0.0f, 1.0f) });
-	Vertex bottomVertex({ Vector4(0.0f, -radius, 0.0f, 1.0f), Vector4(0.0f, -radius, 0.0f, 1.0f) });
+	Vertex topVertex({ Vector4(0.0f, radius, 0.0f, 1.0f) });
+	Vertex bottomVertex({ Vector4(0.0f, -radius, 0.0f, 1.0f) });
 
 	points.push_back(topVertex);
 
@@ -28,6 +26,7 @@ SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount, V
 			v.pos.x = radius * sinf(phi) * cosf(theta);
 			v.pos.y = radius * cosf(phi);
 			v.pos.z = radius * sinf(phi) * sinf(theta);
+			
 			v.col = v.pos;
 
 			points.push_back(v);
@@ -91,8 +90,9 @@ SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount, V
 
 void SphereComponent::Update(float deltaTime)
 {
-	const Matrix world = Matrix::CreateFromQuaternion(Rotation) * Matrix::CreateTranslation(Position);
-	Matrix worldViewProj = world * game->Camera->GetMatrix();
-	worldViewProj = worldViewProj.Transpose();
-	game->context->UpdateSubresource(constBuffer, 0, nullptr, &worldViewProj, 0, 0);
+	Matrix world = Matrix::CreateTranslation(Position) * Matrix::CreateFromQuaternion(Rotation);
+	Matrix worldViewProj = world * game->Camera->GetViewProjectionMatrix();
+
+	auto buffMatrix = worldViewProj.Transpose();
+	game->context->UpdateSubresource(constBuffer, 0, nullptr, &buffMatrix, 0, 0);
 }

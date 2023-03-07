@@ -183,6 +183,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Components\Camera.cpp" />
+    <ClCompile Include="Core\Components\CameraController.cpp" />
     <ClCompile Include="Core\Components\ShapeComponent.cpp" />
     <ClCompile Include="Core\DirectXTK\SimpleMath.cpp" />
     <ClCompile Include="Core\DisplayWin.cpp" />
@@ -192,12 +194,13 @@
     <ClCompile Include="Core\GameComponent.cpp" />
     <ClCompile Include="Core\ShaderManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ShapeComponents\CircleShapeComponent.cpp" />
-    <ClCompile Include="ShapeComponents\DelimiterShapeComponent.cpp" />
-    <ClCompile Include="ShapeComponents\PlatformShapeComponent.cpp" />
-    <ClCompile Include="ShapeComponents\SuperShapeComponent.cpp" />
+    <ClCompile Include="ShapeComponents\CosmicBodyComponent.cpp" />
+    <ClCompile Include="ShapeComponents\GridComponent.cpp" />
+    <ClCompile Include="ShapeComponents\SphereComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Components\Camera.h" />
+    <ClInclude Include="Core\Components\CameraController.h" />
     <ClInclude Include="Core\Components\ShapeComponent.h" />
     <ClInclude Include="Core\DirectXTK\PlatformHelpers.h" />
     <ClInclude Include="Core\DirectXTK\SimpleMath.h" />
@@ -208,10 +211,9 @@
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Core\GameComponent.h" />
     <ClInclude Include="Core\ShaderManager.h" />
-    <ClInclude Include="ShapeComponents\CircleShapeComponent.h" />
-    <ClInclude Include="ShapeComponents\DelimiterShapeComponent.h" />
-    <ClInclude Include="ShapeComponents\PlatformShapeComponent.h" />
-    <ClInclude Include="ShapeComponents\SuperShapeComponent.h" />
+    <ClInclude Include="ShapeComponents\CosmicBodyComponent.h" />
+    <ClInclude Include="ShapeComponents\GridComponent.h" />
+    <ClInclude Include="ShapeComponents\SphereComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Core\DirectXTK\SimpleMath.inl" />
