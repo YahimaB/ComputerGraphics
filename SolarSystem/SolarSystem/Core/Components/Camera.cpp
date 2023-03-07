@@ -3,7 +3,7 @@
 Camera::Camera()
 {
 	Position = Vector3::Backward * 10.0f;
-	Target = Vector3::Zero;
+	Target = Vector3::Up;
 	Up = Vector3::Up;
 }
 

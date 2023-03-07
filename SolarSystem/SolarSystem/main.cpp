@@ -26,6 +26,7 @@ int main()
 
 	if (MyGame->Initialize())
 	{
+		MyGame->controller->bodies = bodies;
 		MyGame->Run();
 	}
 
