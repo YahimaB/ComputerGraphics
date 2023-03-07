@@ -43,6 +43,7 @@ public:
 	IDXGISwapChain* swapChain;
 
 	ID3D11RenderTargetView* renderView;
+	ID3D11DepthStencilView* depthView;
 	ID3D11RasterizerState* rastState;
 	D3D11_VIEWPORT viewport;
 

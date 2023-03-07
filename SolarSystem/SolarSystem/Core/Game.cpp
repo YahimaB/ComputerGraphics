@@ -107,9 +107,30 @@ bool Game::CreateBackBuffer()
 		return false;
 	}
 
+	D3D11_TEXTURE2D_DESC depthStencilDesc = {};
+	depthStencilDesc.Width = Display->ClientWidth;
+	depthStencilDesc.Height = Display->ClientHeight;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0;
+	depthStencilDesc.MiscFlags = 0;
+
+	ID3D11Texture2D* depthTex;
+	res = device->CreateTexture2D(&depthStencilDesc, nullptr, &depthTex);
+	res = device->CreateDepthStencilView(depthTex, nullptr, &depthView);
+	depthTex->Release();
+
+
 	CD3D11_RASTERIZER_DESC rastDesc = {};
-	rastDesc.CullMode = D3D11_CULL_NONE;
+	rastDesc.CullMode = D3D11_CULL_BACK;
 	rastDesc.FillMode = D3D11_FILL_SOLID;
+	rastDesc.FrontCounterClockwise = true;
+	rastDesc.DepthClipEnable = true;
 
 	res = device->CreateRasterizerState(&rastDesc, &rastState);
 	context->RSSetState(rastState);
@@ -191,8 +212,9 @@ void Game::PrepareFrame()
 	context->RSSetViewports(1, &viewport);
 
 	float color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	context->OMSetRenderTargets(1, &renderView, nullptr);
+	context->OMSetRenderTargets(1, &renderView, depthView);
 	context->ClearRenderTargetView(renderView, color);
+	context->ClearDepthStencilView(depthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 void Game::Draw()
