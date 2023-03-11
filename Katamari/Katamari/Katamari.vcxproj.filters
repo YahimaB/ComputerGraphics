@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{23a81bce-46aa-4064-b6d0-b8e83c28d3af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Components">
+      <UniqueIdentifier>{d8a5d9ef-ddc8-484d-bff5-ffd8291b185c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\DirectXTK">
+      <UniqueIdentifier>{8311f05d-7676-4fa9-9214-a3bbe339d541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\External">
+      <UniqueIdentifier>{6f60f36e-96a1-4281-97ec-03a54c6fe43c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShapeComponents">
+      <UniqueIdentifier>{495f0ee9-7658-45b6-8d44-bed27e55ba3f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\External\Delegates.cpp">
+      <Filter>Core\External</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\External\InputDevice.cpp">
+      <Filter>Core\External</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DirectXTK\SimpleMath.cpp">
+      <Filter>Core\DirectXTK</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\Camera.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\CameraController.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\ShapeComponent.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DisplayWin.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Game.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GameComponent.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ShaderManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\CosmicBodyComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\GridComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\SphereComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\External\Delegates.h">
+      <Filter>Core\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\External\InputDevice.h">
+      <Filter>Core\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\External\Keys.h">
+      <Filter>Core\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\PlatformHelpers.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\SimpleMath.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\Camera.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\CameraController.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\ShapeComponent.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DisplayWin.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Game.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameComponent.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ShaderManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\CosmicBodyComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\GridComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\SphereComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Core\External\Delegates.natvis">
+      <Filter>Core\External</Filter>
+    </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core\DirectXTK\SimpleMath.inl">
+      <Filter>Core\DirectXTK</Filter>
+    </None>
+  </ItemGroup>
+</Project>
