@@ -58,6 +58,9 @@
       <Filter>ShapeComponents</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Core\GameObject.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -105,6 +108,12 @@
     <ClInclude Include="ShapeComponents\SphereComponent.h">
       <Filter>ShapeComponents</Filter>
     </ClInclude>
+    <ClInclude Include="Core\GameObject.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MinimalCore.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Core\External\Delegates.natvis">
@@ -115,5 +124,6 @@
     <None Include="Core\DirectXTK\SimpleMath.inl">
       <Filter>Core\DirectXTK</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

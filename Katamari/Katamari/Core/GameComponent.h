@@ -10,9 +10,16 @@ class Game;
 
 class GameComponent
 {
+	int _temp;
+
 public:
 	GameComponent();
 	~GameComponent();
+
+	bool IsUniqueVariant = false;
+
+public:
+	
 
 	void virtual Initialize() {};
 	void virtual Draw() {};

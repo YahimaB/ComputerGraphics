@@ -4,6 +4,8 @@
 #include "../GameComponent.h"
 #include "../DirectXTK/SimpleMath.h"
 
+#include "assimp/Importer.hpp"
+
 using namespace DirectX;
 using namespace SimpleMath;
 
