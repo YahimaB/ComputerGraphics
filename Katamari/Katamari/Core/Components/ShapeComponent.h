@@ -2,7 +2,6 @@
 
 #include "../Game.h"
 #include "../GameComponent.h"
-#include "../DirectXTK/SimpleMath.h"
 
 #include "assimp/Importer.hpp"
 

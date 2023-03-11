@@ -6,10 +6,6 @@
 class SphereComponent : public ShapeComponent
 {
 public:
-	Quaternion Rotation = Quaternion::Identity;
-	Vector3 Position = Vector3::Zero;
-
-public:
 	SphereComponent(float radius, int sliceCount = 32, int stackCount = 32);
 
 	void Update(float deltaTime) override;
