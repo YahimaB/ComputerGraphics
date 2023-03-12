@@ -1,13 +1,10 @@
 #include "Camera.h"
+#include "Transform.h"
 
 Camera* Camera::Current = 0;
 
 Camera::Camera()
 {
-	Position = Vector3::Backward * 10.0f;
-	Target = Vector3::Up;
-	Up = Vector3::Up;
-
 	if (Current == nullptr)
 	{
 		Current = this;
@@ -28,7 +25,13 @@ Matrix Camera::GetViewProjectionMatrix() const
 
 Matrix Camera::GetViewMatrix() const
 {
-	return Matrix::CreateLookAt(Position, Target, Up);
+	Vector3 forward = Vector3::Transform(Vector3::Forward, Transform->Rotation);
+
+	auto position = Transform->Position;
+	auto target = position + forward;
+	auto up = Vector3::Transform(Vector3::Up, Transform->Rotation);
+
+	return Matrix::CreateLookAt(Transform->Position, target, up);
 }
 
 Matrix Camera::GetProjectionMatrix() const

@@ -183,6 +183,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Components\Camera.cpp" />
+    <ClCompile Include="Core\Components\CameraController.cpp" />
     <ClCompile Include="Core\Components\OrbitCameraController.cpp" />
     <ClCompile Include="Core\Components\RendererComponent.cpp" />
     <ClCompile Include="Core\Components\Transform.cpp" />
@@ -202,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Components\Camera.h" />
+    <ClInclude Include="Core\Components\CameraController.h" />
     <ClInclude Include="Core\Components\OrbitCameraController.h" />
     <ClInclude Include="Core\Components\RendererComponent.h" />
     <ClInclude Include="Core\Components\Transform.h" />

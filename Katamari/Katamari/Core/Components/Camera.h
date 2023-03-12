@@ -23,10 +23,6 @@ public:
 		float Far = 1000.0f;
 	};
 
-	DirectX::SimpleMath::Vector3 Position;
-	DirectX::SimpleMath::Vector3 Target;
-	DirectX::SimpleMath::Vector3 Up;
-
 public:
 	ProjectionType Projection = ProjectionType::Perspective;
 	ClippingPlanes ClipPlanes = {};

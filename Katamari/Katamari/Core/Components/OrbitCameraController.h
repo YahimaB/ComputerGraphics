@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../MinimalCore.h"
-#include "../Game.h"
 #include "../External/InputDevice.h"
 
 #include "../GameComponent.h"
@@ -10,17 +9,12 @@
 using namespace DirectX;
 using namespace SimpleMath;
 
-//class KatamariBall;
-
 class OrbitCameraController : public GameComponent
 {
 private:
-    Game* game;
     Camera* camera;
-    //InputDevice* inputDevice;
-    //GameComponent* target;
-
-
+    InputDevice* inputDevice;
+    GameComponent* target;
 
     Quaternion rotation = Quaternion::Identity;
     float radius = 10.0f;
@@ -29,8 +23,6 @@ private:
     bool isLMBActivated = true;
 
 public:
-    GameComponent* target;
-
 	OrbitCameraController(GameComponent* t);
 
     void Update(float deltaTime) override;

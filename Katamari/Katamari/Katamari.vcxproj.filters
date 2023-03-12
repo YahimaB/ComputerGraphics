@@ -70,6 +70,9 @@
     <ClCompile Include="KatamariScripts\KatamariBallController.cpp">
       <Filter>KatamariScripts</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Components\CameraController.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="KatamariScripts\KatamariBallController.h">
       <Filter>KatamariScripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\CameraController.h">
+      <Filter>Core\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
