@@ -1,16 +1,17 @@
-#include "OrbitCameraController.h"
-#include "../Game.h"
-#include "Transform.h"
+#include "KatamariCameraController.h"
 
-OrbitCameraController::OrbitCameraController()
+#include "../Core/Game.h"
+#include "../Core/Components/Transform.h"
+
+KatamariCameraController::KatamariCameraController()
 {
 	_camera = Camera::Current;
 	_inputDevice = Game::Instance->InputDevice;
 
-	_inputDevice->MouseMove.AddRaw(this, &OrbitCameraController::OnMouseMove);
+	_inputDevice->MouseMove.AddRaw(this, &KatamariCameraController::OnMouseMove);
 }
 
-void OrbitCameraController::OnMouseMove(const InputDevice::MouseMoveEventArgs& args)
+void KatamariCameraController::OnMouseMove(const InputDevice::MouseMoveEventArgs& args)
 {
 	if (_inputDevice->IsKeyDown(Keys::LeftButton))
 	{
@@ -22,7 +23,7 @@ void OrbitCameraController::OnMouseMove(const InputDevice::MouseMoveEventArgs& a
 	}
 }
 
-void OrbitCameraController::Update(float deltaTime)
+void KatamariCameraController::Update(float deltaTime)
 {
 	//std::cout << _pitch << std::endl;
 	Quaternion rotationMatrix = Quaternion::CreateFromYawPitchRoll(0.0f, _pitch, 0.0f);

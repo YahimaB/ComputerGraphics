@@ -25,3 +25,5 @@ protected:
 	std::string virtual GetUniqueId() { return std::string(); }
 };
 
+#include "Components/Transform.h"
+

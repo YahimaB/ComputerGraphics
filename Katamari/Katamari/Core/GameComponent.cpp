@@ -1,6 +1,6 @@
 #include "GameComponent.h"
 #include "GameObject.h"
-#include "Components/Transform.h"
+//#include "Components/Transform.h"
 
 
 void GameComponent::DestroyResources()

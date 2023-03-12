@@ -22,14 +22,6 @@ GridComponent::GridComponent(float cellSize, int lineCount)
 	}
 }
 
-void GridComponent::Update(float deltaTime)
-{
-	Matrix worldViewProj = Camera->GetViewProjectionMatrix();
-
-	auto buffMatrix = worldViewProj.Transpose();
-	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &buffMatrix, 0, 0);
-}
-
 Vector4 GridComponent::GetColor(int index)
 {
 	auto visibility = index % 5 == 0 ? 0.3f : 0.1f;

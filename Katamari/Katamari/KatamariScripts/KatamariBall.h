@@ -1,7 +1,7 @@
 #pragma once
 
 //#include "../Core/MinimalCore.h"
-#include "../ShapeComponents/SphereComponent.h"
+#include "../Core/Components/RendererComponents/SphereComponent.h"
 
 class KatamariBall : public SphereComponent
 {

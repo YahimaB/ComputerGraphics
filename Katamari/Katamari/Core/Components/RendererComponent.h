@@ -22,6 +22,7 @@ public:
 	RendererComponent();
 
 	void Initialize() override;
+	void Update(float deltaTime) override;
 	void Draw() override;
 	void DestroyResources() override;
 

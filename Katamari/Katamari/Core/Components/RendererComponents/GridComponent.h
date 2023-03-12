@@ -1,13 +1,11 @@
 #pragma once
 
-#include "../Core/Components/RendererComponent.h"
+#include "../RendererComponent.h"
 
 class GridComponent : public RendererComponent
 {
 public:
 	GridComponent(float cellSize = 1.0f, int lineCount = 100);
-
-	void Update(float deltaTime) override;
 
 protected:
 	LPCWSTR GetShaderName() override { return L"./Shaders/My3DShader.hlsl"; }

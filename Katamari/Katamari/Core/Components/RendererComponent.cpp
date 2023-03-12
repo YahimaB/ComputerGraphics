@@ -49,6 +49,17 @@ void RendererComponent::Initialize()
 	Game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
 }
 
+void RendererComponent::Update(float deltaTime)
+{
+	Transform->Rotation.Normalize();
+	//Matrix world = Matrix::CreateScale(Transform->Scale) * Matrix::CreateFromQuaternion(Transform->Rotation) * Matrix::CreateTranslation(Transform->Position);
+	Matrix world = Transform->GetModel();
+	Matrix worldViewProj = world * Camera->GetViewProjectionMatrix();
+
+	auto buffMatrix = worldViewProj.Transpose();
+	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &buffMatrix, 0, 0);
+}
+
 void RendererComponent::Draw()
 {
 	ShaderManager::Instance->ApplyShader(GetShaderName());

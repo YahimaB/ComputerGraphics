@@ -1,18 +1,18 @@
 #pragma once
 
-#include "../MinimalCore.h"
-#include "../External/InputDevice.h"
+#include "../Core/MinimalCore.h"
+#include "../Core/External/InputDevice.h"
 
-#include "../GameComponent.h"
-#include "Camera.h"
+#include "../Core/GameComponent.h"
+#include "../Core/Components/Camera.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
 
-class OrbitCameraController : public GameComponent
+class KatamariCameraController : public GameComponent
 {
 public:
-    OrbitCameraController();
+    KatamariCameraController();
 
     void Update(float deltaTime) override;
     void OnMouseMove(const InputDevice::MouseMoveEventArgs& args);
