@@ -11,20 +11,18 @@ using namespace SimpleMath;
 
 class OrbitCameraController : public GameComponent
 {
-private:
-    Camera* camera;
-    InputDevice* inputDevice;
-
-    Quaternion rotation = Quaternion::Identity;
-    float sensitivityY = 0.004f;
-
 public:
-	OrbitCameraController();
+    OrbitCameraController();
 
     void Update(float deltaTime) override;
     void OnMouseMove(const InputDevice::MouseMoveEventArgs& args);
 
-    Vector3 GetForward() const;
-    Vector3 GetUp() const;
+private:
+    Camera* _camera;
+    InputDevice* _inputDevice;
+
+    float _sensitivity = 0.005f;
+    float _yaw = 0.0f; //Mouse X || around y axis
+    float _pitch = 0.0f; //Mouse Y || aroud x axis
 };
 

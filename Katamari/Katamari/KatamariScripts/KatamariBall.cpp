@@ -91,19 +91,14 @@ void KatamariBall::Update(float deltaTime)
 
 void KatamariBall::SetDirection(Vector3 dir)
 {
-    Vector3 tmp = Vector3(dir.x, 0.0f, dir.z);
-    tmp.Normalize();
-    Quaternion q = Quaternion::CreateFromAxisAngle(tmp.Cross(Vector3::Up), -rotationMaxSpeed);
-    float f = Quaternion::Angle(Quaternion::Identity, savedRot) / 0.1f;
-    savedRot *= Quaternion::Lerp(q, Quaternion::Identity, f);
-    velocity = tmp * moveMaxSpeed;
-}
-
-void KatamariBall::SetPosition(Vector3 p)
-{
-    //outline->SetPosition(p);
-    Transform->Position = p;
-    //SphereComponent::SetPosition(p);
+    //Vector3 tmp = Vector3(dir.x, 0.0f, dir.z);
+    //std::cout << dir.x << " | " << dir.y << " | " << dir.z << std::endl;
+    dir = Vector3::Transform(dir, Transform->Rotation);
+    dir.Normalize();
+    //Quaternion q = Quaternion::CreateFromAxisAngle(tmp.Cross(Vector3::Up), -rotationMaxSpeed);
+    //float f = Quaternion::Angle(Quaternion::Identity, savedRot) / 0.1f;
+    //savedRot *= Quaternion::Lerp(q, Quaternion::Identity, f);
+    velocity = dir * moveMaxSpeed;
 }
 
 

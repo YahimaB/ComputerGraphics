@@ -1,35 +1,48 @@
 #include "KatamariBallController.h"
 #include "../Core/Components/Transform.h"
 
-KatamariBallController::KatamariBallController(KatamariBall* ball, OrbitCameraController* contr)
+KatamariBallController::KatamariBallController()
 {
-    game = Game::Instance;
-	_ball = ball;
-	_contr = contr;
+    _inputDevice = Game::Instance->InputDevice;
 
-    inputDevice = Game::Instance->InputDevice;
-	inputDevice->MouseMove.AddRaw(this, &KatamariBallController::OnMouseMove);
+	_inputDevice->MouseMove.AddRaw(this, &KatamariBallController::OnMouseMove);
 }
 
 void KatamariBallController::OnMouseMove(const InputDevice::MouseMoveEventArgs& args)
 {
-	if (inputDevice->IsKeyDown(Keys::LeftButton))
+	if (_inputDevice->IsKeyDown(Keys::LeftButton))
 	{
-		_ball->Transform->Rotation *= Quaternion::CreateFromAxisAngle(Vector3::Up, -0.004f * inputDevice->MouseOffset.x);
+		Transform->Rotation *= Quaternion::CreateFromAxisAngle(Vector3::Up, -0.004f * args.Offset.x);
 	}
 }
 
 void KatamariBallController::Update(float deltaTime)
 {
+    deltaTime /= 1000.0f;
+    _velocity *= 1.0f - _moveDrag * deltaTime;
+
     Vector3 dir = Vector3::Zero;
-   if (game->InputDevice->IsKeyDown(Keys::W))
-       dir += _ball->GetForward();
-   if (game->InputDevice->IsKeyDown(Keys::S))
-       dir -= _ball->GetForward();
-   if (game->InputDevice->IsKeyDown(Keys::A))
-       dir -= (_ball->GetForward()).Cross(_ball->GetUp());
-   if (game->InputDevice->IsKeyDown(Keys::D))
-       dir += (_ball->GetForward()).Cross(_ball->GetUp());
-   if (dir.Length() > 0.0f)
-       _ball->SetDirection(dir);
+    if (_inputDevice->IsKeyDown(Keys::W))
+        dir += Vector3::Forward;
+
+    if (_inputDevice->IsKeyDown(Keys::S))
+        dir += Vector3::Backward;
+
+    if (_inputDevice->IsKeyDown(Keys::D))
+        dir += Vector3::Right;
+
+    if (_inputDevice->IsKeyDown(Keys::A))
+        dir += Vector3::Left;
+    
+    if (dir.Length() > 0.0f)
+        SetDirection(dir);
+
+    Transform->Position += _velocity * deltaTime;
+}
+
+void KatamariBallController::SetDirection(Vector3 dir)
+{
+    dir = Vector3::Transform(dir, Transform->Rotation);
+    dir.Normalize();
+    _velocity = dir * _moveMaxSpeed;
 }

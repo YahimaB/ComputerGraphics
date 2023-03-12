@@ -4,35 +4,28 @@
 
 OrbitCameraController::OrbitCameraController()
 {
-	camera = Camera::Current;
-	inputDevice = Game::Instance->InputDevice;
+	_camera = Camera::Current;
+	_inputDevice = Game::Instance->InputDevice;
 
-	inputDevice->MouseMove.AddRaw(this, &OrbitCameraController::OnMouseMove);
+	_inputDevice->MouseMove.AddRaw(this, &OrbitCameraController::OnMouseMove);
 }
 
 void OrbitCameraController::OnMouseMove(const InputDevice::MouseMoveEventArgs& args)
 {
-	if (inputDevice->IsKeyDown(Keys::LeftButton))
+	if (_inputDevice->IsKeyDown(Keys::LeftButton))
 	{
-		Vector3 tmp = Vector3::Transform(Vector3::Right, rotation);
-		if ((GetForward().y < 0 || inputDevice->MouseOffset.y > 0) && (GetUp().y > 0.05f || inputDevice->MouseOffset.y < 0))
-		{
-			rotation *= Quaternion::CreateFromAxisAngle(tmp, -sensitivityY * inputDevice->MouseOffset.y);
-		}
+		float xValue = _sensitivity * args.Offset.x;
+		float yValue = _sensitivity * args.Offset.y;
+
+		_yaw -= xValue;
+		_pitch -= yValue;
 	}
 }
 
 void OrbitCameraController::Update(float deltaTime)
 {
-	camera->Transform->Rotation = rotation;
-}
+	//std::cout << _pitch << std::endl;
+	Quaternion rotationMatrix = Quaternion::CreateFromYawPitchRoll(0.0f, _pitch, 0.0f);
 
-Vector3 OrbitCameraController::GetForward() const
-{
-	return Vector3::Transform(Vector3::Forward, rotation);
-}
-
-Vector3 OrbitCameraController::GetUp() const
-{
-	return Vector3::Transform(Vector3::Up, rotation);
+	_camera->Transform->Rotation = rotationMatrix;
 }

@@ -1,24 +1,29 @@
 #pragma once
 
+#include "../Core/Game.h"
 #include "../Core/GameComponent.h"
-#include "../Core/Components/OrbitCameraController.h"
-#include "KatamariBall.h"
+#include "../Core/External/InputDevice.h"
+
+using namespace DirectX;
+using namespace SimpleMath;
 
 class KatamariBallController : public GameComponent
 {
 public:
-	KatamariBallController(KatamariBall* ball, OrbitCameraController* contr);
+	KatamariBallController();
 
 	void Update(float deltaTime) override;
+	void OnMouseMove(const InputDevice::MouseMoveEventArgs& args);
 
 private:
-	Game* game;
-	InputDevice* inputDevice;
+	InputDevice* _inputDevice;
 
+	float _moveMaxSpeed = 8.0f;
+	float _moveDrag = 5.0f;
+	Vector3 _velocity = Vector3::Zero;
 
-	KatamariBall* _ball;
-	OrbitCameraController* _contr;
+private:
 
-	void OnMouseMove(const InputDevice::MouseMoveEventArgs& args);
+	void SetDirection(Vector3 dir);
 };
 
