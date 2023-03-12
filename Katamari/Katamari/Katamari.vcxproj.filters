@@ -70,6 +70,9 @@
     <ClCompile Include="Core\Components\RendererComponents\SphereComponent.cpp">
       <Filter>Core\Components\RendererComponents</Filter>
     </ClCompile>
+    <ClCompile Include="KatamariScripts\KatamariItem.cpp">
+      <Filter>KatamariScripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="Core\Components\RendererComponents\SphereComponent.h">
       <Filter>Core\Components\RendererComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="KatamariScripts\KatamariItem.h">
+      <Filter>KatamariScripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

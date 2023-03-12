@@ -21,7 +21,9 @@ public:
 	void virtual DestroyResources();
 
 	bool AddComponent(GameComponent* comp);
-	template <typename T> T* GetComponent();
+	GameComponent* GetComponent(std::string id);
+
+	//template <typename T> T* GetComponent();
 
 
 private:

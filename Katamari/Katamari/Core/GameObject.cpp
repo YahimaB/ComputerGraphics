@@ -39,21 +39,6 @@ void GameObject::DestroyResources()
 	_components.shrink_to_fit();
 }
 
-
-template <typename T>
-T* GameObject::GetComponent()
-{
-	const type_info& typeInfo = typeid(T);
-	for (auto component : _components) {
-		if (typeid(component) == typeInfo)
-		{
-			return component;
-		}
-	}
-
-	return nullptr;
-}
-
 bool GameObject::AddComponent(GameComponent *comp)
 {
 	auto uniqueId = comp->GetUniqueId();
@@ -81,3 +66,29 @@ bool GameObject::AddComponent(GameComponent *comp)
 	comp->Initialize();
 	return true;
 }
+
+GameComponent* GameObject::GetComponent(std::string id)
+{
+	for (auto component : _components) {
+		if (component->GetUniqueId() == id)
+		{
+			return component;
+		}
+	}
+
+	return nullptr;
+}
+
+//template <typename T>
+//T* GameObject::GetComponent()
+//{
+//	const type_info& typeInfo = typeid(T);
+//	for (auto component : _components) {
+//		if (typeid(component) == typeInfo)
+//		{
+//			return component;
+//		}
+//	}
+//
+//	return nullptr;
+//}

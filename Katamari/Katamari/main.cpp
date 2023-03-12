@@ -10,6 +10,7 @@
 #include "KatamariScripts/KatamariBall.h"
 #include "KatamariScripts/KatamariBallController.h"
 #include "KatamariScripts/KatamariCameraController.h"
+#include "KatamariScripts/KatamariItem.h"
 
 
 int main()
@@ -36,18 +37,26 @@ int main()
 		camera->Transform->Position = Vector3::Backward * 10.0f + Vector3::Up * 5.0f;
 
 
-		auto sphere2 = new GameObject("Sphere");
-		std::cout << sphere2->AddComponent(new SphereComponent(0.5f)) << std::endl;
-		sphere2->Transform->SetParent(player->Transform);
-		sphere2->Transform->Position = Vector3::Right * 5.0f + Vector3::Up * 1.0f;
+		auto item = new GameObject("Item");
+		item->Transform->Position = Vector3::Forward * 7.0f;
+		std::cout << item->AddComponent(new KatamariItem()) << std::endl;
 
+		auto item1 = new GameObject("Item");
+		item1->Transform->Position = Vector3::Right * 7.0f;
+		std::cout << item1->AddComponent(new KatamariItem()) << std::endl;
+
+		auto item2 = new GameObject("Item");
+		item2->Transform->Position = Vector3::Left * 7.0f;
+		std::cout << item2->AddComponent(new KatamariItem()) << std::endl;
 
 		MyGame->AddGameObject(camera);
 		MyGame->AddGameObject(grid);
 		MyGame->AddGameObject(player);
 		MyGame->AddGameObject(ball);
 
-		MyGame->AddGameObject(sphere2);
+		MyGame->AddGameObject(item);
+		MyGame->AddGameObject(item1);
+		MyGame->AddGameObject(item2);
 
 		MyGame->Run();
 	}

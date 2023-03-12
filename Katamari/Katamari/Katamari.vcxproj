@@ -198,6 +198,7 @@
     <ClCompile Include="KatamariScripts\KatamariBall.cpp" />
     <ClCompile Include="KatamariScripts\KatamariBallController.cpp" />
     <ClCompile Include="KatamariScripts\KatamariCameraController.cpp" />
+    <ClCompile Include="KatamariScripts\KatamariItem.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +221,7 @@
     <ClInclude Include="KatamariScripts\KatamariBall.h" />
     <ClInclude Include="KatamariScripts\KatamariBallController.h" />
     <ClInclude Include="KatamariScripts\KatamariCameraController.h" />
+    <ClInclude Include="KatamariScripts\KatamariItem.h" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Core\External\Delegates.natvis" />

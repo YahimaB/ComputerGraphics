@@ -27,6 +27,21 @@ void Game::AddGameObject(GameObject* gameObject)
 	_gameObjects.push_back(gameObject);
 }
 
+std::vector<GameObject*> Game::FindGameObjects(std::string name)
+{
+	std::vector<GameObject*> objects;
+
+	for (auto gameObject : _gameObjects)
+	{
+		if (gameObject->Name.compare(name) == 0)
+		{
+			objects.push_back(gameObject);
+		}
+	}
+
+	return objects;
+}
+
 bool Game::Initialize()
 {
 	float totalTime = 0;

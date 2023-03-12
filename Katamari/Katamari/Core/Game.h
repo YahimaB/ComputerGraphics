@@ -40,6 +40,7 @@ public:
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
 	void AddGameObject(GameObject* gameObject);
+	std::vector<GameObject*> FindGameObjects(std::string name);
 
 private:
 	LPCWSTR name;

@@ -25,7 +25,6 @@ void KatamariCameraController::OnMouseMove(const InputDevice::MouseMoveEventArgs
 
 void KatamariCameraController::Update(float deltaTime)
 {
-	//std::cout << _pitch << std::endl;
 	Quaternion rotationMatrix = Quaternion::CreateFromYawPitchRoll(0.0f, _pitch, 0.0f);
 
 	_camera->Transform->Rotation = rotationMatrix;
