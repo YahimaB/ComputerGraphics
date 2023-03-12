@@ -76,6 +76,12 @@
     <ClCompile Include="Core\Components\RendererComponents\MeshComponent.cpp">
       <Filter>Core\Components\RendererComponents</Filter>
     </ClCompile>
+    <ClCompile Include="Core\DirectXTK\DDSTextureLoader.cpp">
+      <Filter>Core\DirectXTK</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DirectXTK\DirectXHelpers.cpp">
+      <Filter>Core\DirectXTK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -140,6 +146,21 @@
     </ClInclude>
     <ClInclude Include="Core\Components\RendererComponents\MeshComponent.h">
       <Filter>Core\Components\RendererComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\DDS.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\DDSTextureLoader.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\DirectXHelpers.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\LoaderHelpers.h">
+      <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DirectXTK\Effects.h">
+      <Filter>Core\DirectXTK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

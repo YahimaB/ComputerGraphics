@@ -188,6 +188,8 @@
     <ClCompile Include="Core\Components\RendererComponents\MeshComponent.cpp" />
     <ClCompile Include="Core\Components\RendererComponents\SphereComponent.cpp" />
     <ClCompile Include="Core\Components\Transform.cpp" />
+    <ClCompile Include="Core\DirectXTK\DDSTextureLoader.cpp" />
+    <ClCompile Include="Core\DirectXTK\DirectXHelpers.cpp" />
     <ClCompile Include="Core\DirectXTK\SimpleMath.cpp" />
     <ClCompile Include="Core\DisplayWin.cpp" />
     <ClCompile Include="Core\External\Delegates.cpp" />
@@ -209,6 +211,11 @@
     <ClInclude Include="Core\Components\RendererComponents\MeshComponent.h" />
     <ClInclude Include="Core\Components\RendererComponents\SphereComponent.h" />
     <ClInclude Include="Core\Components\Transform.h" />
+    <ClInclude Include="Core\DirectXTK\DDS.h" />
+    <ClInclude Include="Core\DirectXTK\DDSTextureLoader.h" />
+    <ClInclude Include="Core\DirectXTK\DirectXHelpers.h" />
+    <ClInclude Include="Core\DirectXTK\Effects.h" />
+    <ClInclude Include="Core\DirectXTK\LoaderHelpers.h" />
     <ClInclude Include="Core\DirectXTK\PlatformHelpers.h" />
     <ClInclude Include="Core\DirectXTK\SimpleMath.h" />
     <ClInclude Include="Core\DisplayWin.h" />

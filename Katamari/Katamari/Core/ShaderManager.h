@@ -2,9 +2,9 @@
 
 #include <map>
 
-#include <d3d11.h>
-#include <d3d11_1.h>
-#include <d3dcompiler.h>
+#include "MinimalCore.h"
+#include "DirectXTK/DDSTextureLoader.h"
+
 
 class Game;
 
@@ -18,16 +18,25 @@ struct Shader
 class ShaderManager
 {
 public:
+	struct Texture
+	{
+		ID3D11Resource* buffer;
+		ID3D11ShaderResourceView* view;
+	};
+
 	static ShaderManager* Instance;
 
 	ShaderManager();
-	void ApplyShader(LPCWSTR shaderName);
+	void ApplyShader(std::string shaderName);
+	ID3D11ShaderResourceView* GetTextureView(std::string name);
 
 
 private:
 	Game* game;
-	std::map<LPCWSTR, Shader> shaders;
+	std::map<std::string, Shader> shaders;
+	std::map<std::string, Texture> textures;
 
-	void CompileShaderFromFile(LPCWSTR shaderName, D3D_SHADER_MACRO shaderMacros[], LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut);
+
+	void CompileShaderFromFile(std::string shaderName, D3D_SHADER_MACRO shaderMacros[], LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut);
 };
 

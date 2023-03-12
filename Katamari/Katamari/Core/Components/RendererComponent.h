@@ -13,9 +13,8 @@ struct ConstBuff {
 
 struct Vertex {
 	Vector4 pos = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-	Vector4 col = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	Vector4 tex;
-	Vector4 normal;
+	//Vector4 normal;
 };
 
 class RendererComponent : public GameComponent
@@ -35,6 +34,7 @@ protected:
 	ID3D11Buffer* vertexBuffer = nullptr;
 	ID3D11Buffer* indexBuffer = nullptr;
 	ID3D11Buffer* constBuffer = nullptr;
+	ID3D11SamplerState* samplerState = nullptr;
 
 	std::vector<Vertex> points;
 	std::vector<int> indices;
@@ -42,7 +42,9 @@ protected:
 protected:
 	std::string GetUniqueId() override { return "rc"; }
 
-	virtual LPCWSTR GetShaderName() { return L"./Shaders/MyVeryFirstShader.hlsl"; }
+	virtual std::string GetShaderName() { return "./Shaders/TexturedShader.hlsl"; }
+	virtual std::string GetTextureName() { return "./Textures/default.dds"; }
+
 	virtual D3D_PRIMITIVE_TOPOLOGY GetTopology() { return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST; }
 };
 

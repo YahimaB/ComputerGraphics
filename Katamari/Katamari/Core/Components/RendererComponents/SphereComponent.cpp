@@ -27,7 +27,7 @@ SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount)
 			v.pos.y = radius * cosf(phi);
 			v.pos.z = radius * sinf(phi) * sinf(theta);
 			
-			v.col = v.pos;
+			v.tex = v.pos;
 
 			points.push_back(v);
 		}

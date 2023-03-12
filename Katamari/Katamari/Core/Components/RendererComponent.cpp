@@ -47,11 +47,21 @@ void RendererComponent::Initialize()
 	constBufDesc.ByteWidth = sizeof(Matrix);
 
 	Game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
+
+	D3D11_SAMPLER_DESC samplerStateDesc = {};
+	samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerStateDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerStateDesc.MaxLOD = INT_MAX;
+
+	Game->device->CreateSamplerState(&samplerStateDesc, &samplerState);
 }
 
 void RendererComponent::Update(float deltaTime)
 {
-	Transform->Rotation.Normalize();
+	//Transform->Rotation.Normalize();
 	//Matrix world = Matrix::CreateScale(Transform->Scale) * Matrix::CreateFromQuaternion(Transform->Rotation) * Matrix::CreateTranslation(Transform->Position);
 	Matrix world = Transform->GetModel();
 	Matrix worldViewProj = world * Camera->GetViewProjectionMatrix();
@@ -72,6 +82,10 @@ void RendererComponent::Draw()
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
+
+	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
+	Game->context->PSSetShaderResources(0, 1, &test);
+	Game->context->PSSetSamplers(0, 1, &samplerState);
 
 	Game->context->DrawIndexed(indices.size(), 0, 0);
 }

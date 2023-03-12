@@ -1,15 +1,16 @@
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(std::string fileNameModel, const wchar_t* fileNameTexture) : RendererComponent()
+MeshComponent::MeshComponent(std::string modelName, std::string textureName) : RendererComponent()
 {
-    fNameModel = fileNameModel;
+    ModelName = modelName;
+    TextureName = textureName;
 }
 
 void MeshComponent::Initialize()
 {
     Assimp::Importer importer;
 
-    const aiScene* pScene = importer.ReadFile(fNameModel, aiProcess_Triangulate);
+    const aiScene* pScene = importer.ReadFile(ModelName, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded);
 
     ProcessNode(pScene->mRootNode, pScene);
 
@@ -42,14 +43,14 @@ void MeshComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
         if (mesh->mTextureCoords[0])
         {
-            point.col.x = mesh->mTextureCoords[0][i].x;
-            point.col.y = mesh->mTextureCoords[0][i].y;
+            point.tex.x = mesh->mTextureCoords[0][i].x;
+            point.tex.y = mesh->mTextureCoords[0][i].y;
         }
 
-        point.normal.x = mesh->mNormals[i].x;
+        /*point.normal.x = mesh->mNormals[i].x;
         point.normal.y = mesh->mNormals[i].y;
         point.normal.z = mesh->mNormals[i].z;
-        point.normal.w = 0.0f;
+        point.normal.w = 0.0f;*/
 
         points.push_back(point);
     }

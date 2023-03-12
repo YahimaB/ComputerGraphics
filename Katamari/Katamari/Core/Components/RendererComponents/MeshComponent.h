@@ -9,15 +9,17 @@
 class MeshComponent : public RendererComponent
 {
 public:
-	MeshComponent(std::string fileNameModel, const wchar_t* fileNameTexture);
+	MeshComponent(std::string modelName, std::string textureName);
 
     void Initialize() override;
 
 protected:
-    LPCWSTR GetShaderName() override { return L"./Shaders/My3DShader.hlsl"; }
+    std::string ModelName;
+    std::string TextureName;
 
-    std::string fNameModel;
     void ProcessNode(aiNode* node, const aiScene* scene);
     void ProcessMesh(aiMesh* mesh, const aiScene* scene);
+
+    std::string GetTextureName() override { return TextureName; }
 };
 

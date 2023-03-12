@@ -9,7 +9,7 @@ ShaderManager::ShaderManager()
 	Instance = this;
 }
 
-void ShaderManager::ApplyShader(LPCWSTR shaderName)
+void ShaderManager::ApplyShader(std::string shaderName)
 {
     Shader shader;
 
@@ -50,7 +50,7 @@ void ShaderManager::ApplyShader(LPCWSTR shaderName)
 			D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
 			{
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-				{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 			};
 
 			game->device->CreateInputLayout(
@@ -75,10 +75,12 @@ void ShaderManager::ApplyShader(LPCWSTR shaderName)
     game->context->PSSetShader(shader.pShader, nullptr, 0);
 }
 
-void ShaderManager::CompileShaderFromFile(LPCWSTR shaderName, D3D_SHADER_MACRO shaderMacros[], LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut)
+void ShaderManager::CompileShaderFromFile(std::string shaderName, D3D_SHADER_MACRO shaderMacros[], LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut)
 {
+	auto wideStrName = std::wstring(shaderName.begin(), shaderName.end());
+
     ID3DBlob* pErrorBlob;
-    auto res = D3DCompileFromFile(shaderName,
+    auto res = D3DCompileFromFile(wideStrName.c_str(),
         shaderMacros /*macros*/,
         nullptr /*include*/,
         entryPoint, 
@@ -99,4 +101,19 @@ void ShaderManager::CompileShaderFromFile(LPCWSTR shaderName, D3D_SHADER_MACRO s
 			std::cout << "Missing shader file: " << shaderName << std::endl;
 		}
 	}
+}
+
+ID3D11ShaderResourceView* ShaderManager::GetTextureView(std::string name)
+{
+	if (textures.find(name) != textures.end())
+	{
+		return textures[name].view;
+	}
+
+	std::wstring wideStr = std::wstring(name.begin(), name.end());
+	auto res = DirectX::CreateDDSTextureFromFile(game->device, wideStr.c_str(), &textures[name].buffer, &textures[name].view);
+
+	game->context->GenerateMips(textures[name].view);
+
+	return textures[name].view;
 }
