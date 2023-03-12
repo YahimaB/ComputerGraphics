@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "GameObject.h"
 
 const float MS_PER_UPDATE = 15;
 Game* Game::Instance = 0;
@@ -21,10 +22,9 @@ Game::~Game()
 {
 }
 
-void Game::CreateComponent(GameComponent* component)
+void Game::AddGameObject(GameObject* gameObject)
 {
-	components_[componentsCount] = component;
-	componentsCount++;
+	_gameObjects.push_back(gameObject);
 }
 
 bool Game::Initialize()
@@ -37,19 +37,18 @@ bool Game::Initialize()
 	if (!CreateBackBuffer())
 		return false;
 
+	Shader = new ShaderManager();
 	InputDevice = new ::InputDevice(this);
 
-	Shader = new ShaderManager();
+	//Camera = new ::Camera();
+	//Camera->AspectRatio = static_cast<float>(Display->ClientWidth) / static_cast<float>(Display->ClientHeight);
 
-	Camera = new ::Camera();
-	Camera->AspectRatio = static_cast<float>(Display->ClientWidth) / static_cast<float>(Display->ClientHeight);
-
-	for (int i = 0; i < componentsCount; i++)
+	/*for (int i = 0; i < _gameObjectsCount; i++)
 	{
 		components_[i]->Initialize();
-	}
+	}*/
 
-	controller = new ::OrbitCameraController();
+	//controller = new ::OrbitCameraController();
 
 	return true;
 }
@@ -182,12 +181,12 @@ void Game::Update(float deltaTime)
 {
 	UpdateInternal();
 
-	controller->Update();
-	Camera->UpdateMatrix();
+	//controller->Update();
+	//Camera->UpdateMatrix();
 
-	for (int i = 0; i < componentsCount; i++)
+	for (auto gameObject : _gameObjects)
 	{
-		components_[i]->Update(deltaTime);
+		gameObject->Update(deltaTime);
 	}
 }
 
@@ -234,9 +233,9 @@ void Game::Draw()
 		FrameCount = 0;
 	}
 
-	for (int i = 0; i < componentsCount; i++)
+	for (auto gameObject : _gameObjects)
 	{
-		components_[i]->Draw();
+		gameObject->Draw();
 	}
 
 	EndFrame();

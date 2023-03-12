@@ -1,12 +1,16 @@
 #include "GameComponent.h"
-#include "Game.h"
+#include "GameObject.h"
+#include "Components/Transform.h"
 
-GameComponent::GameComponent()
+
+void GameComponent::DestroyResources()
 {
-	game = Game::Instance;
+	this->Transform = nullptr;
+	this->GameObject = nullptr;
 }
 
-GameComponent::~GameComponent()
+void GameComponent::SetGameObject(::GameObject* gameObject)
 {
-	game = nullptr;
+	this->GameObject = gameObject;
+	this->Transform = gameObject->Transform;
 }

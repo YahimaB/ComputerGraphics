@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Core/Components/ShapeComponent.h"
+#include "../Core/Components/RendererComponent.h"
 
-class GridComponent : public ShapeComponent
+class GridComponent : public RendererComponent
 {
 public:
 	GridComponent(float cellSize = 1.0f, int lineCount = 100);

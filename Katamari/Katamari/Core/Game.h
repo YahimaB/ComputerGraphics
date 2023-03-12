@@ -4,11 +4,9 @@
 
 #include "DisplayWin.h"
 #include "ShaderManager.h"
-#include "GameComponent.h"
-#include "Components/Camera.h"
-#include "Components/OrbitCameraController.h"
 #include "External/InputDevice.h"
 
+class GameObject;
 
 class Game
 {
@@ -21,9 +19,6 @@ public:
 	ShaderManager* Shader;
 	InputDevice* InputDevice;
 
-	Camera* Camera;
-	OrbitCameraController* controller;
-
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 	IDXGISwapChain* swapChain;
@@ -33,15 +28,10 @@ public:
 	ID3D11RasterizerState* rastState;
 	D3D11_VIEWPORT viewport;
 
-	int componentsCount = 0;
-	static const int MAX_COMPONENTS = 500;
-	GameComponent* components_[MAX_COMPONENTS];
-
 public:
 	Game(LPCWSTR appName);
 	~Game();
 
-	void CreateComponent(GameComponent* component);
 	bool Initialize();
 	void Run();
 	void Update(float deltaTime);
@@ -49,6 +39,7 @@ public:
 
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
+	void AddGameObject(GameObject* gameObject);
 
 private:
 	LPCWSTR name;
@@ -58,10 +49,10 @@ private:
 	float TotalTime;
 	unsigned int FrameCount;
 
-	
-
 	ID3D11Debug* debug;
 	ID3DUserDefinedAnnotation* annotation;
+
+	std::vector<GameObject*> _gameObjects;
 
 private:
 	bool CreateBackBuffer();

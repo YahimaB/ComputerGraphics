@@ -33,12 +33,6 @@
     <ClCompile Include="Core\Components\Camera.cpp">
       <Filter>Core\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Components\CameraController.cpp">
-      <Filter>Core\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Components\ShapeComponent.cpp">
-      <Filter>Core\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Core\DisplayWin.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -51,26 +45,29 @@
     <ClCompile Include="Core\ShaderManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="ShapeComponents\CosmicBodyComponent.cpp">
-      <Filter>ShapeComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="ShapeComponents\GridComponent.cpp">
-      <Filter>ShapeComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="ShapeComponents\SphereComponent.cpp">
-      <Filter>ShapeComponents</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Core\GameObject.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Components\Transform.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\RendererComponent.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponents\GridComponent.cpp">
+      <Filter>ShapeComponents</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Components\OrbitCameraController.cpp">
       <Filter>Core\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Components\FPSCameraController.cpp">
-      <Filter>Core\Components</Filter>
+    <ClCompile Include="ShapeComponents\SphereComponent.cpp">
+      <Filter>ShapeComponents</Filter>
     </ClCompile>
     <ClCompile Include="KatamariScripts\KatamariBall.cpp">
+      <Filter>KatamariScripts</Filter>
+    </ClCompile>
+    <ClCompile Include="KatamariScripts\KatamariBallController.cpp">
       <Filter>KatamariScripts</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,12 +90,6 @@
     <ClInclude Include="Core\Components\Camera.h">
       <Filter>Core\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Components\CameraController.h">
-      <Filter>Core\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Components\ShapeComponent.h">
-      <Filter>Core\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Core\DisplayWin.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -111,28 +102,31 @@
     <ClInclude Include="Core\ShaderManager.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="ShapeComponents\CosmicBodyComponent.h">
-      <Filter>ShapeComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeComponents\GridComponent.h">
-      <Filter>ShapeComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeComponents\SphereComponent.h">
-      <Filter>ShapeComponents</Filter>
-    </ClInclude>
     <ClInclude Include="Core\GameObject.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\MinimalCore.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Components\Transform.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\RendererComponent.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeComponents\GridComponent.h">
+      <Filter>ShapeComponents</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Components\OrbitCameraController.h">
       <Filter>Core\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Components\FPSCameraController.h">
-      <Filter>Core\Components</Filter>
+    <ClInclude Include="ShapeComponents\SphereComponent.h">
+      <Filter>ShapeComponents</Filter>
     </ClInclude>
     <ClInclude Include="KatamariScripts\KatamariBall.h">
+      <Filter>KatamariScripts</Filter>
+    </ClInclude>
+    <ClInclude Include="KatamariScripts\KatamariBallController.h">
       <Filter>KatamariScripts</Filter>
     </ClInclude>
   </ItemGroup>

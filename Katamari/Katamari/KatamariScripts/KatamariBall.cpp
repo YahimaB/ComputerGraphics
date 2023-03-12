@@ -1,5 +1,6 @@
 #include "KatamariBall.h"
 #include "../Core/Game.h"
+#include "../Core/Components/Transform.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
@@ -7,8 +8,8 @@ using namespace SimpleMath;
 void KatamariBall::UpdateSize(float absorbedSize)
 {
     float tmp = sqrtf(gameSize * gameSize + absorbedSize * absorbedSize);
-    collision.Radius = tmp;
-    Position.y = tmp;
+    //collision.Radius = tmp;
+    Transform->Position.y = tmp;
     rotationMaxSpeed = 0.1f / (tmp * tmp);
     if (rotationMaxSpeed < 0.01f)
         rotationMaxSpeed = 0.01f;
@@ -21,7 +22,7 @@ void KatamariBall::UpdateSize(float absorbedSize)
 }
 
 KatamariBall::KatamariBall() : SphereComponent(1.0f), rotationDrag(0.14f), rotationMaxSpeed(0.1f), moveMaxSpeed(8.0f), moveDrag(5.0f), savedRot(Quaternion::Identity),
-velocity(Vector3::Zero), collision(Position, 1.0f), gameSize(1.0f)
+velocity(Vector3::Zero), gameSize(1.0f)
 {
     
 }
@@ -45,7 +46,7 @@ KatamariBall::~KatamariBall()
 
 void KatamariBall::Update(float deltaTime)
 {
-    collision.Center = Position;
+    //collision.Center = Transform->Position;
 
     deltaTime /= 1000.0f;
 
@@ -62,7 +63,7 @@ void KatamariBall::Update(float deltaTime)
     }*/
 
     savedRot.RotateTowards(Quaternion::Identity, rotationDrag * deltaTime);
-    Rotation *= savedRot;
+    Transform->Rotation *= savedRot;
     velocity *= 1.0f - moveDrag * deltaTime;
 
     //outline->SetRotation(rotation);
@@ -70,7 +71,7 @@ void KatamariBall::Update(float deltaTime)
     //outline->Update();
     SphereComponent::Update(deltaTime);
 
-    Position += velocity * deltaTime;
+    Transform->Position += velocity * deltaTime;
     //outline->SetPosition(position);
 }
 
@@ -99,5 +100,6 @@ void KatamariBall::SetDirection(Vector3 dir)
 void KatamariBall::SetPosition(Vector3 p)
 {
     //outline->SetPosition(p);
-    SphereComponent::SetPosition(p);
+    Transform->Position = p;
+    //SphereComponent::SetPosition(p);
 }

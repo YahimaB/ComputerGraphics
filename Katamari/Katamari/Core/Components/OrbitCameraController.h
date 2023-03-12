@@ -1,22 +1,23 @@
 #pragma once
 
 #include "../MinimalCore.h"
-
-#include "Camera.h"
-//#include "../GameComponent.h"
+#include "../Game.h"
 #include "../External/InputDevice.h"
-//#include "../../KatamariScripts/KatamariBall.h"
+
+#include "../GameComponent.h"
+#include "Camera.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
 
-class KatamariBall;
+//class KatamariBall;
 
-class OrbitCameraController
+class OrbitCameraController : public GameComponent
 {
 private:
     Game* game;
     Camera* camera;
+    //InputDevice* inputDevice;
     //GameComponent* target;
 
 
@@ -28,12 +29,13 @@ private:
     bool isLMBActivated = true;
 
 public:
-    KatamariBall* target;
+    GameComponent* target;
 
-	OrbitCameraController();
+	OrbitCameraController(GameComponent* t);
+
+    void Update(float deltaTime) override;
 
     void OnMouseMove(const InputDevice::MouseMoveEventArgs& args);
-    void Update();
     Vector3 GetForward() const;
     Vector3 GetUp() const;
     void SetSensitivity(float sX, float sY) { sensitivityX = sX; sensitivityY = sY; }

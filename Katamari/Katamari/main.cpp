@@ -1,11 +1,15 @@
 
 #include "Core/Game.h"
+#include "Core/GameObject.h"
 
+#include "Core/Components/Camera.h"
+#include "Core/Components/OrbitCameraController.h"
 
 #include "ShapeComponents/GridComponent.h"
 #include "ShapeComponents/SphereComponent.h"
-#include "ShapeComponents/CosmicBodyComponent.h"
+//#include "ShapeComponents/CosmicBodyComponent.h"
 #include "KatamariScripts/KatamariBall.h"
+#include "KatamariScripts/KatamariBallController.h"
 
 //SolarSystem
 //int main()
@@ -40,20 +44,65 @@
 //}
 
 //Katamari
+//int main()
+//{
+//	Game* MyGame = new Game(L"Katamari");
+//
+//	MyGame->CreateComponent(new GridComponent());
+//
+//	auto ball = new KatamariBall();
+//	MyGame->CreateComponent(ball);
+//
+//	//MyGame->CreateComponent(new CosmicBodyComponent(3.0f));
+//
+//	if (MyGame->Initialize())
+//	{
+//		MyGame->controller->target = ball;
+//		MyGame->Run();
+//	}
+//
+//	MyGame->Exit();
+//	delete MyGame;
+//
+//	return 0;
+//}
+
 int main()
 {
 	Game* MyGame = new Game(L"Katamari");
 
-	MyGame->CreateComponent(new GridComponent());
+	//MyGame->CreateComponent(new GridComponent());
 
-	auto ball = new KatamariBall();
-	MyGame->CreateComponent(ball);
+	//auto ball = new KatamariBall();
+	//MyGame->CreateComponent(ball);
 
 	//MyGame->CreateComponent(new CosmicBodyComponent(3.0f));
 
 	if (MyGame->Initialize())
 	{
-		MyGame->controller->target = ball;
+		auto camera = new GameObject("Camera");
+		std::cout << camera->AddComponent(new Camera()) << std::endl;
+
+		auto grid = new GameObject("Grid");
+		std::cout << grid->AddComponent(new GridComponent()) << std::endl;
+
+
+		auto sphere = new GameObject("Sphere");
+		auto ball = new KatamariBall();
+		std::cout << sphere->AddComponent(ball) << std::endl;
+
+		auto contr = new OrbitCameraController(sphere->Transform);
+		std::cout << camera->AddComponent(contr) << std::endl;
+
+		std::cout << sphere->AddComponent(new KatamariBallController(ball, contr)) << std::endl;
+
+
+
+		MyGame->AddGameObject(camera);
+		MyGame->AddGameObject(grid);
+		MyGame->AddGameObject(sphere);
+
+		//MyGame->controller->target = ball;
 		MyGame->Run();
 	}
 

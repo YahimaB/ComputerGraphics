@@ -1,4 +1,5 @@
 #include "SphereComponent.h"
+#include "../Core/Components/Transform.h"
 
 SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount)
 {
@@ -90,10 +91,10 @@ SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount)
 
 void SphereComponent::Update(float deltaTime)
 {
-	Rotation.Normalize();
-	Matrix world = Matrix::CreateScale(Scale) * Matrix::CreateFromQuaternion(Rotation) * Matrix::CreateTranslation(Position);
-	Matrix worldViewProj = world * game->Camera->GetViewProjectionMatrix();
+	Transform->Rotation.Normalize();
+	Matrix world = Matrix::CreateScale(Transform->Scale) * Matrix::CreateFromQuaternion(Transform->Rotation) * Matrix::CreateTranslation(Transform->Position);
+	Matrix worldViewProj = world * Camera->GetViewProjectionMatrix();
 
 	auto buffMatrix = worldViewProj.Transpose();
-	game->context->UpdateSubresource(constBuffer, 0, nullptr, &buffMatrix, 0, 0);
+	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &buffMatrix, 0, 0);
 }

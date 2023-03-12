@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Core/Components/ShapeComponent.h"
+#include "../Core/Components/RendererComponent.h"
 #include "../Core/Game.h"
 
-class SphereComponent : public ShapeComponent
+class SphereComponent : public RendererComponent
 {
 public:
 	SphereComponent(float radius, int sliceCount = 32, int stackCount = 32);

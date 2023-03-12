@@ -1,12 +1,16 @@
 #pragma once
-#include "../DirectXTK/SimpleMath.h"
+
+#include "../MinimalCore.h"
+#include "../GameComponent.h"
 
 using namespace DirectX;
 using namespace SimpleMath;
 
-class Camera
+class Camera : public GameComponent
 {
 public:
+	static Camera* Current;
+
 	enum class ProjectionType
 	{
 		Perspective = 0,
@@ -34,7 +38,7 @@ public:
 public:
 	Camera();
 
-	void UpdateMatrix();
+	void Update(float deltaTime) override;
 
 	DirectX::SimpleMath::Matrix GetViewMatrix() const;
 	DirectX::SimpleMath::Matrix GetProjectionMatrix() const;

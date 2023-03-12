@@ -13,7 +13,7 @@ public:
     float moveDrag;
     DirectX::SimpleMath::Quaternion savedRot;
     DirectX::SimpleMath::Vector3 velocity;
-    DirectX::BoundingSphere collision;
+    //DirectX::BoundingSphere collision;
     float gameSize;
 
 public:
@@ -25,7 +25,7 @@ public:
     //void Reload() override;
     //void DestroyResources() override;
     void SetDirection(DirectX::SimpleMath::Vector3 dir);
-    void SetPosition(DirectX::SimpleMath::Vector3 p) override;
+    void SetPosition(DirectX::SimpleMath::Vector3 p);
 
 protected:
     void UpdateSize(float absorbedSize);

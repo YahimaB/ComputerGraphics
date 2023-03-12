@@ -1,13 +1,22 @@
 #include "Camera.h"
 
+Camera* Camera::Current = 0;
+
 Camera::Camera()
 {
 	Position = Vector3::Backward * 10.0f;
 	Target = Vector3::Up;
 	Up = Vector3::Up;
+
+	if (Current == nullptr)
+	{
+		Current = this;
+	}
+
+	//Camera->AspectRatio = static_cast<float>(Display->ClientWidth) / static_cast<float>(Display->ClientHeight);
 }
 
-void Camera::UpdateMatrix()
+void Camera::Update(float deltaTime)
 {
 	ViewProjectionMatrix = GetViewMatrix() * GetProjectionMatrix();
 }
