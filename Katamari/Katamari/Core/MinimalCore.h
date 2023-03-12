@@ -4,6 +4,7 @@
 	Windows includes.
 ----------------------------------------------------------------------------*/
 
+#define NOMINMAX
 #include <windows.h>
 #include <WinUser.h>
 #include <wrl.h>

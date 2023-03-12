@@ -14,6 +14,8 @@ struct ConstBuff {
 struct Vertex {
 	Vector4 pos = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 	Vector4 col = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	Vector4 tex;
+	Vector4 normal;
 };
 
 class RendererComponent : public GameComponent

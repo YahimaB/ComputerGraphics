@@ -73,6 +73,9 @@
     <ClCompile Include="KatamariScripts\KatamariItem.cpp">
       <Filter>KatamariScripts</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Components\RendererComponents\MeshComponent.cpp">
+      <Filter>Core\Components\RendererComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -134,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="KatamariScripts\KatamariItem.h">
       <Filter>KatamariScripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\RendererComponents\MeshComponent.h">
+      <Filter>Core\Components\RendererComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
