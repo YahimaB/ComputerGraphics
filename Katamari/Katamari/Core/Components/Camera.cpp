@@ -25,13 +25,14 @@ Matrix Camera::GetViewProjectionMatrix() const
 
 Matrix Camera::GetViewMatrix() const
 {
-	Vector3 forward = Vector3::Transform(Vector3::Forward, Transform->Rotation);
+	auto model = Transform->GetModel();
 
-	auto position = Transform->Position;
+	auto up = model.Up();
+	auto forward = model.Forward();
+	auto position = model.Translation();
 	auto target = position + forward;
-	auto up = Vector3::Transform(Vector3::Up, Transform->Rotation);
 
-	return Matrix::CreateLookAt(Transform->Position, target, up);
+	return Matrix::CreateLookAt(position, target, up);
 }
 
 Matrix Camera::GetProjectionMatrix() const

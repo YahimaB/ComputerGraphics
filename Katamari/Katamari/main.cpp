@@ -91,16 +91,24 @@ int main()
 		auto ball = new KatamariBall();
 		std::cout << sphere->AddComponent(ball) << std::endl;
 
-		auto contr = new OrbitCameraController(sphere->Transform);
+		auto contr = new OrbitCameraController();
 		std::cout << camera->AddComponent(contr) << std::endl;
 
 		std::cout << sphere->AddComponent(new KatamariBallController(ball, contr)) << std::endl;
 
+		camera->Transform->SetParent(sphere->Transform);
+		camera->Transform->Position = Vector3::Backward * 10.0f + Vector3::Up * 5.0f;
+
+		auto sphere2 = new GameObject("Sphere2");
+		std::cout << sphere2->AddComponent(new SphereComponent(0.5f)) << std::endl;
+		sphere2->Transform->SetParent(sphere->Transform);
+		sphere2->Transform->Position = Vector3::Right * 5.0f + Vector3::Up * 1.0f;
 
 
 		MyGame->AddGameObject(camera);
 		MyGame->AddGameObject(grid);
 		MyGame->AddGameObject(sphere);
+		MyGame->AddGameObject(sphere2);
 
 		//MyGame->controller->target = ball;
 		MyGame->Run();

@@ -92,7 +92,8 @@ SphereComponent::SphereComponent(float radius, int sliceCount, int stackCount)
 void SphereComponent::Update(float deltaTime)
 {
 	Transform->Rotation.Normalize();
-	Matrix world = Matrix::CreateScale(Transform->Scale) * Matrix::CreateFromQuaternion(Transform->Rotation) * Matrix::CreateTranslation(Transform->Position);
+	//Matrix world = Matrix::CreateScale(Transform->Scale) * Matrix::CreateFromQuaternion(Transform->Rotation) * Matrix::CreateTranslation(Transform->Position);
+	Matrix world = Transform->GetModel();
 	Matrix worldViewProj = world * Camera->GetViewProjectionMatrix();
 
 	auto buffMatrix = worldViewProj.Transpose();

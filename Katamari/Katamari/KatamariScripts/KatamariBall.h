@@ -27,6 +27,9 @@ public:
     void SetDirection(DirectX::SimpleMath::Vector3 dir);
     void SetPosition(DirectX::SimpleMath::Vector3 p);
 
+    Vector3 GetForward() const;
+    Vector3 GetUp() const;
+
 protected:
     void UpdateSize(float absorbedSize);
 };

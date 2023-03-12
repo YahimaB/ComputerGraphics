@@ -13,7 +13,12 @@ public:
 
 private:
 	Game* game;
+	InputDevice* inputDevice;
+
+
 	KatamariBall* _ball;
 	OrbitCameraController* _contr;
+
+	void OnMouseMove(const InputDevice::MouseMoveEventArgs& args);
 };
 
