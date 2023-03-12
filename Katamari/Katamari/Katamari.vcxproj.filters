@@ -16,6 +16,9 @@
     <Filter Include="ShapeComponents">
       <UniqueIdentifier>{495f0ee9-7658-45b6-8d44-bed27e55ba3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KatamariScripts">
+      <UniqueIdentifier>{d8ed6e82-e972-4d03-8066-0b3c3163e0e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\External\Delegates.cpp">
@@ -60,6 +63,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Core\GameObject.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\OrbitCameraController.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Components\FPSCameraController.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KatamariScripts\KatamariBall.cpp">
+      <Filter>KatamariScripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +125,15 @@
     </ClInclude>
     <ClInclude Include="Core\MinimalCore.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\OrbitCameraController.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\FPSCameraController.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="KatamariScripts\KatamariBall.h">
+      <Filter>KatamariScripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

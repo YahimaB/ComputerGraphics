@@ -6,7 +6,7 @@
 #include "ShaderManager.h"
 #include "GameComponent.h"
 #include "Components/Camera.h"
-#include "Components/CameraController.h"
+#include "Components/OrbitCameraController.h"
 #include "External/InputDevice.h"
 
 
@@ -20,8 +20,9 @@ public:
 	DisplayWin* Display;
 	ShaderManager* Shader;
 	InputDevice* InputDevice;
+
 	Camera* Camera;
-	CameraController* controller;
+	OrbitCameraController* controller;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;

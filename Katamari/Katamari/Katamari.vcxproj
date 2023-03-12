@@ -184,6 +184,8 @@
   <ItemGroup>
     <ClCompile Include="Core\Components\Camera.cpp" />
     <ClCompile Include="Core\Components\CameraController.cpp" />
+    <ClCompile Include="Core\Components\FPSCameraController.cpp" />
+    <ClCompile Include="Core\Components\OrbitCameraController.cpp" />
     <ClCompile Include="Core\Components\ShapeComponent.cpp" />
     <ClCompile Include="Core\DirectXTK\SimpleMath.cpp" />
     <ClCompile Include="Core\DisplayWin.cpp" />
@@ -193,6 +195,7 @@
     <ClCompile Include="Core\GameComponent.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\ShaderManager.cpp" />
+    <ClCompile Include="KatamariScripts\KatamariBall.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ShapeComponents\CosmicBodyComponent.cpp" />
     <ClCompile Include="ShapeComponents\GridComponent.cpp" />
@@ -201,6 +204,8 @@
   <ItemGroup>
     <ClInclude Include="Core\Components\Camera.h" />
     <ClInclude Include="Core\Components\CameraController.h" />
+    <ClInclude Include="Core\Components\FPSCameraController.h" />
+    <ClInclude Include="Core\Components\OrbitCameraController.h" />
     <ClInclude Include="Core\Components\ShapeComponent.h" />
     <ClInclude Include="Core\DirectXTK\PlatformHelpers.h" />
     <ClInclude Include="Core\DirectXTK\SimpleMath.h" />
@@ -213,6 +218,7 @@
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\MinimalCore.h" />
     <ClInclude Include="Core\ShaderManager.h" />
+    <ClInclude Include="KatamariScripts\KatamariBall.h" />
     <ClInclude Include="ShapeComponents\CosmicBodyComponent.h" />
     <ClInclude Include="ShapeComponents\GridComponent.h" />
     <ClInclude Include="ShapeComponents\SphereComponent.h" />

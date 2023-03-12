@@ -49,7 +49,7 @@ bool Game::Initialize()
 		components_[i]->Initialize();
 	}
 
-	controller = new ::CameraController();
+	controller = new ::OrbitCameraController();
 
 	return true;
 }

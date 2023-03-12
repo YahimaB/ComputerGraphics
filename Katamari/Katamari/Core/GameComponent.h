@@ -16,7 +16,7 @@ public:
 
 	DirectX::SimpleMath::Vector3 Position;
 	DirectX::SimpleMath::Quaternion Rotation;
-	DirectX::SimpleMath::Vector3 Scale;
+	DirectX::SimpleMath::Vector3 Scale = DirectX::SimpleMath::Vector3::One;
 
 public:
 
