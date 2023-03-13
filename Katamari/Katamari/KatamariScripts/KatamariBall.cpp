@@ -8,45 +8,17 @@
 using namespace DirectX;
 using namespace SimpleMath;
 
-//void KatamariBall::UpdateSize(float absorbedSize)
-//{
-//    float tmp = sqrtf(gameSize * gameSize + absorbedSize * absorbedSize);
-//    //collision.Radius = tmp;
-//    Transform->Position.y = tmp;
-//    rotationMaxSpeed = 0.1f / (tmp * tmp);
-//    if (rotationMaxSpeed < 0.01f)
-//        rotationMaxSpeed = 0.01f;
-//    moveMaxSpeed = 8.0f * sqrtf(tmp);
-//    //outline->UpdateRadius(tmp);
-//    gameSize = tmp;
-//#ifdef _DEBUG
-//    std::cout << tmp << std::endl;
-//#endif
-//}
-
-KatamariBall::KatamariBall() : SphereComponent(1.0f), gameSize(1.0f)
+KatamariBall::KatamariBall(float radius) : SphereComponent(radius)
 {
-
-}
-
-KatamariBall::~KatamariBall()
-{
-	//delete outline;
+	_radius = radius;
 }
 
 void KatamariBall::Initialize()
 {
-	//outline->Initialize();
 	SphereComponent::Initialize();
 
-	collision = BoundingSphere(Transform->Position, 1.0f);
+	collision = BoundingSphere(Transform->Position, _radius);
 }
-
-//void KatamariBall::Draw()
-//{
-//    //outline->Draw();
-//    SphereComponent::Draw();
-//}
 
 void KatamariBall::Update(float deltaTime)
 {
@@ -70,6 +42,13 @@ void KatamariBall::Update(float deltaTime)
 			auto localPos = kItem->Transform->Position - Transform->GetModel().Translation();
 			kItem->Transform->Position = Vector3::Transform(localPos, inv);
 			worldRotation.Inverse(kItem->Transform->Rotation);
+
+			float itemRadius = kItem->GetRadius();
+			float newRadius = sqrtf(_radius * _radius + itemRadius * itemRadius);
+
+			_radius = newRadius;
+			collision.Radius = _radius;
+			Transform->Position.y = _radius;
 		}
 	}
 

@@ -6,6 +6,7 @@
 
 #include "Core/Components/RendererComponents/GridComponent.h"
 #include "Core/Components/RendererComponents/SphereComponent.h"
+#include "Core/Components/RendererComponents/MeshComponent.h"
 
 #include "KatamariScripts/KatamariBall.h"
 #include "KatamariScripts/KatamariBallController.h"
@@ -36,27 +37,21 @@ int main()
 		camera->Transform->SetParent(player->Transform);
 		camera->Transform->Position = Vector3::Backward * 10.0f + Vector3::Up * 5.0f;
 
-
-		auto item = new GameObject("Item");
-		item->Transform->Position = Vector3::Forward * 7.0f;
-		std::cout << item->AddComponent(new KatamariItem()) << std::endl;
-
-		auto item1 = new GameObject("Item");
-		item1->Transform->Position = Vector3::Right * 7.0f;
-		std::cout << item1->AddComponent(new KatamariItem()) << std::endl;
-
-		auto item2 = new GameObject("Item");
-		item2->Transform->Position = Vector3::Left * 7.0f;
-		std::cout << item2->AddComponent(new KatamariItem()) << std::endl;
-
 		MyGame->AddGameObject(camera);
 		MyGame->AddGameObject(grid);
 		MyGame->AddGameObject(player);
 		MyGame->AddGameObject(ball);
 
-		MyGame->AddGameObject(item);
-		MyGame->AddGameObject(item1);
-		MyGame->AddGameObject(item2);
+		for (int i = -3; i <= 3; i++)
+		{
+			auto mesh = new GameObject("Item");
+			mesh->Transform->Position = Vector3::Forward * 14.0f + Vector3::Right * i * 2;
+			std::cout << mesh->AddComponent(new MeshComponent("Models/hamburger.obj", "Textures/hamburger.dds")) << std::endl;
+			std::cout << mesh->AddComponent(new KatamariItem(0.6f)) << std::endl;
+
+
+			MyGame->AddGameObject(mesh);
+		}
 
 		MyGame->Run();
 	}

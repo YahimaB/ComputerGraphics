@@ -1,19 +1,25 @@
 #include "KatamariItem.h"
 
-KatamariItem::KatamariItem() : SphereComponent(1.0f)
+KatamariItem::KatamariItem(float radius)
 {
+    _radius = radius;
 }
 
 void KatamariItem::Initialize()
 {
     //outline->Initialize();
-    SphereComponent::Initialize();
+    GameComponent::Initialize();
 
-    Collision = BoundingSphere(Transform->Position, 1.0f);
+    Collision = BoundingSphere(Transform->Position, _radius);
 }
 
 void KatamariItem::Update(float deltaTime)
 {
-    Collision.Center = Transform->Position;
-    SphereComponent::Update(deltaTime);
+    Collision.Center = Transform->GetModel().Translation();
+    GameComponent::Update(deltaTime);
+}
+
+float KatamariItem::GetRadius()
+{
+    return _radius;
 }
