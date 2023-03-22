@@ -42,7 +42,7 @@ protected:
 protected:
 	std::string GetUniqueId() override { return "rc"; }
 
-	virtual std::string GetShaderName() { return "./Shaders/TexturedShader.hlsl"; }
+	virtual std::string GetShaderName() { return "./Shaders/TexturedShaderWithLight.hlsl"; }
 	virtual std::string GetTextureName() { return "./Textures/default.dds"; }
 
 	virtual D3D_PRIMITIVE_TOPOLOGY GetTopology() { return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST; }

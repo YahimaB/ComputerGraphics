@@ -26,6 +26,7 @@ int main()
 
 		auto grid = new GameObject("Grid");
 		std::cout << grid->AddComponent(new GridComponent()) << std::endl;
+		grid->Transform->Position.y = -1.0f;
 
 		auto player = new GameObject("Player");
 		std::cout << player->AddComponent(new KatamariBallController()) << std::endl;
