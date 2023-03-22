@@ -44,7 +44,7 @@ void RendererComponent::Initialize()
 	constBufDesc.CPUAccessFlags = 0;
 	constBufDesc.MiscFlags = 0;
 	constBufDesc.StructureByteStride = 0;
-	constBufDesc.ByteWidth = sizeof(Matrix);
+	constBufDesc.ByteWidth = sizeof(ConstBuff);
 
 	Game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
 
@@ -54,7 +54,8 @@ void RendererComponent::Initialize()
 	samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	samplerStateDesc.MaxLOD = INT_MAX;
+	samplerStateDesc.MinLOD = 0.0f;
+	samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	Game->device->CreateSamplerState(&samplerStateDesc, &samplerState);
 }
@@ -63,11 +64,19 @@ void RendererComponent::Update(float deltaTime)
 {
 	//Transform->Rotation.Normalize();
 	//Matrix world = Matrix::CreateScale(Transform->Scale) * Matrix::CreateFromQuaternion(Transform->Rotation) * Matrix::CreateTranslation(Transform->Position);
+
+	Vector3 scale, pos;
+	Quaternion rot;
+
 	Matrix world = Transform->GetModel();
 	Matrix worldViewProj = world * Camera->GetViewProjectionMatrix();
+	world.Decompose(scale, rot, pos);
 
-	auto buffMatrix = worldViewProj.Transpose();
-	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &buffMatrix, 0, 0);
+	ConstBuff objData = {};
+	objData.World_View_Projection = worldViewProj;
+	objData.invTrWorld = (Matrix::CreateScale(scale) * Matrix::CreateFromQuaternion(rot)).Invert().Transpose();
+
+	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &objData, 0, 0);
 }
 
 void RendererComponent::Draw()
@@ -82,6 +91,7 @@ void RendererComponent::Draw()
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
+	Game->context->PSSetConstantBuffers(0, 1, &constBuffer);
 
 	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);

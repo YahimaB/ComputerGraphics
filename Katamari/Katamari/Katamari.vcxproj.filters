@@ -82,6 +82,9 @@
     <ClCompile Include="Core\DirectXTK\DirectXHelpers.cpp">
       <Filter>Core\DirectXTK</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Components\LightComponent.cpp">
+      <Filter>Core\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -161,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="Core\DirectXTK\Effects.h">
       <Filter>Core\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\LightComponent.h">
+      <Filter>Core\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -47,10 +47,10 @@ void MeshComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             point.tex.y = mesh->mTextureCoords[0][i].y;
         }
 
-        /*point.normal.x = mesh->mNormals[i].x;
+        point.normal.x = mesh->mNormals[i].x;
         point.normal.y = mesh->mNormals[i].y;
         point.normal.z = mesh->mNormals[i].z;
-        point.normal.w = 0.0f;*/
+        point.normal.w = 0.0f;
 
         points.push_back(point);
     }

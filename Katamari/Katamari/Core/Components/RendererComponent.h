@@ -9,12 +9,13 @@ using namespace SimpleMath;
 
 struct ConstBuff {
 	Matrix World_View_Projection;
+	Matrix invTrWorld;
 };
 
 struct Vertex {
 	Vector4 pos = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 	Vector4 tex;
-	//Vector4 normal;
+	Vector4 normal;
 };
 
 class RendererComponent : public GameComponent

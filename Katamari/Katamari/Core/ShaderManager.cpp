@@ -11,14 +11,14 @@ ShaderManager::ShaderManager()
 
 void ShaderManager::ApplyShader(std::string shaderName)
 {
-    Shader shader;
+	Shader shader;
 
-    auto shaderPair = shaders.find(shaderName);
-    if (shaderPair != shaders.end()) {
+	auto shaderPair = shaders.find(shaderName);
+	if (shaderPair != shaders.end()) {
 
-        shader = shaderPair->second;
-    }
-    else {
+		shader = shaderPair->second;
+	}
+	else {
 		shader = {};
 		ID3D11VertexShader* vertexShader;
 		ID3D11PixelShader* pixelShader;
@@ -49,8 +49,30 @@ void ShaderManager::ApplyShader(std::string shaderName)
 		{
 			D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
 			{
-				{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+				D3D11_INPUT_ELEMENT_DESC {
+					"POSITION",
+					0,
+					DXGI_FORMAT_R32G32B32A32_FLOAT,
+					0,
+					0,
+					D3D11_INPUT_PER_VERTEX_DATA,
+					0},
+				D3D11_INPUT_ELEMENT_DESC {
+					"TEXCOORD",
+					0,
+					DXGI_FORMAT_R32G32B32A32_FLOAT,
+					0,
+					D3D11_APPEND_ALIGNED_ELEMENT,
+					D3D11_INPUT_PER_VERTEX_DATA,
+					0},
+				D3D11_INPUT_ELEMENT_DESC {
+					"NORMAL",
+					0,
+					DXGI_FORMAT_R32G32B32A32_FLOAT,
+					0,
+					D3D11_APPEND_ALIGNED_ELEMENT,
+					D3D11_INPUT_PER_VERTEX_DATA,
+					0}
 			};
 
 			game->device->CreateInputLayout(
@@ -62,17 +84,17 @@ void ShaderManager::ApplyShader(std::string shaderName)
 
 			vsBlob->Release();
 		}
-		
+
 		shader.vShader = vertexShader;
 		shader.pShader = pixelShader;
 		shader.inputLayout = inputLayout;
 
 		shaders[shaderName] = shader;
-    }
+	}
 
-    game->context->IASetInputLayout(shader.inputLayout);
-    game->context->VSSetShader(shader.vShader, nullptr, 0);
-    game->context->PSSetShader(shader.pShader, nullptr, 0);
+	game->context->IASetInputLayout(shader.inputLayout);
+	game->context->VSSetShader(shader.vShader, nullptr, 0);
+	game->context->PSSetShader(shader.pShader, nullptr, 0);
 }
 
 void ShaderManager::CompileShaderFromFile(std::string shaderName, D3D_SHADER_MACRO shaderMacros[], LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut)

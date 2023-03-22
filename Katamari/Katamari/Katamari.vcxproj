@@ -183,6 +183,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Components\Camera.cpp" />
+    <ClCompile Include="Core\Components\LightComponent.cpp" />
     <ClCompile Include="Core\Components\RendererComponent.cpp" />
     <ClCompile Include="Core\Components\RendererComponents\GridComponent.cpp" />
     <ClCompile Include="Core\Components\RendererComponents\MeshComponent.cpp" />
@@ -206,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Components\Camera.h" />
+    <ClInclude Include="Core\Components\LightComponent.h" />
     <ClInclude Include="Core\Components\RendererComponent.h" />
     <ClInclude Include="Core\Components\RendererComponents\GridComponent.h" />
     <ClInclude Include="Core\Components\RendererComponents\MeshComponent.h" />

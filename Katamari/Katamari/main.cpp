@@ -3,6 +3,7 @@
 #include "Core/GameObject.h"
 
 #include "Core/Components/Camera.h"
+#include "Core/Components/LightComponent.h"
 
 #include "Core/Components/RendererComponents/GridComponent.h"
 #include "Core/Components/RendererComponents/SphereComponent.h"
@@ -24,9 +25,11 @@ int main()
 		std::cout << camera->AddComponent(new Camera()) << std::endl;
 		std::cout << camera->AddComponent(new KatamariCameraController()) << std::endl;
 
+		auto light = new GameObject("Light");
+		std::cout << light->AddComponent(new LightComponent()) << std::endl;
+
 		auto grid = new GameObject("Grid");
 		std::cout << grid->AddComponent(new GridComponent()) << std::endl;
-		grid->Transform->Position.y = -1.0f;
 
 		auto player = new GameObject("Player");
 		std::cout << player->AddComponent(new KatamariBallController()) << std::endl;
@@ -34,11 +37,13 @@ int main()
 		auto ball = new GameObject("Ball");
 		std::cout << ball->AddComponent(new KatamariBall()) << std::endl;
 		ball->Transform->SetParent(player->Transform);
+		ball->Transform->Position.y = 1.0f;
 
 		camera->Transform->SetParent(player->Transform);
 		camera->Transform->Position = Vector3::Backward * 10.0f + Vector3::Up * 5.0f;
 
 		MyGame->AddGameObject(camera);
+		MyGame->AddGameObject(light);
 		MyGame->AddGameObject(grid);
 		MyGame->AddGameObject(player);
 		MyGame->AddGameObject(ball);
@@ -53,6 +58,7 @@ int main()
 
 			MyGame->AddGameObject(mesh);
 		}
+
 
 		MyGame->Run();
 	}
