@@ -14,24 +14,24 @@ void LightComponent::Initialize()
 	constBufPerSceneDesc.CPUAccessFlags = 0;
 	constBufPerSceneDesc.MiscFlags = 0;
 	constBufPerSceneDesc.StructureByteStride = 0;
-	constBufPerSceneDesc.ByteWidth = sizeof(CBDataPerScene);
+	constBufPerSceneDesc.ByteWidth = sizeof(LightProperties);
 
 	Game->device->CreateBuffer(&constBufPerSceneDesc, nullptr, &constBuffer);
 }
 
 void LightComponent::Update(float deltaTime)
 {
-	Vector3 temp = Camera->Transform->GetModel().Backward();
+	Vector3 viewVector = Camera->Transform->GetModel().Backward();
 
-	CBDataPerScene sceneData = {};
-	sceneData.lightPos = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
-	sceneData.lightColorAmbStr = Vector4(1.0f, 1.0f, 1.0f, 0.4f);
-	sceneData.viewDirSpecStr = Vector4(temp);
-	sceneData.viewDirSpecStr.Normalize();
-	sceneData.viewDirSpecStr.w = 0.5f;
-	sceneData.lightPos.Normalize();
+	LightProperties lightProps = {};
+	lightProps.Lights = {
+		Vector4(1.0f, -1.0f, 0.0f, 0.0f),
+		Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f
+	};
+	lightProps.ViewVector = viewVector;
+	lightProps.Intensity = 5.0f;
 
-	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &sceneData, 0, 0);
+	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &lightProps, 0, 0);
 }
 
 void LightComponent::Draw()

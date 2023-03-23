@@ -7,11 +7,17 @@
 using namespace DirectX;
 using namespace SimpleMath;
 
-struct CBDataPerScene
+struct Light
 {
-	Vector4 lightPos;
-	Vector4 lightColorAmbStr;
-	Vector4 viewDirSpecStr;
+	Vector4 Direction;
+	Vector4 Color;
+};
+
+struct LightProperties
+{
+	Light Lights;
+	Vector3 ViewVector;
+	float Intensity;
 };
 
 class LightComponent : public GameComponent
