@@ -41,6 +41,8 @@ public:
 
 	DirectX::SimpleMath::Matrix GetViewProjectionMatrix() const;
 
+	std::vector<Vector4> GetFrustumCornersWorldSpace(const Matrix& view, const Matrix& proj);
+
 protected:
 	DirectX::SimpleMath::Matrix ViewProjectionMatrix = Matrix::Identity;
 

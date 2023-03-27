@@ -1,4 +1,5 @@
 #include "RendererComponent.h"
+#include "LightComponent.h"
 
 RendererComponent::RendererComponent()
 {
@@ -48,18 +49,44 @@ void RendererComponent::Initialize()
 
 	Game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
 
+	D3D11_BUFFER_DESC constCascadeBufDesc = {};
+	constCascadeBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constCascadeBufDesc.Usage = D3D11_USAGE_DEFAULT;
+	constCascadeBufDesc.CPUAccessFlags = 0;
+	constCascadeBufDesc.MiscFlags = 0;
+	constCascadeBufDesc.StructureByteStride = 0;
+	constCascadeBufDesc.ByteWidth = sizeof(Matrix) * 5 + sizeof(Vector4);
+
+	Game->device->CreateBuffer(&constCascadeBufDesc, NULL, &constCascadeBuffer);
+
 	D3D11_SAMPLER_DESC samplerStateDesc = {};
 	samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerStateDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	//samplerStateDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 	samplerStateDesc.MinLOD = 0.0f;
 	samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	Game->device->CreateSamplerState(&samplerStateDesc, &samplerState);
 
+	D3D11_SAMPLER_DESC depthSamplerStateDesc = {};
+	depthSamplerStateDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+	depthSamplerStateDesc.ComparisonFunc = D3D11_COMPARISON_GREATER_EQUAL;
+	depthSamplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+	depthSamplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+	depthSamplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+	depthSamplerStateDesc.BorderColor[0] = 1.0f;
+	depthSamplerStateDesc.BorderColor[1] = 1.0f;
+	depthSamplerStateDesc.BorderColor[2] = 1.0f;
+	depthSamplerStateDesc.BorderColor[3] = 1.0f;
+
+	Game->device->CreateSamplerState(&depthSamplerStateDesc, &depthSamplerState);
+
+
+
 	ShaderManager::Instance->InitShader(GetBaseShader());
+	ShaderManager::Instance->InitShader(GetShadowShader());
 }
 
 void RendererComponent::Update(float deltaTime)
@@ -76,9 +103,57 @@ void RendererComponent::Update(float deltaTime)
 
 	ConstBuff objData = {};
 	objData.World_View_Projection = worldViewProj;
+	objData.World = world;
+	objData.WorldView = world * Camera->GetViewMatrix();
 	objData.invTrWorld = (Matrix::CreateScale(scale) * Matrix::CreateFromQuaternion(rot)).Invert().Transpose();
 
+	CbDataCascade cascadeData = {};
+	auto tmp = LightComponent::Instance->GetLightSpaceMatrices();
+	for (int i = 0; i < 5; ++i)
+	{
+		cascadeData.ViewProj[i] = tmp[i];
+	}
+	cascadeData.Distance = LightComponent::Instance->GetShadowCascadeDistances();
+
 	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &objData, 0, 0);
+	Game->context->UpdateSubresource(constCascadeBuffer, 0, nullptr, &cascadeData, 0, 0);
+}
+
+void RendererComponent::PrepareFrame()
+{
+	std::cout << "as" << std::endl;
+	//if (!isShadowCasting_)
+	//	return;
+
+	//Game->context->RSSetState(rastState_.Get());
+
+	/*D3D11_VIEWPORT viewport;
+	viewport.Width = 1024.0f;
+	viewport.Height = 1024.0f;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
+
+	game->GetContext()->RSSetViewports(1, &viewport);*/
+
+	ShaderManager::Instance->SetShader(GetShadowShader());
+
+	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
+	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
+	UINT offsets[] = { 0, 0 };
+
+	//Game->context->IASetInputLayout(layout_.Get());
+	Game->context->IASetPrimitiveTopology(GetTopology());
+	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
+	//Game->context->VSSetShader(ResourceFactory::GetVertexShader("csm"), nullptr, 0);
+	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
+	//game->GetContext()->PSSetShader(nullptr, nullptr, 0);
+	//Game->context->GSSetShader(ResourceFactory::GetGeometryShader("csm"), nullptr, 0);
+	Game->context->GSSetConstantBuffers(2, 1, &constCascadeBuffer);
+
+	Game->context->DrawIndexed(indices.size(), 0, 0);
 }
 
 void RendererComponent::Draw()
@@ -92,12 +167,20 @@ void RendererComponent::Draw()
 	Game->context->IASetPrimitiveTopology(GetTopology());
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
+
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
+
 	Game->context->PSSetConstantBuffers(0, 1, &constBuffer);
+	Game->context->PSSetConstantBuffers(2, 1, &constCascadeBuffer);
 
 	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);
+
+	const auto csm = Game->depthShadowSrv;
+	Game->context->PSSetShaderResources(1, 1, &csm);
+
 	Game->context->PSSetSamplers(0, 1, &samplerState);
+	Game->context->PSSetSamplers(1, 1, &depthSamplerState);
 
 	Game->context->DrawIndexed(indices.size(), 0, 0);
 }

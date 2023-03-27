@@ -20,6 +20,14 @@ void GameObject::Update(float deltaTime)
 	}
 }
 
+void GameObject::PrepareFrame()
+{
+	for (auto component : _components)
+	{
+		component->PrepareFrame();
+	}
+}
+
 void GameObject::Draw()
 {
 	for (auto component : _components)

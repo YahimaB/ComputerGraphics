@@ -68,6 +68,60 @@ bool Game::Initialize()
 	return true;
 }
 
+void Game::CreateCsmDepthTextureArray()
+{
+	D3D11_TEXTURE2D_DESC depthDescription = {};
+	depthDescription.Width = static_cast<float>(Display->ClientWidth);
+	depthDescription.Height = static_cast<float>(Display->ClientWidth);
+	depthDescription.ArraySize = 5;
+	depthDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
+	depthDescription.Format = DXGI_FORMAT_R32_TYPELESS;
+	depthDescription.MipLevels = 1;
+	depthDescription.SampleDesc.Count = 1;
+	depthDescription.SampleDesc.Quality = 0;
+	depthDescription.Usage = D3D11_USAGE_DEFAULT;
+	depthDescription.CPUAccessFlags = 0;
+	depthDescription.MiscFlags = 0;
+
+	auto res = device->CreateTexture2D(&depthDescription, nullptr, &shadowTexArr);
+
+	if (FAILED(res))
+	{
+		OutputDebugString(TEXT("Fatal error: Failed to create CSM depth texture array!\n"));
+	}
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC dViewDesc = {};
+	dViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	dViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+	dViewDesc.Texture2DArray = {};
+	dViewDesc.Texture2DArray.MipSlice = 0;
+	dViewDesc.Texture2DArray.FirstArraySlice = 0;
+	dViewDesc.Texture2DArray.ArraySize = 5;
+
+	res = device->CreateDepthStencilView(shadowTexArr, &dViewDesc, &depthShadowDsv);
+
+	if (FAILED(res))
+	{
+		OutputDebugString(TEXT("Fatal error: Failed to create CSM depth stencil view!\n"));
+	}
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+	srvDesc.Texture2DArray = {};
+	srvDesc.Texture2DArray.MostDetailedMip = 0;
+	srvDesc.Texture2DArray.MipLevels = 1;
+	srvDesc.Texture2DArray.FirstArraySlice = 0;
+	srvDesc.Texture2DArray.ArraySize = 5;
+
+	res = device->CreateShaderResourceView(shadowTexArr, &srvDesc, &depthShadowSrv);
+
+	if (FAILED(res))
+	{
+		OutputDebugString(TEXT("Fatal error: Failed to create CSM depth SRV!\n"));
+	}
+}
+
 bool Game::CreateBackBuffer()
 {
 	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_1 };
@@ -85,7 +139,7 @@ bool Game::CreateBackBuffer()
 	swapDesc.OutputWindow = Display->hWnd;
 	swapDesc.Windowed = true;
 	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	swapDesc.Flags = 0;
+	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	swapDesc.SampleDesc.Count = 1;
 	swapDesc.SampleDesc.Quality = 0;
 
@@ -139,6 +193,7 @@ bool Game::CreateBackBuffer()
 	res = device->CreateDepthStencilView(depthTex, nullptr, &depthView);
 	depthTex->Release();
 
+	CreateCsmDepthTextureArray();
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
 	rastDesc.CullMode = D3D11_CULL_BACK;
@@ -213,6 +268,19 @@ void Game::UpdateInternal()
 
 void Game::PrepareFrame()
 {
+	context->OMSetRenderTargets(0, nullptr, depthShadowDsv);
+	context->ClearDepthStencilView(depthShadowDsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	for (auto gameObject : _gameObjects)
+	{
+		gameObject->PrepareFrame();
+	}
+}
+
+void Game::Draw()
+{
+	PrepareFrame();
+
 	context->ClearState();
 	context->RSSetState(rastState);
 
@@ -229,11 +297,6 @@ void Game::PrepareFrame()
 	context->OMSetRenderTargets(1, &renderView, depthView);
 	context->ClearRenderTargetView(renderView, color);
 	context->ClearDepthStencilView(depthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-}
-
-void Game::Draw()
-{
-	PrepareFrame();
 
 	FrameCount++;
 	if (TotalTime > 1.0f) {

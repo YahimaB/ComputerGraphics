@@ -187,6 +187,7 @@
     <ClCompile Include="Core\Components\RendererComponent.cpp" />
     <ClCompile Include="Core\Components\RendererComponents\GridComponent.cpp" />
     <ClCompile Include="Core\Components\RendererComponents\MeshComponent.cpp" />
+    <ClCompile Include="Core\Components\RendererComponents\PlaneComponent.cpp" />
     <ClCompile Include="Core\Components\RendererComponents\SphereComponent.cpp" />
     <ClCompile Include="Core\Components\Transform.cpp" />
     <ClCompile Include="Core\DirectXTK\DDSTextureLoader.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Core\Components\RendererComponent.h" />
     <ClInclude Include="Core\Components\RendererComponents\GridComponent.h" />
     <ClInclude Include="Core\Components\RendererComponents\MeshComponent.h" />
+    <ClInclude Include="Core\Components\RendererComponents\PlaneComponent.h" />
     <ClInclude Include="Core\Components\RendererComponents\SphereComponent.h" />
     <ClInclude Include="Core\Components\Transform.h" />
     <ClInclude Include="Core\DirectXTK\DDS.h" />

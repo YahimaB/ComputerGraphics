@@ -46,3 +46,31 @@ Matrix Camera::GetProjectionMatrix() const
 		return Matrix::CreateOrthographic(OrthoSize * AspectRatio, OrthoSize, ClipPlanes.Near, ClipPlanes.Far);
 	}
 }
+
+
+std::vector<Vector4> Camera::GetFrustumCornersWorldSpace(const Matrix& view, const Matrix& proj)
+{
+	const auto viewProj = view * proj;
+	const auto inv = viewProj.Invert();
+
+	std::vector<Vector4> frustumCorners;
+	frustumCorners.reserve(8);
+	for (unsigned int x = 0; x < 2; ++x)
+	{
+		for (unsigned int y = 0; y < 2; ++y)
+		{
+			for (unsigned int z = 0; z < 2; ++z)
+			{
+				const Vector4 pt = 
+					Vector4::Transform(Vector4(
+						2.0f * x - 1.0f,
+						2.0f * y - 1.0f,
+						z,
+						1.0f), inv);
+				frustumCorners.push_back(pt / pt.w);
+			}
+		}
+	}
+
+	return frustumCorners;
+}

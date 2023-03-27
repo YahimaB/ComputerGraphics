@@ -88,6 +88,9 @@
     <ClCompile Include="Core\Managers\ShaderManager.cpp">
       <Filter>Core\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Components\RendererComponents\PlaneComponent.cpp">
+      <Filter>Core\Components\RendererComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -170,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="Core\Managers\ShaderManager.h">
       <Filter>Core\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Components\RendererComponents\PlaneComponent.h">
+      <Filter>Core\Components\RendererComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

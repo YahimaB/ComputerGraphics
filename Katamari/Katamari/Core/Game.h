@@ -26,6 +26,11 @@ public:
 	ID3D11RenderTargetView* renderView;
 	ID3D11DepthStencilView* depthView;
 	ID3D11RasterizerState* rastState;
+
+	ID3D11Texture2D* shadowTexArr;
+	ID3D11DepthStencilView* depthShadowDsv;
+	ID3D11ShaderResourceView* depthShadowSrv;
+
 	D3D11_VIEWPORT viewport;
 
 public:
@@ -56,6 +61,7 @@ private:
 	std::vector<GameObject*> _gameObjects;
 
 private:
+	void CreateCsmDepthTextureArray();
 	bool CreateBackBuffer();
 	void UpdateInternal();
 	void PrepareFrame();

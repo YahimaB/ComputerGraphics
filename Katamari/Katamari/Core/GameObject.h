@@ -17,6 +17,7 @@ public:
 	~GameObject() {};
 
 	void virtual Update(float deltaTime);
+	void virtual PrepareFrame();
 	void virtual Draw();
 	void virtual DestroyResources();
 

@@ -18,10 +18,14 @@ struct LightProperties
 	Light Lights;
 	Vector3 ViewVector;
 	float Intensity;
+	Matrix T;
 };
 
 class LightComponent : public GameComponent
 {
+public:
+	static LightComponent* Instance;
+
 public:
 	LightComponent();
 
@@ -35,5 +39,11 @@ protected:
 	Camera* Camera = nullptr;
 
 	ID3D11Buffer* constBuffer = nullptr;
+
+public:
+	std::vector<float> shadowCascadeLevels_{};
+	Matrix GetLightSpaceMatrix(float nearPlane, float farPlane);
+	Vector4 GetShadowCascadeDistances() const;
+	std::vector<Matrix> GetLightSpaceMatrices();
 };
 

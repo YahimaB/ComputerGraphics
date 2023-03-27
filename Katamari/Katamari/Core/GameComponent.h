@@ -14,6 +14,7 @@ public:
 public:
 
 	void virtual Initialize() {};
+	void virtual PrepareFrame() {};
 	void virtual Draw() {};
 	void virtual Update(float deltaTime) {};
 	void virtual DestroyResources();
