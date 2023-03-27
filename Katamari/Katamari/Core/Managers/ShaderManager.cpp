@@ -19,7 +19,7 @@ void ShaderManager::InitShader(FShaderData data)
 
 	FShader shader;
 
-	if (data.Type && ST_Vertex) {
+	if (data.Type & ST_Vertex) {
 		ID3DBlob* vsBlob;
 		ID3D11VertexShader* vertexShader;
 
@@ -37,7 +37,7 @@ void ShaderManager::InitShader(FShaderData data)
 		std::cout << "init VS:" << std::endl;
 	}
 
-	if (data.Type && ST_Pixel) {
+	if (data.Type & ST_Pixel) {
 		ID3DBlob* psBlob;
 		ID3D11PixelShader* pixelShader;
 
@@ -50,6 +50,20 @@ void ShaderManager::InitShader(FShaderData data)
 		psBlob->Release();
 
 		std::cout << "init PS:" << std::endl;
+	}
+
+	if (data.Type & ST_Geometry) {
+		ID3DBlob* gsBlob;
+		ID3D11PixelShader* geometryShader;
+
+		CompileShaderFromFile(data.ShaderName, nullptr, "GSMain", "gs_5_0", &gsBlob);
+		game->device->CreateGeometryShader(
+			gsBlob->GetBufferPointer(),
+			gsBlob->GetBufferSize(),
+			nullptr, &shader.GShader);
+		gsBlob->Release();
+
+		std::cout << "init GS:" << std::endl;
 	}
 
 	shaders[data.ShaderName] = shader;
@@ -72,6 +86,9 @@ void ShaderManager::SetShader(FShaderData data)
 	if (data.Type && ST_Pixel) {
 		game->context->PSSetShader(shader.PShader, nullptr, 0);
 	}
+	if (data.Type && ST_Geometry) {
+		game->context->GSSetShader(shader.GShader, nullptr, 0);
+	}
 }
 
 void ShaderManager::CompileShaderFromFile(std::string shaderName, D3D_SHADER_MACRO shaderMacros[], LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut)
@@ -93,6 +110,7 @@ void ShaderManager::CompileShaderFromFile(std::string shaderName, D3D_SHADER_MAC
 	if (FAILED(res)) {
 		if (pErrorBlob) {
 			char* compileErrors = (char*)(pErrorBlob->GetBufferPointer());
+			std::cout << compileErrors << std::endl;
 			throw compileErrors;
 		}
 		else
