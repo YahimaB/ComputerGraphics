@@ -58,6 +58,8 @@ void RendererComponent::Initialize()
 	samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	Game->device->CreateSamplerState(&samplerStateDesc, &samplerState);
+
+	ShaderManager::Instance->InitShader(GetBaseShader());
 }
 
 void RendererComponent::Update(float deltaTime)
@@ -81,7 +83,7 @@ void RendererComponent::Update(float deltaTime)
 
 void RendererComponent::Draw()
 {
-	OldShaderManager::Instance->ApplyShader(GetShaderName());
+	ShaderManager::Instance->SetShader(GetBaseShader());
 
 	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
 	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
@@ -93,7 +95,7 @@ void RendererComponent::Draw()
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
 	Game->context->PSSetConstantBuffers(0, 1, &constBuffer);
 
-	ID3D11ShaderResourceView* test = OldShaderManager::Instance->GetTextureView(GetTextureName());
+	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);
 	Game->context->PSSetSamplers(0, 1, &samplerState);
 

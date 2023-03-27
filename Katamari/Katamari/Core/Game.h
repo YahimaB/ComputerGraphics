@@ -3,7 +3,7 @@
 #include "MinimalCore.h"
 
 #include "DisplayWin.h"
-#include "OldShaderManager.h"
+#include "Managers/ShaderManager.h"
 #include "External/InputDevice.h"
 
 class GameObject;
@@ -16,7 +16,7 @@ public:
 
 public:
 	DisplayWin* Display;
-	OldShaderManager* Shader;
+	ShaderManager* ShaderManager;
 	InputDevice* InputDevice;
 
 	ID3D11Device* device;

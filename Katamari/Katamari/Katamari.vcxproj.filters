@@ -19,6 +19,9 @@
     <Filter Include="Core\Components\RendererComponents">
       <UniqueIdentifier>{f510acfb-b5be-4595-8a0b-aded390da0f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Managers">
+      <UniqueIdentifier>{5b9a4344-194d-4914-8c60-801c3f03c9fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\External\Delegates.cpp">
@@ -40,9 +43,6 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\GameComponent.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\OldShaderManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
@@ -85,6 +85,9 @@
     <ClCompile Include="Core\Components\LightComponent.cpp">
       <Filter>Core\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Managers\ShaderManager.cpp">
+      <Filter>Core\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -112,9 +115,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\GameComponent.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\OldShaderManager.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\GameObject.h">
@@ -167,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="Core\Components\LightComponent.h">
       <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Managers\ShaderManager.h">
+      <Filter>Core\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

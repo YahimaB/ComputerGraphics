@@ -43,8 +43,10 @@ protected:
 protected:
 	std::string GetUniqueId() override { return "rc"; }
 
-	virtual std::string GetShaderName() { return "./Shaders/TexturedShaderWithLight.hlsl"; }
 	virtual std::string GetTextureName() { return "./Textures/default.dds"; }
+
+	virtual FShaderData GetBaseShader() { return { "./Shaders/TexturedShaderWithLight.hlsl", ST_Vertex | ST_Pixel }; }
+	virtual FShaderData GetShadowShader() { return { "./Shaders/TexturedShaderWithLight.hlsl", ST_Vertex | ST_Geometry }; }
 
 	virtual D3D_PRIMITIVE_TOPOLOGY GetTopology() { return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST; }
 };
