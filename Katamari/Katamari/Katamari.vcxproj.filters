@@ -42,7 +42,7 @@
     <ClCompile Include="Core\GameComponent.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\ShaderManager.cpp">
+    <ClCompile Include="Core\OldShaderManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
@@ -114,7 +114,7 @@
     <ClInclude Include="Core\GameComponent.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\ShaderManager.h">
+    <ClInclude Include="Core\OldShaderManager.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\GameObject.h">

@@ -52,7 +52,7 @@ bool Game::Initialize()
 	if (!CreateBackBuffer())
 		return false;
 
-	Shader = new ShaderManager();
+	Shader = new OldShaderManager();
 	InputDevice = new ::InputDevice(this);
 
 	//Camera = new ::Camera();

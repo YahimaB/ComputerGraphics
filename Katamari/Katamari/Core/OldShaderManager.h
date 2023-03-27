@@ -8,6 +8,13 @@
 
 class Game;
 
+template <typename T>
+struct ShaderData
+{
+	T* Shader;
+
+};
+
 struct Shader
 {
 	ID3D11VertexShader* vShader;
@@ -15,7 +22,7 @@ struct Shader
 	ID3D11InputLayout* inputLayout;
 };
 
-class ShaderManager
+class OldShaderManager
 {
 public:
 	struct Texture
@@ -24,9 +31,9 @@ public:
 		ID3D11ShaderResourceView* view;
 	};
 
-	static ShaderManager* Instance;
+	static OldShaderManager* Instance;
 
-	ShaderManager();
+	OldShaderManager();
 	void ApplyShader(std::string shaderName);
 	ID3D11ShaderResourceView* GetTextureView(std::string name);
 
@@ -36,7 +43,10 @@ private:
 	std::map<std::string, Shader> shaders;
 	std::map<std::string, Texture> textures;
 
+	std::map<std::string, ShaderData<ID3D11DeviceChild>> tempShaders;
+
 
 	void CompileShaderFromFile(std::string shaderName, D3D_SHADER_MACRO shaderMacros[], LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** blobOut);
+	HRESULT CreateInputLayoutDescFromVertexShaderSignature(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout);
 };
 

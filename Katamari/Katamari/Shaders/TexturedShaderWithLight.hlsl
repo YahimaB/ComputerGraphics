@@ -115,8 +115,8 @@ LightingResult ComputeLighting(float4 P, float3 N)
 	LightingResult totalResult = { {0, 0, 0, 0}, {0, 0, 0, 0} };
 	totalResult = DoDirectionalLight(Lights, ViewVector, N);
 
-	totalResult.Diffuse = saturate(totalResult.Diffuse);
-	totalResult.Specular = saturate(totalResult.Specular);
+	//totalResult.Diffuse = saturate(totalResult.Diffuse);
+	//totalResult.Specular = saturate(totalResult.Specular);
 
 	return totalResult;
 }

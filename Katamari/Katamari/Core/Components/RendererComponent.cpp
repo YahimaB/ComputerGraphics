@@ -81,7 +81,7 @@ void RendererComponent::Update(float deltaTime)
 
 void RendererComponent::Draw()
 {
-	ShaderManager::Instance->ApplyShader(GetShaderName());
+	OldShaderManager::Instance->ApplyShader(GetShaderName());
 
 	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
 	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
@@ -93,7 +93,7 @@ void RendererComponent::Draw()
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
 	Game->context->PSSetConstantBuffers(0, 1, &constBuffer);
 
-	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
+	ID3D11ShaderResourceView* test = OldShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);
 	Game->context->PSSetSamplers(0, 1, &samplerState);
 
