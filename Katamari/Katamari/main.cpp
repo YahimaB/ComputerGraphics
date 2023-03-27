@@ -6,6 +6,8 @@
 #include "Core/Components/LightComponent.h"
 
 #include "Core/Components/RendererComponents/GridComponent.h"
+#include "Core/Components/RendererComponents/PlaneComponent.h"
+
 #include "Core/Components/RendererComponents/SphereComponent.h"
 #include "Core/Components/RendererComponents/MeshComponent.h"
 
@@ -29,7 +31,9 @@ int main()
 		std::cout << light->AddComponent(new LightComponent()) << std::endl;
 
 		auto grid = new GameObject("Grid");
-		std::cout << grid->AddComponent(new GridComponent()) << std::endl;
+		//std::cout << grid->AddComponent(new GridComponent()) << std::endl;
+		auto plane = new PlaneComponent(50.0f);
+		std::cout << grid->AddComponent(plane) << std::endl;
 
 		auto player = new GameObject("Player");
 		std::cout << player->AddComponent(new KatamariBallController()) << std::endl;
