@@ -197,6 +197,7 @@
     <ClCompile Include="Core\External\Delegates.cpp" />
     <ClCompile Include="Core\External\InputDevice.cpp" />
     <ClCompile Include="Core\Game.cpp" />
+    <ClCompile Include="Core\Game.Init.cpp" />
     <ClCompile Include="Core\GameComponent.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\Managers\ShaderManager.cpp" />

@@ -83,17 +83,12 @@ void RendererComponent::Initialize()
 
 	Game->device->CreateSamplerState(&depthSamplerStateDesc, &depthSamplerState);
 
-
-
 	ShaderManager::Instance->InitShader(GetBaseShader());
 	ShaderManager::Instance->InitShader(GetShadowShader());
 }
 
 void RendererComponent::Update(float deltaTime)
 {
-	//Transform->Rotation.Normalize();
-	//Matrix world = Matrix::CreateScale(Transform->Scale) * Matrix::CreateFromQuaternion(Transform->Rotation) * Matrix::CreateTranslation(Transform->Position);
-
 	Vector3 scale, pos;
 	Quaternion rot;
 
@@ -121,36 +116,16 @@ void RendererComponent::Update(float deltaTime)
 
 void RendererComponent::PrepareFrame()
 {
-	std::cout << "as" << std::endl;
-	//if (!isShadowCasting_)
-	//	return;
-
-	//Game->context->RSSetState(rastState_.Get());
-
-	/*D3D11_VIEWPORT viewport;
-	viewport.Width = 1024.0f;
-	viewport.Height = 1024.0f;
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0;
-	viewport.MaxDepth = 1.0f;
-
-	game->GetContext()->RSSetViewports(1, &viewport);*/
-
 	ShaderManager::Instance->SetShader(GetShadowShader());
 
 	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
 	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
 	UINT offsets[] = { 0, 0 };
 
-	//Game->context->IASetInputLayout(layout_.Get());
 	Game->context->IASetPrimitiveTopology(GetTopology());
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
-	//Game->context->VSSetShader(ResourceFactory::GetVertexShader("csm"), nullptr, 0);
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
-	//game->GetContext()->PSSetShader(nullptr, nullptr, 0);
-	//Game->context->GSSetShader(ResourceFactory::GetGeometryShader("csm"), nullptr, 0);
 	Game->context->GSSetConstantBuffers(2, 1, &constCascadeBuffer);
 
 	Game->context->DrawIndexed(indices.size(), 0, 0);
@@ -175,9 +150,7 @@ void RendererComponent::Draw()
 
 	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);
-
-	const auto csm = Game->depthShadowSrv;
-	Game->context->PSSetShaderResources(1, 1, &csm);
+	Game->context->PSSetShaderResources(1, 1, &Game->shadowSRV);
 
 	Game->context->PSSetSamplers(0, 1, &samplerState);
 	Game->context->PSSetSamplers(1, 1, &depthSamplerState);

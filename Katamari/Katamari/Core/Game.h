@@ -16,22 +16,23 @@ public:
 
 public:
 	DisplayWin* Display;
-	ShaderManager* ShaderManager;
-	InputDevice* InputDevice;
+	D3D11_VIEWPORT viewport;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 	IDXGISwapChain* swapChain;
 
-	ID3D11RenderTargetView* renderView;
-	ID3D11DepthStencilView* depthView;
+	ID3D11RenderTargetView* mainRTV;
+	ID3D11DepthStencilView* mainDSV;
+
+	ID3D11DepthStencilView* shadowDSV;
+	ID3D11ShaderResourceView* shadowSRV;
+
 	ID3D11RasterizerState* rastState;
 
-	ID3D11Texture2D* shadowTexArr;
-	ID3D11DepthStencilView* depthShadowDsv;
-	ID3D11ShaderResourceView* depthShadowSrv;
-
-	D3D11_VIEWPORT viewport;
+public:
+	ShaderManager* ShaderManager;
+	InputDevice* InputDevice;
 
 public:
 	Game(LPCWSTR appName);
@@ -61,10 +62,16 @@ private:
 	std::vector<GameObject*> _gameObjects;
 
 private:
-	void CreateCsmDepthTextureArray();
-	bool CreateBackBuffer();
 	void UpdateInternal();
 	void PrepareFrame();
 	void EndFrame();
 	void Draw();
+
+private:
+	void CreateDisplay();
+	bool CreateResources();
+	bool CreateDeviceAndSwapChain();
+	bool CreateMainRenderResources();
+	bool CreateShadowRenderResources();
+	bool CreateRasterizerState();
 };

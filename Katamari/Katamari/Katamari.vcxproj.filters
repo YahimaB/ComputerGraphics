@@ -91,6 +91,9 @@
     <ClCompile Include="Core\Components\RendererComponents\PlaneComponent.cpp">
       <Filter>Core\Components\RendererComponents</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Game.Init.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
