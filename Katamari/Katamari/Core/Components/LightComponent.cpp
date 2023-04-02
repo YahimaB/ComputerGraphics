@@ -34,7 +34,7 @@ void LightComponent::Update(float deltaTime)
 
 	LightProperties lightProps = {};
 	lightProps.Lights = {
-		Vector4(0.0f, -1.0f, 0.0f, 0.0f), //direction
+		Vector4(1.0f, -1.0f, 0.0f, 0.0f), //direction
 		Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f //color
 	};
 	lightProps.ViewVector = viewVector;

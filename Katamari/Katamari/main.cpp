@@ -32,7 +32,7 @@ int main()
 
 		auto grid = new GameObject("Grid");
 		//std::cout << grid->AddComponent(new GridComponent()) << std::endl;
-		auto plane = new PlaneComponent(50.0f);
+		auto plane = new PlaneComponent(200.0f);
 		std::cout << grid->AddComponent(plane) << std::endl;
 
 		auto player = new GameObject("Player");
@@ -63,6 +63,11 @@ int main()
 			MyGame->AddGameObject(mesh);
 		}
 
+		auto mesh = new GameObject("BigBoy");
+		mesh->Transform->Position = Vector3::Forward * 100.0f;
+		mesh->Transform->Scale = Vector3::One * 30.0f;
+		std::cout << mesh->AddComponent(new MeshComponent("Models/hamburger.obj", "Textures/hamburger.dds")) << std::endl;
+		MyGame->AddGameObject(mesh);
 
 		MyGame->Run();
 	}
