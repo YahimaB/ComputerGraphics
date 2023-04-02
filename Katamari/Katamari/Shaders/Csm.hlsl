@@ -11,38 +11,47 @@ struct VS_IN
 	float4 normal : NORMAL0;
 };
 
+struct ObjectData
+{
+	float4x4 World;
+};
+
+cbuffer ObjectBufffer : register(b0)
+{
+	ObjectData ObjData;
+};
+
 struct GS_IN
 {
 	float4 pos : POSITION;
-};
-
-cbuffer cbPerObject : register(b0)
-{
-	float4x4 gWorldViewProj;
-	float4x4 gWorld;
-	float4x4 gWorldView;
-	float4x4 gInvTrWorldView;
 };
 
 GS_IN VSMain(VS_IN input)
 {
 	GS_IN output = (GS_IN)0;
 
-	output.pos = mul(float4(input.pos.xyz, 1.0f), gWorld);
+	output.pos = mul(float4(input.pos.xyz, 1.0f), ObjData.World);
 
 	return output;
 }
 
-cbuffer cbCascade : register(b2)
-{
-	float4x4 gViewProj[CASCADE_COUNT + 1];
-	float4 gDistances;
-};
+
 
 struct GS_OUT
 {
 	float4 pos : SV_POSITION;
  	uint arrInd : SV_RenderTargetArrayIndex;
+};
+
+struct CascadeData
+{
+	float4x4 ViewProj[CASCADE_COUNT + 1];
+	float4 Distances;
+};
+
+cbuffer CascadeBuffer : register(b2)
+{
+	CascadeData CascData;
 };
 
 [instance(CASCADE_COUNT + 1)]
@@ -53,7 +62,7 @@ void GSMain(triangle GS_IN p[3], in uint id : SV_GSInstanceID, inout TriangleStr
 	for (int i = 0; i < 3; ++i)
 	{
 		GS_OUT gs = (GS_OUT)0;
-		gs.pos = mul(float4(p[i].pos.xyz, 1.0f), gViewProj[id]);
+		gs.pos = mul(float4(p[i].pos.xyz, 1.0f), CascData.ViewProj[id]);
 		gs.arrInd = id;
 		stream.Append(gs);
 	}

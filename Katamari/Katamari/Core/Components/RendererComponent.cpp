@@ -125,6 +125,7 @@ void RendererComponent::PrepareFrame()
 	Game->context->IASetPrimitiveTopology(GetTopology());
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
+
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
 	Game->context->GSSetConstantBuffers(2, 1, &constCascadeBuffer);
 

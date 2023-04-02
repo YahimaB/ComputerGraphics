@@ -8,9 +8,9 @@ using namespace DirectX;
 using namespace SimpleMath;
 
 struct ConstBuff {
-	Matrix World_View_Projection;
 	Matrix World;
 	Matrix WorldView;
+	Matrix World_View_Projection;
 	Matrix invTrWorld;
 };
 

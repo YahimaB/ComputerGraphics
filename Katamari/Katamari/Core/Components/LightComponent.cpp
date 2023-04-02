@@ -43,14 +43,15 @@ void LightComponent::Update(float deltaTime)
         0.5f, 0.0f, 0.0f, 0.0f,
         0.0f, -0.5f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, 0.0f, 1.0f);
+        0.5f, 0.5f, 0.0f, 1.0f
+    );
 
 	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &lightProps, 0, 0);
 }
 
 void LightComponent::Draw()
 {
-	Game->context->VSSetConstantBuffers(1, 1, &constBuffer);
+	//Game->context->VSSetConstantBuffers(1, 1, &constBuffer);
 	Game->context->PSSetConstantBuffers(1, 1, &constBuffer);
 }
 
@@ -63,6 +64,10 @@ void LightComponent::DestroyResources()
 	GameComponent::DestroyResources();
 }
 
+Vector4 LightComponent::GetShadowCascadeDistances() const
+{
+    return Vector4(shadowCascadeLevels_[0], shadowCascadeLevels_[1], shadowCascadeLevels_[2], shadowCascadeLevels_[3]);
+}
 
 Matrix LightComponent::GetLightSpaceMatrix(const float nearPlane, const float farPlane)
 {
@@ -104,11 +109,6 @@ Matrix LightComponent::GetLightSpaceMatrix(const float nearPlane, const float fa
     const auto lightProjection = Matrix::CreateOrthographicOffCenter(minX, maxX, minY, maxY, minZ, maxZ);
 
     return lightView * lightProjection;
-}
-
-Vector4 LightComponent::GetShadowCascadeDistances() const
-{
-    return Vector4(shadowCascadeLevels_[0], shadowCascadeLevels_[1], shadowCascadeLevels_[2], shadowCascadeLevels_[3]);
 }
 
 std::vector<Matrix> LightComponent::GetLightSpaceMatrices()
