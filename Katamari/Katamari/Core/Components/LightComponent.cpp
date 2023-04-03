@@ -36,6 +36,19 @@ void LightComponent::Initialize()
     constCascadeBufDesc.ByteWidth = sizeof(CascadeData);
 
     Game->device->CreateBuffer(&constCascadeBufDesc, NULL, &constCascadeBuffer);
+
+    D3D11_SAMPLER_DESC depthSamplerStateDesc = {};
+    depthSamplerStateDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+    depthSamplerStateDesc.ComparisonFunc = D3D11_COMPARISON_GREATER_EQUAL;
+    depthSamplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+    depthSamplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+    depthSamplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+    depthSamplerStateDesc.BorderColor[0] = 1.0f;
+    depthSamplerStateDesc.BorderColor[1] = 1.0f;
+    depthSamplerStateDesc.BorderColor[2] = 1.0f;
+    depthSamplerStateDesc.BorderColor[3] = 1.0f;
+
+    Game->device->CreateSamplerState(&depthSamplerStateDesc, &depthSamplerState);
 }
 
 void LightComponent::Update(float deltaTime)
@@ -72,6 +85,8 @@ void LightComponent::Draw()
 {
 	Game->context->PSSetConstantBuffers(1, 1, &constLightsBuffer);
     Game->context->PSSetConstantBuffers(2, 1, &constCascadeBuffer);
+
+    Game->context->PSSetSamplers(1, 1, &depthSamplerState);
 }
 
 void LightComponent::DestroyResources()

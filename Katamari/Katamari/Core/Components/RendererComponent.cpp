@@ -60,19 +60,6 @@ void RendererComponent::Initialize()
 
 	Game->device->CreateSamplerState(&samplerStateDesc, &samplerState);
 
-	D3D11_SAMPLER_DESC depthSamplerStateDesc = {};
-	depthSamplerStateDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
-	depthSamplerStateDesc.ComparisonFunc = D3D11_COMPARISON_GREATER_EQUAL;
-	depthSamplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-	depthSamplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-	depthSamplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-	depthSamplerStateDesc.BorderColor[0] = 1.0f;
-	depthSamplerStateDesc.BorderColor[1] = 1.0f;
-	depthSamplerStateDesc.BorderColor[2] = 1.0f;
-	depthSamplerStateDesc.BorderColor[3] = 1.0f;
-
-	Game->device->CreateSamplerState(&depthSamplerStateDesc, &depthSamplerState);
-
 	ShaderManager::Instance->InitShader(GetBaseShader());
 	ShaderManager::Instance->InitShader(GetShadowShader());
 }
@@ -133,7 +120,6 @@ void RendererComponent::Draw()
 	Game->context->PSSetShaderResources(1, 1, &Game->shadowSRV);
 
 	Game->context->PSSetSamplers(0, 1, &samplerState);
-	Game->context->PSSetSamplers(1, 1, &depthSamplerState);
 
 	Game->context->DrawIndexed(indices.size(), 0, 0);
 }

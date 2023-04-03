@@ -47,6 +47,8 @@ protected:
 	ID3D11Buffer* constLightsBuffer = nullptr;
 	ID3D11Buffer* constCascadeBuffer = nullptr;
 
+	ID3D11SamplerState* depthSamplerState = nullptr;
+
 public:
 	std::vector<float> shadowCascadeLevels_{};
 	Matrix GetLightSpaceMatrix(float nearPlane, float farPlane);
