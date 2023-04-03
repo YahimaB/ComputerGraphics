@@ -49,10 +49,13 @@ protected:
 
 	ID3D11SamplerState* depthSamplerState = nullptr;
 
+	const static int CascadeCount = 4;
+	float cascadeOffsets[CascadeCount] = {50.0f, 25.0f, 10.0f, 2.0f};
+	float shadowCascadeLevels[CascadeCount] = {};
+
 public:
-	std::vector<float> shadowCascadeLevels_{};
-	Matrix GetLightSpaceMatrix(float nearPlane, float farPlane);
+	Matrix GetLightProjViewMatrix(float nearPlane, float farPlane);
 	Vector4 GetShadowCascadeDistances() const;
-	std::vector<Matrix> GetLightSpaceMatrices();
+	std::vector<Matrix> GetLightProjViewMatrices();
 };
 

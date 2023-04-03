@@ -29,7 +29,8 @@ struct PS_IN
 	float4 pos : SV_POSITION;
 	float2 tex : TEXCOORD;
 	float4 normal : NORMAL;
-	float4 viewPos : VIEWPOS;
+
+	float4 worldViewPos : VIEWPOS;
 	float4 worldPos : WORLDPOS;
 };
 
@@ -39,7 +40,8 @@ PS_IN VSMain( VS_IN input )
 
 	output.pos = mul(float4(input.pos.xyz, 1.0f), ObjData.WorldViewProj);
 	output.normal = mul(float4(input.normal.xyz, 0.0f), ObjData.InvTransWorld);
-	output.viewPos = mul(float4(input.pos.xyz, 1.0f), ObjData.WorldView);
+
+	output.worldViewPos = mul(float4(input.pos.xyz, 1.0f), ObjData.WorldView);
 	output.worldPos = mul(float4(input.pos.xyz, 1.0f), ObjData.World);
 
 	output.tex = input.tex;
@@ -77,7 +79,7 @@ struct LightingResult
 float4 DoDiffuse(Light light, float3 L, float3 N);
 float4 DoSpecular(Light light, float3 V, float3 L, float3 N);
 LightingResult DoDirectionalLight(Light light, float3 V, float3 N);
-LightingResult ComputeLighting(float4 P, float3 N);
+LightingResult ComputeLighting(float4 P, float4 WP, float4 VP, float3 N);
 
 struct CascadeData
 {
@@ -90,7 +92,7 @@ cbuffer CascadeBuffer : register(b2)
 	CascadeData CascData;
 };
 
-float ShadowCalculation(float4 posWorldSpace, float4 posViewSpace, float dotN);
+float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, Light light);
 
 Texture2D				DiffuseMap			: register(t0);
 Texture2DArray			CascadeShadowMap	: register(t1);
@@ -101,7 +103,7 @@ SamplerComparisonState	DepthSampler		: register(s1);
 float4 PSMain( PS_IN input ) : SV_Target
 {
 	float4 norm = normalize(input.normal);
-	LightingResult lightResult = ComputeLighting(input.pos, norm);
+	LightingResult lightResult = ComputeLighting(input.pos, input.worldPos, input.worldViewPos, norm);
 
 	float4 ambient = LightsData.Lights.Color; //TODO: multiply to material
 	float4 diffuse = lightResult.Diffuse * LightsData.Intensity; //TODO: multiply to material
@@ -110,9 +112,8 @@ float4 PSMain( PS_IN input ) : SV_Target
 	//texture color
 	float4 objColor = DiffuseMap.SampleLevel(Sampler, input.tex.xy, 0);
 
-	float shadow = ShadowCalculation(input.worldPos, input.viewPos, dot(norm, -LightsData.Lights.Direction));
 
-	float4 result = (ambient + (1.0f - shadow) * (diffuse + specular)) * objColor;
+	float4 result = (ambient + (diffuse + specular)) * objColor;
 	return result;
 }
 
@@ -147,7 +148,7 @@ LightingResult DoDirectionalLight(Light light, float3 V, float3 N)
 	return result;
 }
 
-LightingResult ComputeLighting(float4 P, float3 N)
+LightingResult ComputeLighting(float4 P, float4 worldP, float4 worldViewP, float3 N)
 {
 	//float3 V = normalize(EyePosition - P).xyz;
 
@@ -157,12 +158,18 @@ LightingResult ComputeLighting(float4 P, float3 N)
 	//totalResult.Diffuse = saturate(totalResult.Diffuse);
 	//totalResult.Specular = saturate(totalResult.Specular);
 
+	float shadow = 1.0f - ShadowCalculation(worldP, worldViewP, N, LightsData.Lights);
+
+	totalResult.Diffuse *= shadow;
+	totalResult.Specular *= shadow;
+
 	return totalResult;
 }
 
-float ShadowCalculation(float4 posWorldSpace, float4 posViewSpace, float dotN)
+float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, Light light)
 {
-	float depthValue = abs(posViewSpace.z);
+	// select cascade layer
+	float depthValue = abs(worldViewPos.z);
 
 	int layer = -1;
 	for (int i = 0; i < CASCADE_COUNT; ++i)
@@ -178,11 +185,10 @@ float ShadowCalculation(float4 posWorldSpace, float4 posViewSpace, float dotN)
 		layer = CASCADE_COUNT;
 	}
 
-	//float4 posLightSpace = mul(CascData.ViewProj[layer], float4(posWorldSpace.xyz, 1.0));
-	float4 posLightSpace = mul(float4(posWorldSpace.xyz, 1.0), CascData.ViewProj[layer]);
+	float4 lightViewProjPos = mul(float4(worldPos.xyz, 1.0), CascData.ViewProj[layer]);
 
 	// perform perspective divide
-	float3 projCoords = posLightSpace.xyz / posLightSpace.w;
+	float3 projCoords = lightViewProjPos.xyz / lightViewProjPos.w;
 
 	// transform to [0,1] range
 	projCoords.x = projCoords.x * 0.5f + 0.5f;
@@ -196,7 +202,7 @@ float ShadowCalculation(float4 posWorldSpace, float4 posViewSpace, float dotN)
 	}
 
 	// calculate bias (based on depth map resolution and slope)
-	float bias = max(0.05f * (1.0f - dotN), 0.005f);
+	float bias = max(0.05f * (1.0f - dot(N, -light.Direction)), 0.005f);
 	const float biasModifier = 0.5f;
 	if (layer == CASCADE_COUNT)
 	{

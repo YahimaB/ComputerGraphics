@@ -47,7 +47,7 @@ void RendererComponent::Initialize()
 	constBufDesc.StructureByteStride = 0;
 	constBufDesc.ByteWidth = sizeof(ObjectData);
 
-	Game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
+	Game->device->CreateBuffer(&constBufDesc, NULL, &constObjectBuffer);
 
 	D3D11_SAMPLER_DESC samplerStateDesc = {};
 	samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -79,14 +79,14 @@ void RendererComponent::Update(float deltaTime)
 	objData.WorldView = world * Camera->GetViewMatrix();
 	objData.invTrWorld = (Matrix::CreateScale(scale) * Matrix::CreateFromQuaternion(rot)).Invert().Transpose();
 
-	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &objData, 0, 0);
+	Game->context->UpdateSubresource(constObjectBuffer, 0, nullptr, &objData, 0, 0);
 }
 
 void RendererComponent::PrepareFrame()
 {
 	ShaderManager::Instance->SetShader(GetShadowShader());
 
-	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
+	ID3D11Buffer* vBuffers[] = { vertexBuffer, constObjectBuffer };
 	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
 	UINT offsets[] = { 0, 0 };
 
@@ -94,7 +94,7 @@ void RendererComponent::PrepareFrame()
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
 
-	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
+	Game->context->VSSetConstantBuffers(0, 1, &constObjectBuffer);
 
 	Game->context->DrawIndexed(indices.size(), 0, 0);
 }
@@ -103,7 +103,7 @@ void RendererComponent::Draw()
 {
 	ShaderManager::Instance->SetShader(GetBaseShader());
 
-	ID3D11Buffer* vBuffers[] = { vertexBuffer, constBuffer };
+	ID3D11Buffer* vBuffers[] = { vertexBuffer, constObjectBuffer };
 	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
 	UINT offsets[] = { 0, 0 };
 
@@ -111,9 +111,9 @@ void RendererComponent::Draw()
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
 
-	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
+	Game->context->VSSetConstantBuffers(0, 1, &constObjectBuffer);
 
-	Game->context->PSSetConstantBuffers(0, 1, &constBuffer);
+	Game->context->PSSetConstantBuffers(0, 1, &constObjectBuffer);
 
 	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);
@@ -131,7 +131,7 @@ void RendererComponent::DestroyResources()
 
 	vertexBuffer->Release();
 	indexBuffer->Release();
-	constBuffer->Release();
+	constObjectBuffer->Release();
 
 	Game = nullptr;
 

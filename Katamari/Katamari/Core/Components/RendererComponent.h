@@ -37,10 +37,9 @@ protected:
 
 	ID3D11Buffer* vertexBuffer = nullptr;
 	ID3D11Buffer* indexBuffer = nullptr;
-	ID3D11Buffer* constBuffer = nullptr;
+	ID3D11Buffer* constObjectBuffer = nullptr;
 
 	ID3D11SamplerState* samplerState = nullptr;
-	//ID3D11SamplerState* depthSamplerState = nullptr;
 
 	std::vector<Vertex> points;
 	std::vector<int> indices;

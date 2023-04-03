@@ -8,15 +8,15 @@ LightComponent::LightComponent()
 	Game = ::Game::Instance;
 	Camera = ::Camera::Current;
 	Instance = this;
-
-    shadowCascadeLevels_.push_back(1000.0f / 50.0f);
-    shadowCascadeLevels_.push_back(1000.0f / 25.0f);
-    shadowCascadeLevels_.push_back(1000.0f / 10.0f);
-    shadowCascadeLevels_.push_back(1000.0f / 2.0f);
 }
 
 void LightComponent::Initialize()
 {
+    for (int i = 0; i < CascadeCount; i++)
+    {
+        shadowCascadeLevels[i] = (Camera->ClipPlanes.Far / cascadeOffsets[i]);
+    }
+
 	D3D11_BUFFER_DESC constBufPerSceneDesc = {};
 	constBufPerSceneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufPerSceneDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -35,7 +35,7 @@ void LightComponent::Initialize()
     constCascadeBufDesc.StructureByteStride = 0;
     constCascadeBufDesc.ByteWidth = sizeof(CascadeData);
 
-    Game->device->CreateBuffer(&constCascadeBufDesc, NULL, &constCascadeBuffer);
+    Game->device->CreateBuffer(&constCascadeBufDesc, nullptr, &constCascadeBuffer);
 
     D3D11_SAMPLER_DESC depthSamplerStateDesc = {};
     depthSamplerStateDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
@@ -66,12 +66,12 @@ void LightComponent::Update(float deltaTime)
 	Game->context->UpdateSubresource(constLightsBuffer, 0, nullptr, &lightProps, 0, 0);
 
     CascadeData cascadeData = {};
-    auto tmp = GetLightSpaceMatrices();
+    auto projViewMatrices = GetLightProjViewMatrices();
     for (int i = 0; i < 5; ++i)
     {
-        cascadeData.ViewProj[i] = tmp[i];
+        cascadeData.ViewProj[i] = projViewMatrices[i];
     }
-    cascadeData.Distance = GetShadowCascadeDistances();
+    cascadeData.Distance = Vector4(shadowCascadeLevels);
 
     Game->context->UpdateSubresource(constCascadeBuffer, 0, nullptr, &cascadeData, 0, 0);
 }
@@ -100,10 +100,10 @@ void LightComponent::DestroyResources()
 
 Vector4 LightComponent::GetShadowCascadeDistances() const
 {
-    return Vector4(shadowCascadeLevels_[0], shadowCascadeLevels_[1], shadowCascadeLevels_[2], shadowCascadeLevels_[3]);
+    return Vector4(shadowCascadeLevels[0], shadowCascadeLevels[1], shadowCascadeLevels[2], shadowCascadeLevels[3]);
 }
 
-Matrix LightComponent::GetLightSpaceMatrix(const float nearPlane, const float farPlane)
+Matrix LightComponent::GetLightProjViewMatrix(const float nearPlane, const float farPlane)
 {
     const auto proj = Matrix::CreatePerspectiveFieldOfView(
         Camera::Current->FOV, Camera::Current->AspectRatio,
@@ -146,22 +146,22 @@ Matrix LightComponent::GetLightSpaceMatrix(const float nearPlane, const float fa
     return lightView * lightProjection;
 }
 
-std::vector<Matrix> LightComponent::GetLightSpaceMatrices()
+std::vector<Matrix> LightComponent::GetLightProjViewMatrices()
 {
     std::vector<Matrix> ret;
-    for (size_t i = 0; i < shadowCascadeLevels_.size() + 1; ++i)
+    for (size_t i = 0; i < CascadeCount + 1; ++i)
     {
         if (i == 0)
         {
-            ret.push_back(GetLightSpaceMatrix(Camera::Current->ClipPlanes.Near, shadowCascadeLevels_[i]));
+            ret.push_back(GetLightProjViewMatrix(Camera::Current->ClipPlanes.Near, shadowCascadeLevels[i]));
         }
-        else if (i < shadowCascadeLevels_.size())
+        else if (i < CascadeCount)
         {
-            ret.push_back(GetLightSpaceMatrix(shadowCascadeLevels_[i - 1], shadowCascadeLevels_[i]));
+            ret.push_back(GetLightProjViewMatrix(shadowCascadeLevels[i - 1], shadowCascadeLevels[i]));
         }
         else
         {
-            ret.push_back(GetLightSpaceMatrix(shadowCascadeLevels_[i - 1], Camera::Current->ClipPlanes.Far));
+            ret.push_back(GetLightProjViewMatrix(shadowCascadeLevels[i - 1], Camera::Current->ClipPlanes.Far));
         }
     }
     return ret;
