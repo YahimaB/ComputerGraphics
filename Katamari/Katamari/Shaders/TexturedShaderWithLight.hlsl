@@ -61,7 +61,6 @@ struct LightsProperties
 	Light Lights;
 	float3 ViewVector;
 	float Intensity;
-	float4x4 gT;
 };
 
 cbuffer LightProperties : register(b1)
@@ -179,17 +178,24 @@ float ShadowCalculation(float4 posWorldSpace, float4 posViewSpace, float dotN)
 		layer = CASCADE_COUNT;
 	}
 
+	//float4 posLightSpace = mul(CascData.ViewProj[layer], float4(posWorldSpace.xyz, 1.0));
 	float4 posLightSpace = mul(float4(posWorldSpace.xyz, 1.0), CascData.ViewProj[layer]);
+
+	// perform perspective divide
 	float3 projCoords = posLightSpace.xyz / posLightSpace.w;
 
-	projCoords = (mul(float4(projCoords, 1.0f), LightsData.gT)).xyz;
-	float currentDepth = projCoords.z;
+	// transform to [0,1] range
+	projCoords.x = projCoords.x * 0.5f + 0.5f;
+	projCoords.y = projCoords.y * -0.5f + 0.5f;
 
+	// get depth of current fragment from light's perspective
+	float currentDepth = projCoords.z;
 	if (currentDepth > 1.0f)
 	{
 		return 0.0f;
 	}
 
+	// calculate bias (based on depth map resolution and slope)
 	float bias = max(0.05f * (1.0f - dotN), 0.005f);
 	const float biasModifier = 0.5f;
 	if (layer == CASCADE_COUNT)
@@ -203,7 +209,7 @@ float ShadowCalculation(float4 posWorldSpace, float4 posViewSpace, float dotN)
 
 	// PCF
 	float shadow = 0.0f;
-	float2 texelSize = 1.0f / 800.0f;
+	float2 texelSize = 1.0f / 1024.0f;
 	for (int x = -1; x <= 1; ++x)
 	{
 		for (int y = -1; y <= 1; ++y)
@@ -213,7 +219,11 @@ float ShadowCalculation(float4 posWorldSpace, float4 posViewSpace, float dotN)
 	}
 	shadow /= 9.0f;
 
-	//float shadow = CascadeShadowMap.SampleCmp(DepthSampler, float3(projCoords.xy, layer), currentDepth);
+	// keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+	if (projCoords.z > 1.0)
+	{
+		shadow = 0.0f;
+	}
 
 	return shadow;
 }

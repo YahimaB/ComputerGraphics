@@ -18,7 +18,6 @@ struct LightProperties
 	Light Lights;
 	Vector3 ViewVector;
 	float Intensity;
-	Matrix T;
 };
 
 class LightComponent : public GameComponent

@@ -213,6 +213,26 @@ bool Game::CreateRasterizerState()
 	return true;
 }
 
+bool Game::CreateShadowRasterizerState()
+{
+	CD3D11_RASTERIZER_DESC rastDesc = {};
+	rastDesc.CullMode = D3D11_CULL_FRONT;
+	rastDesc.FillMode = D3D11_FILL_SOLID;
+	rastDesc.FrontCounterClockwise = true;
+	rastDesc.DepthClipEnable = true;
+
+	HRESULT res = device->CreateRasterizerState(&rastDesc, &rastState);
+	context->RSSetState(rastState);
+
+	if (FAILED(res))
+	{
+		MessageBoxA(0, "CreateRasterizerState() failed", "Fatal Error", MB_OK);
+		return false;
+	}
+
+	return true;
+}
+
 
 
 LRESULT CALLBACK Game::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)

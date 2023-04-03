@@ -65,7 +65,7 @@ std::vector<Vector4> Camera::GetFrustumCornersWorldSpace(const Matrix& view, con
 					Vector4::Transform(Vector4(
 						2.0f * x - 1.0f,
 						2.0f * y - 1.0f,
-						z,
+						2.0f * z - 1.0f,
 						1.0f), inv);
 				frustumCorners.push_back(pt / pt.w);
 			}

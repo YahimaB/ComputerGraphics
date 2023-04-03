@@ -41,7 +41,7 @@ int main()
 		auto ball = new GameObject("Ball");
 		std::cout << ball->AddComponent(new KatamariBall(1.5)) << std::endl;
 		ball->Transform->SetParent(player->Transform);
-		ball->Transform->Position.y = 1.5f;
+		ball->Transform->Position.y = 1.6f;
 
 		camera->Transform->SetParent(player->Transform);
 		camera->Transform->Position = Vector3::Backward * 10.0f + Vector3::Up * 5.0f;

@@ -74,4 +74,5 @@ private:
 	bool CreateMainRenderResources();
 	bool CreateShadowRenderResources();
 	bool CreateRasterizerState();
+	bool CreateShadowRasterizerState();
 };

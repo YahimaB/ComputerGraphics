@@ -34,17 +34,11 @@ void LightComponent::Update(float deltaTime)
 
 	LightProperties lightProps = {};
 	lightProps.Lights = {
-		Vector4(1.0f, -1.0f, 0.0f, 0.0f), //direction
+		Vector4(-1.0f, -1.0f, 0.0f, 0.0f), //direction
 		Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f //color
 	};
 	lightProps.ViewVector = viewVector;
 	lightProps.Intensity = 5.0f;
-    lightProps.T = Matrix(
-        0.5f, 0.0f, 0.0f, 0.0f,
-        0.0f, -0.5f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, 0.0f, 1.0f
-    );
 
 	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &lightProps, 0, 0);
 }
@@ -72,8 +66,9 @@ Vector4 LightComponent::GetShadowCascadeDistances() const
 Matrix LightComponent::GetLightSpaceMatrix(const float nearPlane, const float farPlane)
 {
     const auto proj = Matrix::CreatePerspectiveFieldOfView(
-        Camera::Current->FOV, Camera::Current->AspectRatio, nearPlane,
-        farPlane);
+        Camera::Current->FOV, Camera::Current->AspectRatio,
+        nearPlane, farPlane
+    );
     const auto corners = Camera::Current->GetFrustumCornersWorldSpace(Camera::Current->GetViewMatrix(), proj);
 
     auto center = Vector3::Zero;
@@ -83,7 +78,7 @@ Matrix LightComponent::GetLightSpaceMatrix(const float nearPlane, const float fa
     }
     center /= static_cast<float>(corners.size());
 
-    const auto lightView = Matrix::CreateLookAt(center, center + Vector4(1.0f, -1.0f, 0.0f, 0.0f), Vector3::Up);
+    const auto lightView = Matrix::CreateLookAt(center - Vector4(-1.0f, -1.0f, 0.0f, 0.0f), center, Vector3::Up);
 
     float minX = std::numeric_limits<float>::max();
     float maxX = std::numeric_limits<float>::lowest();
