@@ -49,16 +49,6 @@ void RendererComponent::Initialize()
 
 	Game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
 
-	D3D11_BUFFER_DESC constCascadeBufDesc = {};
-	constCascadeBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constCascadeBufDesc.Usage = D3D11_USAGE_DEFAULT;
-	constCascadeBufDesc.CPUAccessFlags = 0;
-	constCascadeBufDesc.MiscFlags = 0;
-	constCascadeBufDesc.StructureByteStride = 0;
-	constCascadeBufDesc.ByteWidth = sizeof(CascadeData);
-
-	Game->device->CreateBuffer(&constCascadeBufDesc, NULL, &constCascadeBuffer);
-
 	D3D11_SAMPLER_DESC samplerStateDesc = {};
 	samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -102,16 +92,7 @@ void RendererComponent::Update(float deltaTime)
 	objData.WorldView = world * Camera->GetViewMatrix();
 	objData.invTrWorld = (Matrix::CreateScale(scale) * Matrix::CreateFromQuaternion(rot)).Invert().Transpose();
 
-	CascadeData cascadeData = {};
-	auto tmp = LightComponent::Instance->GetLightSpaceMatrices();
-	for (int i = 0; i < 5; ++i)
-	{
-		cascadeData.ViewProj[i] = tmp[i];
-	}
-	cascadeData.Distance = LightComponent::Instance->GetShadowCascadeDistances();
-
 	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &objData, 0, 0);
-	Game->context->UpdateSubresource(constCascadeBuffer, 0, nullptr, &cascadeData, 0, 0);
 }
 
 void RendererComponent::PrepareFrame()
@@ -127,7 +108,6 @@ void RendererComponent::PrepareFrame()
 	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
 
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
-	Game->context->GSSetConstantBuffers(2, 1, &constCascadeBuffer);
 
 	Game->context->DrawIndexed(indices.size(), 0, 0);
 }
@@ -147,7 +127,6 @@ void RendererComponent::Draw()
 	Game->context->VSSetConstantBuffers(0, 1, &constBuffer);
 
 	Game->context->PSSetConstantBuffers(0, 1, &constBuffer);
-	Game->context->PSSetConstantBuffers(2, 1, &constCascadeBuffer);
 
 	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);

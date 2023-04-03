@@ -17,8 +17,6 @@ LightComponent::LightComponent()
 
 void LightComponent::Initialize()
 {
-
-
 	D3D11_BUFFER_DESC constBufPerSceneDesc = {};
 	constBufPerSceneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufPerSceneDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -27,7 +25,17 @@ void LightComponent::Initialize()
 	constBufPerSceneDesc.StructureByteStride = 0;
 	constBufPerSceneDesc.ByteWidth = sizeof(LightingData);
 
-	Game->device->CreateBuffer(&constBufPerSceneDesc, nullptr, &constBuffer);
+	Game->device->CreateBuffer(&constBufPerSceneDesc, nullptr, &constLightsBuffer);
+
+    D3D11_BUFFER_DESC constCascadeBufDesc = {};
+    constCascadeBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    constCascadeBufDesc.Usage = D3D11_USAGE_DEFAULT;
+    constCascadeBufDesc.CPUAccessFlags = 0;
+    constCascadeBufDesc.MiscFlags = 0;
+    constCascadeBufDesc.StructureByteStride = 0;
+    constCascadeBufDesc.ByteWidth = sizeof(CascadeData);
+
+    Game->device->CreateBuffer(&constCascadeBufDesc, NULL, &constCascadeBuffer);
 }
 
 void LightComponent::Update(float deltaTime)
@@ -42,18 +50,33 @@ void LightComponent::Update(float deltaTime)
 	lightProps.ViewVector = viewVector;
 	lightProps.Intensity = 5.0f;
 
-	Game->context->UpdateSubresource(constBuffer, 0, nullptr, &lightProps, 0, 0);
+	Game->context->UpdateSubresource(constLightsBuffer, 0, nullptr, &lightProps, 0, 0);
+
+    CascadeData cascadeData = {};
+    auto tmp = GetLightSpaceMatrices();
+    for (int i = 0; i < 5; ++i)
+    {
+        cascadeData.ViewProj[i] = tmp[i];
+    }
+    cascadeData.Distance = GetShadowCascadeDistances();
+
+    Game->context->UpdateSubresource(constCascadeBuffer, 0, nullptr, &cascadeData, 0, 0);
+}
+
+void LightComponent::PrepareFrame()
+{
+    Game->context->GSSetConstantBuffers(2, 1, &constCascadeBuffer);
 }
 
 void LightComponent::Draw()
 {
-	//Game->context->VSSetConstantBuffers(1, 1, &constBuffer);
-	Game->context->PSSetConstantBuffers(1, 1, &constBuffer);
+	Game->context->PSSetConstantBuffers(1, 1, &constLightsBuffer);
+    Game->context->PSSetConstantBuffers(2, 1, &constCascadeBuffer);
 }
 
 void LightComponent::DestroyResources()
 {
-	constBuffer->Release();
+	constLightsBuffer->Release();
 
 	Game = nullptr;
 

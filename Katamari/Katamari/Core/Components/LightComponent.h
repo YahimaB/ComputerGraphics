@@ -20,6 +20,12 @@ struct LightingData
 	float Intensity;
 };
 
+struct CascadeData
+{
+	Matrix ViewProj[5];
+	Vector4 Distance;
+};
+
 class LightComponent : public GameComponent
 {
 public:
@@ -30,6 +36,7 @@ public:
 
 	void Initialize() override;
 	void Update(float deltaTime) override;
+	void PrepareFrame() override;
 	void Draw() override;
 	void DestroyResources() override;
 
@@ -37,7 +44,8 @@ protected:
 	Game* Game = nullptr;
 	Camera* Camera = nullptr;
 
-	ID3D11Buffer* constBuffer = nullptr;
+	ID3D11Buffer* constLightsBuffer = nullptr;
+	ID3D11Buffer* constCascadeBuffer = nullptr;
 
 public:
 	std::vector<float> shadowCascadeLevels_{};

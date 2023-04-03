@@ -14,12 +14,6 @@ struct ObjectData {
 	Matrix invTrWorld;
 };
 
-struct CascadeData
-{
-	Matrix ViewProj[5];
-	Vector4 Distance;
-};
-
 struct Vertex {
 	Vector4 pos = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 	Vector4 tex;
@@ -44,7 +38,6 @@ protected:
 	ID3D11Buffer* vertexBuffer = nullptr;
 	ID3D11Buffer* indexBuffer = nullptr;
 	ID3D11Buffer* constBuffer = nullptr;
-	ID3D11Buffer* constCascadeBuffer = nullptr;
 
 	ID3D11SamplerState* samplerState = nullptr;
 	ID3D11SamplerState* depthSamplerState = nullptr;
