@@ -45,7 +45,7 @@ void RendererComponent::Initialize()
 	constBufDesc.CPUAccessFlags = 0;
 	constBufDesc.MiscFlags = 0;
 	constBufDesc.StructureByteStride = 0;
-	constBufDesc.ByteWidth = sizeof(ConstBuff);
+	constBufDesc.ByteWidth = sizeof(ObjectData);
 
 	Game->device->CreateBuffer(&constBufDesc, NULL, &constBuffer);
 
@@ -55,7 +55,7 @@ void RendererComponent::Initialize()
 	constCascadeBufDesc.CPUAccessFlags = 0;
 	constCascadeBufDesc.MiscFlags = 0;
 	constCascadeBufDesc.StructureByteStride = 0;
-	constCascadeBufDesc.ByteWidth = sizeof(Matrix) * 5 + sizeof(Vector4);
+	constCascadeBufDesc.ByteWidth = sizeof(CascadeData);
 
 	Game->device->CreateBuffer(&constCascadeBufDesc, NULL, &constCascadeBuffer);
 
@@ -96,13 +96,13 @@ void RendererComponent::Update(float deltaTime)
 	Matrix worldViewProj = world * Camera->GetViewProjectionMatrix();
 	world.Decompose(scale, rot, pos);
 
-	ConstBuff objData = {};
+	ObjectData objData = {};
 	objData.World_View_Projection = worldViewProj;
 	objData.World = world;
 	objData.WorldView = world * Camera->GetViewMatrix();
 	objData.invTrWorld = (Matrix::CreateScale(scale) * Matrix::CreateFromQuaternion(rot)).Invert().Transpose();
 
-	CbDataCascade cascadeData = {};
+	CascadeData cascadeData = {};
 	auto tmp = LightComponent::Instance->GetLightSpaceMatrices();
 	for (int i = 0; i < 5; ++i)
 	{

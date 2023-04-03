@@ -13,7 +13,7 @@ struct Light
 	Vector4 Color;
 };
 
-struct LightProperties
+struct LightingData
 {
 	Light Lights;
 	Vector3 ViewVector;

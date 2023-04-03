@@ -17,13 +17,15 @@ LightComponent::LightComponent()
 
 void LightComponent::Initialize()
 {
+
+
 	D3D11_BUFFER_DESC constBufPerSceneDesc = {};
 	constBufPerSceneDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufPerSceneDesc.Usage = D3D11_USAGE_DEFAULT;
 	constBufPerSceneDesc.CPUAccessFlags = 0;
 	constBufPerSceneDesc.MiscFlags = 0;
 	constBufPerSceneDesc.StructureByteStride = 0;
-	constBufPerSceneDesc.ByteWidth = sizeof(LightProperties);
+	constBufPerSceneDesc.ByteWidth = sizeof(LightingData);
 
 	Game->device->CreateBuffer(&constBufPerSceneDesc, nullptr, &constBuffer);
 }
@@ -32,7 +34,7 @@ void LightComponent::Update(float deltaTime)
 {
 	Vector3 viewVector = Camera->Transform->GetModel().Backward();
 
-	LightProperties lightProps = {};
+	LightingData lightProps = {};
 	lightProps.Lights = {
 		Vector4(-1.0f, -1.0f, 0.0f, 0.0f), //direction
 		Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f //color

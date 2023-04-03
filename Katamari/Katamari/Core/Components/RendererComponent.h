@@ -7,14 +7,14 @@
 using namespace DirectX;
 using namespace SimpleMath;
 
-struct ConstBuff {
+struct ObjectData {
 	Matrix World;
 	Matrix WorldView;
 	Matrix World_View_Projection;
 	Matrix invTrWorld;
 };
 
-struct CbDataCascade
+struct CascadeData
 {
 	Matrix ViewProj[5];
 	Vector4 Distance;

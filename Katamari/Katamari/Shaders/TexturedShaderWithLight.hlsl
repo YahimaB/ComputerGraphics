@@ -56,16 +56,16 @@ struct Light
 	float4 Color;
 };
 
-struct LightsProperties
+struct LightingData
 {
 	Light Lights;
 	float3 ViewVector;
 	float Intensity;
 };
 
-cbuffer LightProperties : register(b1)
+cbuffer LightBuffer : register(b1)
 {
-	LightsProperties LightsData;
+	LightingData LightsData;
 };
 
 struct LightingResult
