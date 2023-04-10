@@ -70,13 +70,12 @@ void RendererComponent::Update(float deltaTime)
 	Quaternion rot;
 
 	Matrix world = Transform->GetModel();
-	Matrix worldViewProj = world * Camera->GetViewProjectionMatrix();
 	world.Decompose(scale, rot, pos);
 
 	ObjectData objData = {};
-	objData.World_View_Projection = worldViewProj;
 	objData.World = world;
 	objData.WorldView = world * Camera->GetViewMatrix();
+	objData.World_View_Projection = world * Camera->GetViewProjectionMatrix();
 	objData.invTrWorld = (Matrix::CreateScale(scale) * Matrix::CreateFromQuaternion(rot)).Invert().Transpose();
 
 	Game->context->UpdateSubresource(constObjectBuffer, 0, nullptr, &objData, 0, 0);
@@ -86,13 +85,9 @@ void RendererComponent::PrepareFrame()
 {
 	ShaderManager::Instance->SetShader(GetShadowShader());
 
-	ID3D11Buffer* vBuffers[] = { vertexBuffer, constObjectBuffer };
-	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
-	UINT offsets[] = { 0, 0 };
-
 	Game->context->IASetPrimitiveTopology(GetTopology());
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
+	Game->context->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 
 	Game->context->VSSetConstantBuffers(0, 1, &constObjectBuffer);
 
@@ -103,13 +98,9 @@ void RendererComponent::Draw()
 {
 	ShaderManager::Instance->SetShader(GetBaseShader());
 
-	ID3D11Buffer* vBuffers[] = { vertexBuffer, constObjectBuffer };
-	UINT strides[] = { sizeof(Vertex), sizeof(Vertex) };
-	UINT offsets[] = { 0, 0 };
-
 	Game->context->IASetPrimitiveTopology(GetTopology());
 	Game->context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	Game->context->IASetVertexBuffers(0, 1, vBuffers, strides, offsets);
+	Game->context->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 
 	Game->context->VSSetConstantBuffers(0, 1, &constObjectBuffer);
 

@@ -3,6 +3,7 @@
 #include "MinimalCore.h"
 
 #include "DisplayWin.h"
+#include "GBuffer.h"
 #include "Managers/ShaderManager.h"
 #include "External/InputDevice.h"
 
@@ -31,6 +32,10 @@ public:
 	ID3D11ShaderResourceView* shadowSRV;
 
 	ID3D11RasterizerState* rastState;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> defaultDepthState_;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> quadDepthState_;
+
+	GBuffer gBuffer_;
 
 public:
 	ShaderManager* ShaderManager;
@@ -75,6 +80,9 @@ private:
 	bool CreateDeviceAndSwapChain();
 	bool CreateMainRenderResources();
 	bool CreateShadowRenderResources();
-	bool CreateRasterizerState();
-	bool CreateShadowRasterizerState();
+	bool CreateDepthStencilStates();
+
+	bool SetBaseRasterizerState();
+	bool SetShadowRasterizerState();
+	bool SetLightRasterizerState();
 };

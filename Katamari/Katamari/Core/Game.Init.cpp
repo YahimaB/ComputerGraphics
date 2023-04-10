@@ -10,6 +10,9 @@ bool Game::Initialize()
 	ShaderManager = new ::ShaderManager();
 	InputDevice = new ::InputDevice(this);
 
+	gBuffer_ = GBuffer();
+	gBuffer_.Initialize();
+
 	return true;
 }
 
@@ -35,9 +38,11 @@ bool Game::CreateResources()
 
 	if (!CreateShadowRenderResources())
 		return false;
-
-	if (!CreateRasterizerState())
+	
+	if (!CreateDepthStencilStates())
 		return false;
+
+	return true;
 }
 
 bool Game::CreateDeviceAndSwapChain()
@@ -191,7 +196,7 @@ bool Game::CreateShadowRenderResources()
 	return true;
 }
 
-bool Game::CreateRasterizerState()
+bool Game::SetBaseRasterizerState()
 {
 	CD3D11_RASTERIZER_DESC rastDesc = {};
 	rastDesc.CullMode = D3D11_CULL_BACK;
@@ -211,7 +216,7 @@ bool Game::CreateRasterizerState()
 	return true;
 }
 
-bool Game::CreateShadowRasterizerState()
+bool Game::SetShadowRasterizerState()
 {
 	CD3D11_RASTERIZER_DESC rastDesc = {};
 	rastDesc.CullMode = D3D11_CULL_FRONT;
@@ -224,14 +229,62 @@ bool Game::CreateShadowRasterizerState()
 
 	if (FAILED(res))
 	{
-		MessageBoxA(0, "CreateRasterizerState() failed", "Fatal Error", MB_OK);
+		MessageBoxA(0, "CreateShadowRasterizerState() failed", "Fatal Error", MB_OK);
 		return false;
 	}
 
 	return true;
 }
 
+bool Game::SetLightRasterizerState()
+{
+	CD3D11_RASTERIZER_DESC rastDesc = {};
+	rastDesc.CullMode = D3D11_CULL_NONE;
+	rastDesc.FillMode = D3D11_FILL_SOLID;
+	rastDesc.FrontCounterClockwise = true;
+	rastDesc.DepthClipEnable = true;
 
+	HRESULT res = device->CreateRasterizerState(&rastDesc, &rastState);
+	context->RSSetState(rastState);
+
+	if (FAILED(res))
+	{
+		MessageBoxA(0, "CreateLightRasterizerState() failed", "Fatal Error", MB_OK);
+		return false;
+	}
+
+	return true;
+}
+
+bool Game::CreateDepthStencilStates()
+{
+	D3D11_DEPTH_STENCIL_DESC defaultDepthDesc = {};
+	defaultDepthDesc.DepthEnable = true;
+	defaultDepthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	defaultDepthDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	HRESULT res = device->CreateDepthStencilState(&defaultDepthDesc, defaultDepthState_.GetAddressOf());
+	if (FAILED(res))
+	{
+		MessageBoxA(0, "CreateDepthStencilStates() for default failed", "Fatal Error", MB_OK);
+		return false;
+	}
+
+	D3D11_DEPTH_STENCIL_DESC quadDepthDesc = {};
+	defaultDepthDesc.DepthEnable = true;
+	defaultDepthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	defaultDepthDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	HRESULT res2 = device->CreateDepthStencilState(&quadDepthDesc, quadDepthState_.GetAddressOf());
+
+	if (FAILED(res2))
+	{
+		MessageBoxA(0, "CreateDepthStencilStates() for quad failed", "Fatal Error", MB_OK);
+		return false;
+	}
+
+	return true;
+}
 
 LRESULT CALLBACK Game::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {

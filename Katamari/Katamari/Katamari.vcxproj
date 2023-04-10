@@ -201,6 +201,7 @@
     <ClCompile Include="Core\Game.Init.cpp" />
     <ClCompile Include="Core\GameComponent.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
+    <ClCompile Include="Core\GBuffer.cpp" />
     <ClCompile Include="Core\Managers\ShaderManager.cpp" />
     <ClCompile Include="KatamariScripts\KatamariBall.cpp" />
     <ClCompile Include="KatamariScripts\KatamariBallController.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Core\GameComponent.h" />
     <ClInclude Include="Core\GameObject.h" />
+    <ClInclude Include="Core\GBuffer.h" />
     <ClInclude Include="Core\Managers\ShaderManager.h" />
     <ClInclude Include="Core\MinimalCore.h" />
     <ClInclude Include="KatamariScripts\KatamariBall.h" />

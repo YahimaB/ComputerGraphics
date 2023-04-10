@@ -81,6 +81,11 @@ void Game::Run()
 	}
 }
 
+void Game::UpdateInternal()
+{
+
+}
+
 void Game::Update(float deltaTime)
 {
 	UpdateInternal();
@@ -91,15 +96,9 @@ void Game::Update(float deltaTime)
 	}
 }
 
-
-void Game::UpdateInternal()
-{
-
-}
-
 void Game::PrepareFrame()
 {
-	CreateShadowRasterizerState();
+	SetShadowRasterizerState();
 	context->OMSetRenderTargets(0, nullptr, shadowDSV);
 	context->ClearDepthStencilView(shadowDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
@@ -116,7 +115,7 @@ void Game::Draw()
 	context->ClearState();
 	context->RSSetViewports(1, &viewport);
 
-	CreateRasterizerState();
+	SetBaseRasterizerState();
 	//context->RSSetState(rastState);
 
 	float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };

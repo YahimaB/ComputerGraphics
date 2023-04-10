@@ -44,6 +44,9 @@ protected:
 	std::vector<Vertex> points;
 	std::vector<int> indices;
 
+	UINT strides[1] = { sizeof(Vertex) };
+	UINT offsets[1] = { 0 };
+
 protected:
 	std::string GetUniqueId() override { return "rc"; }
 
