@@ -103,7 +103,6 @@ void RendererComponent::Draw()
 	Game->context->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 
 	Game->context->VSSetConstantBuffers(0, 1, &constObjectBuffer);
-
 	Game->context->PSSetConstantBuffers(0, 1, &constObjectBuffer);
 
 	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());

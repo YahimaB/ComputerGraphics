@@ -24,7 +24,9 @@ Game::Game(LPCWSTR appName)
 Game::~Game()
 {
 	SaveWICTextureToFile(context, backBufferTex, GUID_ContainerFormatJpeg, L"SCREENSHOT.JPG");
-
+	SaveWICTextureToFile(context, gBuffer_.albedoBuffer_.Get(), GUID_ContainerFormatJpeg, L"SCREENSHOT_ALBEDO.JPG");
+	SaveWICTextureToFile(context, gBuffer_.normalBuffer_.Get(), GUID_ContainerFormatJpeg, L"SCREENSHOT_NORMALS.JPG");
+	SaveWICTextureToFile(context, gBuffer_.positionBuffer_.Get(), GUID_ContainerFormatJpeg, L"SCREENSHOT_POSITION.JPG");
 }
 
 void Game::AddGameObject(GameObject* gameObject)
@@ -116,11 +118,21 @@ void Game::Draw()
 	context->RSSetViewports(1, &viewport);
 
 	SetBaseRasterizerState();
-	//context->RSSetState(rastState);
+	context->OMSetDepthStencilState(defaultDepthState_.Get(), 0);
+
+	//context->OMSetRenderTargets(1, &mainRTV, mainDSV);
+	const auto rtvs = new ID3D11RenderTargetView * [3];
+	rtvs[0] = gBuffer_.albedoRtv_.Get();
+	rtvs[1] = gBuffer_.positionRtv_.Get();
+	rtvs[2] = gBuffer_.normalRtv_.Get();
+	context->OMSetRenderTargets(3, rtvs, mainDSV);
+
 
 	float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	context->OMSetRenderTargets(1, &mainRTV, mainDSV);
-	context->ClearRenderTargetView(mainRTV, clearColor);
+	//context->ClearRenderTargetView(mainRTV, clearColor);
+	context->ClearRenderTargetView(gBuffer_.albedoRtv_.Get(), clearColor);
+	context->ClearRenderTargetView(gBuffer_.positionRtv_.Get(), clearColor);
+	context->ClearRenderTargetView(gBuffer_.normalRtv_.Get(), clearColor);
 	context->ClearDepthStencilView(mainDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	FrameCount++;
