@@ -22,6 +22,8 @@ public:
 	ID3D11DeviceContext* context;
 	IDXGISwapChain* swapChain;
 
+	ID3D11Texture2D* backBufferTex;
+
 	ID3D11RenderTargetView* mainRTV;
 	ID3D11DepthStencilView* mainDSV;
 

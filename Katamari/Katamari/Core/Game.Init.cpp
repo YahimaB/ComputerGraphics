@@ -86,7 +86,6 @@ bool Game::CreateDeviceAndSwapChain()
 
 bool Game::CreateMainRenderResources()
 {
-	ID3D11Texture2D* backBufferTex;
 	HRESULT res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferTex);
 	if (FAILED(res))
 	{
@@ -95,7 +94,6 @@ bool Game::CreateMainRenderResources()
 	}
 
 	res = device->CreateRenderTargetView(backBufferTex, nullptr, &mainRTV);
-	backBufferTex->Release();
 	if (FAILED(res))
 	{
 		MessageBoxA(0, "CreateRenderTargetView() for renderView failed", "Fatal Error", MB_OK);

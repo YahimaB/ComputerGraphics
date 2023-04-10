@@ -1,6 +1,9 @@
 #include "Game.h"
 #include "GameObject.h"
 
+#include <wincodec.h> // Optional
+#include "External/ScreenGrab11.h"
+
 const float MS_PER_UPDATE = 15;
 Game* Game::Instance = 0;
 
@@ -20,6 +23,8 @@ Game::Game(LPCWSTR appName)
 
 Game::~Game()
 {
+	SaveWICTextureToFile(context, backBufferTex, GUID_ContainerFormatJpeg, L"SCREENSHOT.JPG");
+
 }
 
 void Game::AddGameObject(GameObject* gameObject)

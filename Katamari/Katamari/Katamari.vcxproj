@@ -196,6 +196,7 @@
     <ClCompile Include="Core\DisplayWin.cpp" />
     <ClCompile Include="Core\External\Delegates.cpp" />
     <ClCompile Include="Core\External\InputDevice.cpp" />
+    <ClCompile Include="Core\External\ScreenGrab11.cpp" />
     <ClCompile Include="Core\Game.cpp" />
     <ClCompile Include="Core\Game.Init.cpp" />
     <ClCompile Include="Core\GameComponent.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="Core\External\Delegates.h" />
     <ClInclude Include="Core\External\InputDevice.h" />
     <ClInclude Include="Core\External\Keys.h" />
+    <ClInclude Include="Core\External\ScreenGrab11.h" />
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Core\GameComponent.h" />
     <ClInclude Include="Core\GameObject.h" />
