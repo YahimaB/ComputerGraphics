@@ -44,11 +44,11 @@ void GBuffer::Initialize()
     res = game_->device->CreateRenderTargetView(albedoBuffer_.Get(), &albedoRtvDesc, albedoRtv_.GetAddressOf());
 
     D3D11_TEXTURE2D_DESC normalBuffDesc = baseBuffDesc;
-    normalBuffDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    normalBuffDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
     D3D11_SHADER_RESOURCE_VIEW_DESC normalSrvDesc = baseSrvDesc;
-    normalSrvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    normalSrvDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
     D3D11_RENDER_TARGET_VIEW_DESC normalRtvDesc = baseRtvDesc;
-    normalRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    normalRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
     res = game_->device->CreateTexture2D(&normalBuffDesc, nullptr, normalBuffer_.GetAddressOf());
     res = game_->device->CreateShaderResourceView(normalBuffer_.Get(), &normalSrvDesc, normalSrv_.GetAddressOf());
     res = game_->device->CreateRenderTargetView(normalBuffer_.Get(), &normalRtvDesc, normalRtv_.GetAddressOf());

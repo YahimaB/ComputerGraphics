@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "GameObject.h"
+#include "Components/LightComponent.h"
 
 #include <wincodec.h> // Optional
 #include "External/ScreenGrab11.h"
@@ -51,6 +52,8 @@ std::vector<GameObject*> Game::FindGameObjects(std::string name)
 
 void Game::Run()
 {
+	ShaderManager->InitShader(GetLightShader());
+
 	StartTime = std::chrono::steady_clock::now();
 	PrevTime = std::chrono::steady_clock::now();
 
@@ -101,6 +104,8 @@ void Game::Update(float deltaTime)
 void Game::PrepareFrame()
 {
 	SetShadowRasterizerState();
+	context->RSSetViewports(1, &viewport);
+
 	context->OMSetRenderTargets(0, nullptr, shadowDSV);
 	context->ClearDepthStencilView(shadowDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
@@ -115,9 +120,9 @@ void Game::Draw()
 	PrepareFrame();
 
 	context->ClearState();
+	SetBaseRasterizerState();
 	context->RSSetViewports(1, &viewport);
 
-	SetBaseRasterizerState();
 	context->OMSetDepthStencilState(defaultDepthState_.Get(), 0);
 
 	//context->OMSetRenderTargets(1, &mainRTV, mainDSV);
@@ -152,6 +157,25 @@ void Game::Draw()
 	{
 		gameObject->Draw();
 	}
+
+	context->ClearState();
+	SetLightRasterizerState();
+	context->RSSetViewports(1, &viewport);
+
+	context->OMSetDepthStencilState(quadDepthState_.Get(), 0);
+	context->OMSetRenderTargets(1, &mainRTV, nullptr);
+
+	ShaderManager->SetShader(GetLightShader());
+
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	LightComponent::Instance->Draw();
+
+	context->PSSetShaderResources(0, 1, gBuffer_.albedoSrv_.GetAddressOf());
+	context->PSSetShaderResources(1, 1, gBuffer_.positionSrv_.GetAddressOf());
+	context->PSSetShaderResources(2, 1, gBuffer_.normalSrv_.GetAddressOf());
+
+	context->Draw(4, 0);
 
 	EndFrame();
 }
