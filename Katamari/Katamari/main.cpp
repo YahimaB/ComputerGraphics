@@ -29,14 +29,19 @@ int main()
 
 		auto dirLight = new GameObject("Light");
 		std::cout << dirLight->AddComponent(new LightComponent(0, Vector3::One * 0.5f)) << std::endl;
+		dirLight->Transform->Rotation = Quaternion::CreateFromAxisAngle(Vector3::Left, XM_PI - XM_PI / 1.5f);
 
 		auto pointLight1 = new GameObject("Light");
 		std::cout << pointLight1->AddComponent(new LightComponent(1, Vector3(10.0f, 0.0f, 0.0f))) << std::endl;
 		pointLight1->Transform->Position = Vector3::Forward * 30.0f + Vector3::Up * 10.0f + Vector3::Right * 35.0f;
 
 		auto pointLight2 = new GameObject("Light");
-		std::cout << pointLight2->AddComponent(new LightComponent(1, Vector3(0.0f, 0.0f, 100.0f))) << std::endl;
+		std::cout << pointLight2->AddComponent(new LightComponent(1, Vector3(0.0f, 0.0f, 10.0f))) << std::endl;
 		pointLight2->Transform->Position = Vector3::Forward * 30.0f + Vector3::Up * 10.0f - Vector3::Right * 35.0f;
+
+		auto spotLight = new GameObject("Light");
+		std::cout << spotLight->AddComponent(new LightComponent(2, Vector3(0.0f, 10.0f, 0.0f))) << std::endl;
+		spotLight->Transform->Position = Vector3::Forward * 10.0f + Vector3::Up * 10.0f + Vector3::Right * 0.0f;
 
 		auto grid = new GameObject("Grid");
 		//std::cout << grid->AddComponent(new GridComponent()) << std::endl;
@@ -58,6 +63,7 @@ int main()
 		MyGame->AddGameObject(dirLight);
 		MyGame->AddGameObject(pointLight1);
 		MyGame->AddGameObject(pointLight2);
+		MyGame->AddGameObject(spotLight);
 		MyGame->AddGameObject(grid);
 		MyGame->AddGameObject(player);
 		MyGame->AddGameObject(ball);

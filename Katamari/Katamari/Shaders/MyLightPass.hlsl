@@ -169,7 +169,7 @@ LightingResult DoDirectionalLight(Light light, float3 V, float4 P, float3 N)
 
 	float3 L = -light.Direction.xyz;
 
-	result.Ambient = light.Color;
+	result.Ambient = light.Color / 5;
 	result.Diffuse = DoDiffuse(light, L, N);
 	result.Specular = DoSpecular(light, V, L, N);
 
@@ -290,7 +290,7 @@ float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, float4 l
 	}
 
 	// calculate bias (based on depth map resolution and slope)
-	float bias = max(0.05f * (1.0f - dot(N, lightDirection)), 0.005f);
+	float bias = max(0.01f * (1.0f - dot(N, lightDirection)), 0.005f);
 	const float biasModifier = 0.5f;
 	if (layer == CASCADE_COUNT)
 	{

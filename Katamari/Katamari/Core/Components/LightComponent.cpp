@@ -56,46 +56,46 @@ void LightComponent::Initialize()
 
 void LightComponent::Update(float deltaTime)
 {
-	Vector3 viewVector = Camera->Transform->GetModel().Backward();
-
-    Vector3 scale, pos;
-    Quaternion rot;
-    Transform->GetModel().Decompose(scale, rot, pos);
+    Matrix world = Transform->GetModel();
 
 	LightingData lightProps = {};
-    lightProps.Lights.Position = Vector4(pos);
-
-    lightProps.Lights.Direction = Vector4(-1.0f, -1.0f, 0.0f, 0.0f);
+    lightProps.Lights.Position = Vector4(world.Translation());
+    lightProps.Lights.Direction = Vector4(world.Forward());
     lightProps.Lights.Color = Vector4(Color);
     lightProps.Lights.Enabled = true;
     lightProps.Lights.LightType = Type;
 
     lightProps.ViewMatrix = Camera->GetViewMatrix();
-	lightProps.ViewVector = viewVector;
+	lightProps.ViewVector = Camera->Transform->GetModel().Backward();
 	lightProps.Intensity = 1.0f;
 
 	Game->context->UpdateSubresource(constLightsBuffer, 0, nullptr, &lightProps, 0, 0);
 
-    CascadeData cascadeData = {};
-    auto projViewMatrices = GetLightProjViewMatrices();
-    for (int i = 0; i < 5; ++i)
+    if (Type == 0)
     {
-        cascadeData.ViewProj[i] = projViewMatrices[i];
-    }
-    cascadeData.Distance = Vector4(shadowCascadeLevels);
+        CascadeData cascadeData = {};
+        auto projViewMatrices = GetLightProjViewMatrices();
+        for (int i = 0; i < 5; ++i)
+        {
+            cascadeData.ViewProj[i] = projViewMatrices[i];
+        }
+        cascadeData.Distance = Vector4(shadowCascadeLevels);
 
-    Game->context->UpdateSubresource(constCascadeBuffer, 0, nullptr, &cascadeData, 0, 0);
+        Game->context->UpdateSubresource(constCascadeBuffer, 0, nullptr, &cascadeData, 0, 0);
+    }
 }
 
 void LightComponent::PrepareFrame()
 {
-    Game->context->GSSetConstantBuffers(2, 1, &constCascadeBuffer);
+    if (Type == 0)
+        Game->context->GSSetConstantBuffers(2, 1, &constCascadeBuffer);
 }
 
 void LightComponent::Draw()
 {
 	Game->context->PSSetConstantBuffers(1, 1, &constLightsBuffer);
-    Game->context->PSSetConstantBuffers(2, 1, &constCascadeBuffer);
+    if (Type == 0)
+        Game->context->PSSetConstantBuffers(2, 1, &constCascadeBuffer);
 
     Game->context->PSSetSamplers(1, 1, &depthSamplerState);
 }
@@ -129,7 +129,8 @@ Matrix LightComponent::GetLightProjViewMatrix(const float nearPlane, const float
     }
     center /= static_cast<float>(corners.size());
 
-    const auto lightView = Matrix::CreateLookAt(center - Vector4(-1.0f, -1.0f, 0.0f, 0.0f), center, Vector3::Up);
+    Matrix world = Transform->GetModel();
+    const auto lightView = Matrix::CreateLookAt(center - Vector4(world.Forward()), center, Vector3::Up);
 
     float minX = std::numeric_limits<float>::max();
     float maxX = std::numeric_limits<float>::lowest();
