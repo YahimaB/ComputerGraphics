@@ -68,6 +68,7 @@ cbuffer LightBuffer : register(b1)
 
 struct LightingResult
 {
+	float4 Ambient;
 	float4 Diffuse;
 	float4 Specular;
 };
@@ -109,7 +110,7 @@ float4 PSMain( PS_IN input ) : SV_Target
 
 	LightingResult lightResult = ComputeLighting(input.pos, worldPos, worldViewPos, norm);
 
-	float4 ambient = LightsData.Lights.Color; //TODO: multiply to material
+	float4 ambient = lightResult.Ambient * LightsData.Intensity; //TODO: multiply to material
 	float4 diffuse = lightResult.Diffuse * LightsData.Intensity; //TODO: multiply to material
 	float4 specular = lightResult.Specular * LightsData.Intensity; //TODO: multiply to material
 
@@ -155,6 +156,7 @@ LightingResult DoPointLight(Light light, float3 V, float4 P, float3 N)
 
 	float attenuation = DoAttenuation(light, distance);
 
+	result.Ambient = float4(0, 0, 0, 0);
 	result.Diffuse = DoDiffuse(light, L, N) * attenuation;
 	result.Specular = DoSpecular(light, V, L, N) * attenuation;
 
@@ -167,6 +169,7 @@ LightingResult DoDirectionalLight(Light light, float3 V, float4 P, float3 N)
 
 	float3 L = -light.Direction.xyz;
 
+	result.Ambient = light.Color;
 	result.Diffuse = DoDiffuse(light, L, N);
 	result.Specular = DoSpecular(light, V, L, N);
 
@@ -192,6 +195,7 @@ LightingResult DoSpotLight(Light light, float3 V, float4 P, float3 N)
 	float attenuation = DoAttenuation(light, distance);
 	float spotIntensity = DoSpotCone(light, L);
 
+	result.Ambient = float4( 0, 0, 0, 0 );
 	result.Diffuse = DoDiffuse(light, L, N) * attenuation * spotIntensity;
 	result.Specular = DoSpecular(light, V, L, N) * attenuation * spotIntensity;
 
@@ -203,12 +207,12 @@ LightingResult ComputeLighting(float4 P, float4 worldPos, float4 worldViewPos, f
 	float3 V = LightsData.ViewVector;
 	P = worldPos;
 
-	LightingResult totalResult = { {0, 0, 0, 0}, {0, 0, 0, 0} };
+	LightingResult totalResult = { {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0} };
 
 	/*[unroll]
 	for (int i = 0; i < MAX_LIGHTS; ++i)
 	{*/
-		LightingResult result = { {0, 0, 0, 0}, {0, 0, 0, 0} };
+		LightingResult result = { {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0} };
 		float shadow = 1.0f;
 
 		//if (!LightsData.Lights.Enabled) continue;
@@ -237,6 +241,7 @@ LightingResult ComputeLighting(float4 P, float4 worldPos, float4 worldViewPos, f
 		result.Diffuse *= shadow;
 		result.Specular *= shadow;
 
+		totalResult.Ambient += result.Ambient;
 		totalResult.Diffuse += result.Diffuse;
 		totalResult.Specular += result.Specular;
 	//}

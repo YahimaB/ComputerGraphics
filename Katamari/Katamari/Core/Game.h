@@ -36,6 +36,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> quadDepthState_;
 
 	GBuffer gBuffer_;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState_;
 
 public:
 	ShaderManager* ShaderManager;

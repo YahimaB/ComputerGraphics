@@ -41,8 +41,11 @@ class LightComponent : public GameComponent
 public:
 	static LightComponent* Instance;
 
+	int Type = 0;
+	Vector3 Color = Vector3::Zero;
+
 public:
-	LightComponent();
+	LightComponent(int type = 0, Vector3 color = Vector3::One);
 
 	void Initialize() override;
 	void Update(float deltaTime) override;
@@ -62,6 +65,8 @@ protected:
 	const static int CascadeCount = 4;
 	float cascadeOffsets[CascadeCount] = {50.0f, 25.0f, 10.0f, 2.0f};
 	float shadowCascadeLevels[CascadeCount] = {};
+
+	std::string GetUniqueId() override { return "light"; }
 
 public:
 	Matrix GetLightProjViewMatrix(float nearPlane, float farPlane);

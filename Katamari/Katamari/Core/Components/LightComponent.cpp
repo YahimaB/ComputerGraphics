@@ -3,11 +3,14 @@
 LightComponent* LightComponent::Instance = 0;
 
 
-LightComponent::LightComponent()
+LightComponent::LightComponent(int type, Vector3 color)
 {
 	Game = ::Game::Instance;
 	Camera = ::Camera::Current;
 	Instance = this;
+
+    Type = type;
+    Color = color;
 }
 
 void LightComponent::Initialize()
@@ -63,13 +66,13 @@ void LightComponent::Update(float deltaTime)
     lightProps.Lights.Position = Vector4(pos);
 
     lightProps.Lights.Direction = Vector4(-1.0f, -1.0f, 0.0f, 0.0f);
-    lightProps.Lights.Color = Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f;
+    lightProps.Lights.Color = Vector4(Color);
     lightProps.Lights.Enabled = true;
-    lightProps.Lights.LightType = 0;
+    lightProps.Lights.LightType = Type;
 
     lightProps.ViewMatrix = Camera->GetViewMatrix();
 	lightProps.ViewVector = viewVector;
-	lightProps.Intensity = 5.0f;
+	lightProps.Intensity = 1.0f;
 
 	Game->context->UpdateSubresource(constLightsBuffer, 0, nullptr, &lightProps, 0, 0);
 

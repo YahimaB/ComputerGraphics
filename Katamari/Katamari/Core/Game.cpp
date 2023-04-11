@@ -165,19 +165,29 @@ void Game::Draw()
 
 	context->OMSetDepthStencilState(quadDepthState_.Get(), 0);
 	context->OMSetRenderTargets(1, &mainRTV, nullptr);
+	context->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 
 	ShaderManager->SetShader(GetLightShader());
 
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	LightComponent::Instance->Draw();
+	//LightComponent::Instance->Draw();
 
 	context->PSSetShaderResources(0, 1, gBuffer_.albedoSrv_.GetAddressOf());
 	context->PSSetShaderResources(1, 1, gBuffer_.positionSrv_.GetAddressOf());
 	context->PSSetShaderResources(2, 1, gBuffer_.normalSrv_.GetAddressOf());
 	context->PSSetShaderResources(3, 1, &shadowSRV);
 
-	context->Draw(4, 0);
+	auto lights = FindGameObjects("Light");
+	for (auto light : lights)
+	{
+		LightComponent* lightComp = (LightComponent*)light->GetComponent("light");
+		lightComp->Draw();
+
+		context->Draw(4, 0);
+		context->OMSetBlendState(blendState_.Get(), nullptr, 0xffffffff);
+	}
+
 
 	EndFrame();
 }
