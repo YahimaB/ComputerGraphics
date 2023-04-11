@@ -29,6 +29,7 @@ int main()
 
 		auto light = new GameObject("Light");
 		std::cout << light->AddComponent(new LightComponent()) << std::endl;
+		light->Transform->Position = Vector3::Up * 10.0f;
 
 		auto grid = new GameObject("Grid");
 		//std::cout << grid->AddComponent(new GridComponent()) << std::endl;

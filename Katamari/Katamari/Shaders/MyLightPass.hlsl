@@ -55,7 +55,7 @@ struct Light
 
 struct LightingData
 {
-	Light Lights[MAX_LIGHTS];
+	Light Lights;
 	float4x4 ViewMatrix;
 	float3 ViewVector;
 	float Intensity;
@@ -89,7 +89,7 @@ cbuffer CascadeBuffer : register(b2)
 	CascadeData CascData;
 };
 
-float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, Light light);
+float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, float4 lightDirection);
 
 Texture2D<float4>		DiffuseTex			: register(t0);
 Texture2D<float3>		WorldPositions		: register(t1);
@@ -109,7 +109,7 @@ float4 PSMain( PS_IN input ) : SV_Target
 
 	LightingResult lightResult = ComputeLighting(input.pos, worldPos, worldViewPos, norm);
 
-	float4 ambient = LightsData.Lights[0].Color; //TODO: multiply to material
+	float4 ambient = LightsData.Lights.Color; //TODO: multiply to material
 	float4 diffuse = lightResult.Diffuse * LightsData.Intensity; //TODO: multiply to material
 	float4 specular = lightResult.Specular * LightsData.Intensity; //TODO: multiply to material
 
@@ -205,49 +205,51 @@ LightingResult ComputeLighting(float4 P, float4 worldPos, float4 worldViewPos, f
 
 	LightingResult totalResult = { {0, 0, 0, 0}, {0, 0, 0, 0} };
 
-	[unroll]
+	/*[unroll]
 	for (int i = 0; i < MAX_LIGHTS; ++i)
-	{
+	{*/
 		LightingResult result = { {0, 0, 0, 0}, {0, 0, 0, 0} };
+		float shadow = 1.0f;
 
-		if (!LightsData.Lights[i].Enabled) continue;
+		//if (!LightsData.Lights.Enabled) continue;
 
-		switch (LightsData.Lights[i].LightType)
+		switch (LightsData.Lights.LightType)
 		{
 		case DIRECTIONAL_LIGHT:
 		{
-			result = DoDirectionalLight(LightsData.Lights[i], V, P, N);
+			result = DoDirectionalLight(LightsData.Lights, V, P, N);
+			shadow = 1.0f - ShadowCalculation(worldPos, worldViewPos, N, -LightsData.Lights.Direction);
 		}
 		break;
 		case POINT_LIGHT:
 		{
-			result = DoPointLight(LightsData.Lights[i], V, P, N);
+			result = DoPointLight(LightsData.Lights, V, P, N);
+			//shadow = 1.0f - ShadowCalculation(worldPos, worldViewPos, N, LightsData.Lights[i].Position - worldPos);
 		}
 		break;
 		case SPOT_LIGHT:
 		{
-			result = DoSpotLight(LightsData.Lights[i], V, P, N);
+			result = DoSpotLight(LightsData.Lights, V, P, N);
 		}
 		break;
 		}
+
+		result.Diffuse *= shadow;
+		result.Specular *= shadow;
+
 		totalResult.Diffuse += result.Diffuse;
 		totalResult.Specular += result.Specular;
-	}
+	//}
 
 	//totalResult = DoDirectionalLight(LightsData.Lights, LightsData.ViewVector, N);
 
 	//totalResult.Diffuse = saturate(totalResult.Diffuse);
 	//totalResult.Specular = saturate(totalResult.Specular);
 
-	float shadow = 1.0f - ShadowCalculation(worldPos, worldViewPos, N, LightsData.Lights[0]);
-
-	totalResult.Diffuse *= shadow;
-	totalResult.Specular *= shadow;
-
 	return totalResult;
 }
 
-float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, Light light)
+float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, float4 lightDirection)
 {
 	// select cascade layer
 	float depthValue = abs(worldViewPos.z);
@@ -283,7 +285,7 @@ float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, Light li
 	}
 
 	// calculate bias (based on depth map resolution and slope)
-	float bias = max(0.05f * (1.0f - dot(N, -light.Direction)), 0.005f);
+	float bias = max(0.05f * (1.0f - dot(N, lightDirection)), 0.005f);
 	const float biasModifier = 0.5f;
 	if (layer == CASCADE_COUNT)
 	{

@@ -60,10 +60,12 @@ void LightComponent::Update(float deltaTime)
     Transform->GetModel().Decompose(scale, rot, pos);
 
 	LightingData lightProps = {};
-    lightProps.Lights[0].Position = Vector4(pos);
-    lightProps.Lights[0].Direction = Vector4(-1.0f, -1.0f, 0.0f, 0.0f);
-    lightProps.Lights[0].Color = Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f;
-    lightProps.Lights[0].Enabled = true;
+    lightProps.Lights.Position = Vector4(pos);
+
+    lightProps.Lights.Direction = Vector4(-1.0f, -1.0f, 0.0f, 0.0f);
+    lightProps.Lights.Color = Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f;
+    lightProps.Lights.Enabled = true;
+    lightProps.Lights.LightType = 0;
 
     lightProps.ViewMatrix = Camera->GetViewMatrix();
 	lightProps.ViewVector = viewVector;

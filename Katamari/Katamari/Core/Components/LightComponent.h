@@ -13,9 +13,9 @@ struct Light
 	Vector4 Direction;
 	Vector4 Color;
 	float SpotAngle = 1.0f;              // 4 bytes
-	float ConstantAttenuation = 1.0f;    // 4 bytes
-	float LinearAttenuation = 1.0f;      // 4 bytes
-	float QuadraticAttenuation = 1.0f;
+	float ConstantAttenuation = 0.0f;    // 4 bytes
+	float LinearAttenuation = 0.1f;      // 4 bytes
+	float QuadraticAttenuation = 0.0f;
 
 	int LightType = 0;              // 4 bytes
 	bool Enabled = false;                // 4 bytes
@@ -24,7 +24,7 @@ struct Light
 
 struct LightingData
 {
-	Light Lights[8];
+	Light Lights;
 	Matrix ViewMatrix;
 	Vector3 ViewVector;
 	float Intensity;
