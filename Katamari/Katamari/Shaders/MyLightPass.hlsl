@@ -4,51 +4,6 @@
 #define CASCADE_COUNT 4
 #endif
 
-//struct VS_IN
-//{
-//	float4 pos : POSITION0;
-//	float4 tex : TEXCOORD0;
-//	float4 normal : NORMAL0;
-//};
-//
-//struct ObjectData
-//{
-//	float4x4 World;
-//	float4x4 WorldView;
-//	float4x4 WorldViewProj;
-//	float4x4 InvTransWorld;
-//};
-//
-//cbuffer ObjectBufffer : register(b0)
-//{
-//	ObjectData ObjData;
-//};
-//
-//struct PS_IN
-//{
-//	float4 pos : SV_POSITION;
-//	float2 tex : TEXCOORD;
-//	float4 normal : NORMAL;
-//
-//	float4 worldViewPos : VIEWPOS;
-//	float4 worldPos : WORLDPOS;
-//};
-//
-//PS_IN VSMain( VS_IN input )
-//{
-//	PS_IN output = (PS_IN)0;
-//
-//	output.pos = mul(float4(input.pos.xyz, 1.0f), ObjData.WorldViewProj);
-//	output.normal = mul(float4(input.normal.xyz, 0.0f), ObjData.InvTransWorld);
-//
-//	output.worldViewPos = mul(float4(input.pos.xyz, 1.0f), ObjData.WorldView);
-//	output.worldPos = mul(float4(input.pos.xyz, 1.0f), ObjData.World);
-//
-//	output.tex = input.tex;
-//
-//	return output;
-//}
-
 struct PS_IN
 {
 	float4 pos : SV_POSITION;
@@ -75,6 +30,7 @@ struct Light
 struct LightingData
 {
 	Light Lights;
+	float4x4 ViewMatrix;
 	float3 ViewVector;
 	float Intensity;
 };
@@ -90,10 +46,11 @@ struct LightingResult
 	float4 Specular;
 };
 
+float4 GetColor(float4 worldViewPos);
 float4 DoDiffuse(Light light, float3 L, float3 N);
 float4 DoSpecular(Light light, float3 V, float3 L, float3 N);
 LightingResult DoDirectionalLight(Light light, float3 V, float3 N);
-LightingResult ComputeLighting(float4 P, float4 WP, float4 VP, float3 N);
+LightingResult ComputeLighting(float4 P, float4 WP, float4 WVP, float3 N);
 
 struct CascadeData
 {
@@ -108,31 +65,31 @@ cbuffer CascadeBuffer : register(b2)
 
 float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, Light light);
 
-//Texture2D				DiffuseMap			: register(t0);
+Texture2D<float4>		DiffuseTex			: register(t0);
+Texture2D<float3>		WorldPositions		: register(t1);
+Texture2D<float3>		Normals				: register(t2);
 Texture2DArray			CascadeShadowMap	: register(t3);
 
 SamplerState			Sampler				: register(s0);
 SamplerComparisonState	DepthSampler		: register(s1);
 
-Texture2D<float4> DiffuseTex : register(t0);
-Texture2D<float3> ViewPositions : register(t1);
-Texture2D<float3> Normals : register(t2);
 
 float4 PSMain( PS_IN input ) : SV_Target
 {
-	//float4 norm = normalize(input.normal);
 	float4 norm = float4(normalize(Normals.Load(int3(input.pos.xy, 0))), 1.0f);
 
-	float4 temp = float4(0, 0, 0, 0);
-	LightingResult lightResult = ComputeLighting(input.pos, /*input.worldPos*/temp, /*input.worldViewPos*/temp, norm);
+	float4 worldPos = float4(WorldPositions.Load(int3(input.pos.xy, 0)).xyz, 1.0f);
+	float4 worldViewPos = mul(worldPos, LightsData.ViewMatrix);
+
+	LightingResult lightResult = ComputeLighting(input.pos, worldPos, worldViewPos, norm);
 
 	float4 ambient = LightsData.Lights.Color; //TODO: multiply to material
 	float4 diffuse = lightResult.Diffuse * LightsData.Intensity; //TODO: multiply to material
 	float4 specular = lightResult.Specular * LightsData.Intensity; //TODO: multiply to material
 
 	//texture color
-	//float4 objColor = DiffuseMap.SampleLevel(Sampler, input.tex.xy, 0);
-	float4 objColor = float4(DiffuseTex.Load(int3(input.pos.xy, 0)).xyz, 1.0f);
+	//float4 objColor = float4(DiffuseTex.Load(int3(input.pos.xy, 0)).xyz, 1.0f);
+	float4 objColor = GetColor(worldViewPos);
 
 	float4 result = (ambient + (diffuse + specular)) * objColor;
 	return result;
@@ -169,7 +126,7 @@ LightingResult DoDirectionalLight(Light light, float3 V, float3 N)
 	return result;
 }
 
-LightingResult ComputeLighting(float4 P, float4 worldP, float4 worldViewP, float3 N)
+LightingResult ComputeLighting(float4 P, float4 worldPos, float4 worldViewPos, float3 N)
 {
 	//float3 V = normalize(EyePosition - P).xyz;
 
@@ -179,8 +136,7 @@ LightingResult ComputeLighting(float4 P, float4 worldP, float4 worldViewP, float
 	//totalResult.Diffuse = saturate(totalResult.Diffuse);
 	//totalResult.Specular = saturate(totalResult.Specular);
 
-	//float shadow = 1.0f - ShadowCalculation(worldP, worldViewP, N, LightsData.Lights);
-	float shadow = 1.0f;
+	float shadow = 1.0f - ShadowCalculation(worldPos, worldViewPos, N, LightsData.Lights);
 
 	totalResult.Diffuse *= shadow;
 	totalResult.Specular *= shadow;
@@ -254,4 +210,25 @@ float ShadowCalculation(float4 worldPos, float4 worldViewPos, float3 N, Light li
 	}
 
 	return shadow;
+}
+
+float4 GetColor(float4 worldViewPos)
+{
+	float depthValue = abs(worldViewPos.z);
+
+	int layer = -1;
+	for (int i = 0; i < CASCADE_COUNT; ++i)
+	{
+		if (depthValue < CascData.Distances[i])
+		{
+			layer = i;
+			break;
+		}
+	}
+	if (layer == -1)
+	{
+		layer = CASCADE_COUNT;
+	}
+
+	return float4(float3(0.2f, 0.2f, 0.2f) * (layer + 1), 1.0f);
 }

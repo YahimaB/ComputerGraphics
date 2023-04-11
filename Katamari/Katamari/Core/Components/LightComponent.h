@@ -16,6 +16,7 @@ struct Light
 struct LightingData
 {
 	Light Lights;
+	Matrix ViewMatrix;
 	Vector3 ViewVector;
 	float Intensity;
 };

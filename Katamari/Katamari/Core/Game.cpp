@@ -103,6 +103,7 @@ void Game::Update(float deltaTime)
 
 void Game::PrepareFrame()
 {
+	context->ClearState();
 	SetShadowRasterizerState();
 	context->RSSetViewports(1, &viewport);
 
@@ -174,6 +175,7 @@ void Game::Draw()
 	context->PSSetShaderResources(0, 1, gBuffer_.albedoSrv_.GetAddressOf());
 	context->PSSetShaderResources(1, 1, gBuffer_.positionSrv_.GetAddressOf());
 	context->PSSetShaderResources(2, 1, gBuffer_.normalSrv_.GetAddressOf());
+	context->PSSetShaderResources(3, 1, &shadowSRV);
 
 	context->Draw(4, 0);
 

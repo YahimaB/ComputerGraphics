@@ -107,7 +107,6 @@ void RendererComponent::Draw()
 
 	ID3D11ShaderResourceView* test = ShaderManager::Instance->GetTextureView(GetTextureName());
 	Game->context->PSSetShaderResources(0, 1, &test);
-	Game->context->PSSetShaderResources(1, 1, &Game->shadowSRV);
 
 	Game->context->PSSetSamplers(0, 1, &samplerState);
 

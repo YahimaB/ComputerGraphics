@@ -60,6 +60,7 @@ void LightComponent::Update(float deltaTime)
 		Vector4(-1.0f, -1.0f, 0.0f, 0.0f), //direction
 		Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f //color
 	};
+    lightProps.ViewMatrix = Camera->GetViewMatrix();
 	lightProps.ViewVector = viewVector;
 	lightProps.Intensity = 5.0f;
 
