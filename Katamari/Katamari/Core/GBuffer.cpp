@@ -36,30 +36,21 @@ void GBuffer::Initialize()
     baseRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     baseRtvDesc.Texture2D.MipSlice = 0;
 
-    D3D11_TEXTURE2D_DESC albedoBuffDesc = baseBuffDesc;
-    D3D11_SHADER_RESOURCE_VIEW_DESC albedoSrvDesc = baseSrvDesc;
-    D3D11_RENDER_TARGET_VIEW_DESC albedoRtvDesc = baseRtvDesc;
-    auto res = game->device->CreateTexture2D(&albedoBuffDesc, nullptr, &diffuseBuffer);
-    res = game->device->CreateShaderResourceView(diffuseBuffer, &albedoSrvDesc, &diffuseSRV);
-    res = game->device->CreateRenderTargetView(diffuseBuffer, &albedoRtvDesc, &diffuseRTV);
+    game->device->CreateTexture2D(&baseBuffDesc, nullptr, &diffuseBuffer);
+    game->device->CreateShaderResourceView(diffuseBuffer, &baseSrvDesc, &diffuseSRV);
+    game->device->CreateRenderTargetView(diffuseBuffer, &baseRtvDesc, &diffuseRTV);
 
-    D3D11_TEXTURE2D_DESC normalBuffDesc = baseBuffDesc;
-    normalBuffDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
-    D3D11_SHADER_RESOURCE_VIEW_DESC normalSrvDesc = baseSrvDesc;
-    normalSrvDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
-    D3D11_RENDER_TARGET_VIEW_DESC normalRtvDesc = baseRtvDesc;
-    normalRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
-    res = game->device->CreateTexture2D(&normalBuffDesc, nullptr, &normalBuffer);
-    res = game->device->CreateShaderResourceView(normalBuffer, &normalSrvDesc, &normalSRV);
-    res = game->device->CreateRenderTargetView(normalBuffer, &normalRtvDesc, &normalRTV);
+    baseBuffDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
+    baseSrvDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
+    baseRtvDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
+    game->device->CreateTexture2D(&baseBuffDesc, nullptr, &normalBuffer);
+    game->device->CreateShaderResourceView(normalBuffer, &baseSrvDesc, &normalSRV);
+    game->device->CreateRenderTargetView(normalBuffer, &baseRtvDesc, &normalRTV);
 
-    D3D11_TEXTURE2D_DESC positionBuffDesc = baseBuffDesc;
-    positionBuffDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-    D3D11_SHADER_RESOURCE_VIEW_DESC positionSrvDesc = baseSrvDesc;
-    positionSrvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-    D3D11_RENDER_TARGET_VIEW_DESC positionRtvDesc = baseRtvDesc;
-    positionRtvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-    res = game->device->CreateTexture2D(&positionBuffDesc, nullptr, &positionBuffer);
-    res = game->device->CreateShaderResourceView(positionBuffer, &positionSrvDesc, &positionSRV);
-    res = game->device->CreateRenderTargetView(positionBuffer, &positionRtvDesc, &positionRTV);
+    baseBuffDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    baseSrvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    baseRtvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    game->device->CreateTexture2D(&baseBuffDesc, nullptr, &positionBuffer);
+    game->device->CreateShaderResourceView(positionBuffer, &baseSrvDesc, &positionSRV);
+    game->device->CreateRenderTargetView(positionBuffer, &baseRtvDesc, &positionRTV);
 }
