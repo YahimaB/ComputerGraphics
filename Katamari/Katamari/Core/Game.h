@@ -87,5 +87,5 @@ private:
 	bool SetShadowRasterizerState();
 	bool SetLightRasterizerState();
 
-	FShaderData GetLightShader() { return { "./Shaders/MyLightPass.hlsl", ST_Vertex | ST_Pixel }; }
+	FShaderData GetLightShader() { return { "./Shaders/LightShader.hlsl", ST_Vertex | ST_Pixel }; }
 };

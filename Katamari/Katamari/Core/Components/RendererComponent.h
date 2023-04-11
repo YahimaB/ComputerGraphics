@@ -52,7 +52,7 @@ protected:
 
 	virtual std::string GetTextureName() { return "./Textures/default.dds"; }
 
-	virtual FShaderData GetBaseShader() { return { "./Shaders/GBuffer.hlsl", ST_Vertex | ST_Pixel }; }
+	virtual FShaderData GetBaseShader() { return { "./Shaders/BufferShader.hlsl", ST_Vertex | ST_Pixel }; }
 	virtual FShaderData GetShadowShader() { return { "./Shaders/Csm.hlsl", ST_Vertex | ST_Geometry }; }
 
 	virtual D3D_PRIMITIVE_TOPOLOGY GetTopology() { return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST; }
