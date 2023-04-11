@@ -7,13 +7,43 @@ struct VS_IN
 	float4 normal : NORMAL0;
 };
 
+struct ObjectData
+{
+	float4x4 World;
+	float4x4 WorldView;
+	float4x4 WorldViewProj;
+	float4x4 InvTransWorld;
+};
+
+cbuffer ObjectBufffer : register(b0)
+{
+	ObjectData ObjData;
+};
+
 struct PS_IN
 {
 	float4 pos : SV_POSITION;
  	float4 tex : TEXCOORD;
 	float4 normal : NORMAL;
+
 	float4 worldPos : WORLDPOS;
 };
+
+PS_IN VSMain(VS_IN input)
+{
+	PS_IN output = (PS_IN)0;
+	
+	output.pos = mul(float4(input.pos.xyz, 1.0f), ObjData.WorldViewProj);
+	output.normal = mul(float4(input.normal.xyz, 0.0f), ObjData.InvTransWorld);
+
+	output.worldPos = mul(float4(input.pos.xyz, 1.0f), ObjData.World);
+
+	output.tex = input.tex;
+	
+	return output;
+}
+
+
 
 struct GBuffer
 {
@@ -22,38 +52,15 @@ struct GBuffer
 	float3 Normal : SV_Target1;
 };
 
-cbuffer cbPerObject : register(b0)
-{
-	float4x4 gWorld;
-	float4x4 gWorldView;
-	float4x4 gWorldViewProj;
-	float4x4 gInvTrWorldView;
-};
-
 Texture2D DiffuseMap : register(t0);
 SamplerState Sampler : register(s0);
-
-PS_IN VSMain(VS_IN input)
-{
-	PS_IN output = (PS_IN)0;
-	
-	output.pos = mul(float4(input.pos.xyz, 1.0f), gWorldViewProj);
-	output.tex = input.tex;
-	output.normal = mul(float4(input.normal.xyz, 0.0f), gInvTrWorldView);
-	output.worldPos = mul(float4(input.pos.xyz, 1.0f), gWorld);
-	
-	return output;
-}
 
 [earlydepthstencil]
 GBuffer PSMain(PS_IN input) : SV_Target
 {
 	GBuffer result = (GBuffer)0;
-
-	float4 objColor = DiffuseMap.SampleLevel(Sampler, input.tex.xy, 0);
 	
-	result.DiffuseSpec.xyz = objColor.xyz;
-	result.DiffuseSpec.w = 0.5f;
+	result.DiffuseSpec = DiffuseMap.SampleLevel(Sampler, input.tex.xy, 0);
 	result.WorldPos = input.worldPos.xyz;
 	result.Normal = normalize(input.normal.xyz);
 	
