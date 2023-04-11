@@ -25,9 +25,9 @@ Game::Game(LPCWSTR appName)
 Game::~Game()
 {
 	SaveWICTextureToFile(context, backBufferTex, GUID_ContainerFormatJpeg, L"SCREENSHOT.JPG");
-	SaveWICTextureToFile(context, gBuffer_.albedoBuffer_.Get(), GUID_ContainerFormatJpeg, L"SCREENSHOT_ALBEDO.JPG");
-	SaveWICTextureToFile(context, gBuffer_.normalBuffer_.Get(), GUID_ContainerFormatJpeg, L"SCREENSHOT_NORMALS.JPG");
-	SaveWICTextureToFile(context, gBuffer_.positionBuffer_.Get(), GUID_ContainerFormatJpeg, L"SCREENSHOT_POSITION.JPG");
+	SaveWICTextureToFile(context, gBuffer->diffuseBuffer, GUID_ContainerFormatJpeg, L"SCREENSHOT_DIFFUSE.JPG");
+	SaveWICTextureToFile(context, gBuffer->normalBuffer, GUID_ContainerFormatJpeg, L"SCREENSHOT_NORMALS.JPG");
+	SaveWICTextureToFile(context, gBuffer->positionBuffer, GUID_ContainerFormatJpeg, L"SCREENSHOT_POSITION.JPG");
 }
 
 void Game::AddGameObject(GameObject* gameObject)
@@ -124,21 +124,21 @@ void Game::Draw()
 	SetBaseRasterizerState();
 	context->RSSetViewports(1, &viewport);
 
-	context->OMSetDepthStencilState(defaultDepthState_.Get(), 0);
+	context->OMSetDepthStencilState(defaultDepthState, 0);
 
 	//context->OMSetRenderTargets(1, &mainRTV, mainDSV);
 	const auto rtvs = new ID3D11RenderTargetView * [3];
-	rtvs[0] = gBuffer_.albedoRtv_.Get();
-	rtvs[1] = gBuffer_.positionRtv_.Get();
-	rtvs[2] = gBuffer_.normalRtv_.Get();
+	rtvs[0] = gBuffer->diffuseRTV;
+	rtvs[1] = gBuffer->positionRTV;
+	rtvs[2] = gBuffer->normalRTV;
 	context->OMSetRenderTargets(3, rtvs, mainDSV);
 
 
 	float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	//context->ClearRenderTargetView(mainRTV, clearColor);
-	context->ClearRenderTargetView(gBuffer_.albedoRtv_.Get(), clearColor);
-	context->ClearRenderTargetView(gBuffer_.positionRtv_.Get(), clearColor);
-	context->ClearRenderTargetView(gBuffer_.normalRtv_.Get(), clearColor);
+	context->ClearRenderTargetView(gBuffer->diffuseRTV, clearColor);
+	context->ClearRenderTargetView(gBuffer->positionRTV, clearColor);
+	context->ClearRenderTargetView(gBuffer->normalRTV, clearColor);
 	context->ClearDepthStencilView(mainDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	FrameCount++;
@@ -163,7 +163,7 @@ void Game::Draw()
 	SetLightRasterizerState();
 	context->RSSetViewports(1, &viewport);
 
-	context->OMSetDepthStencilState(quadDepthState_.Get(), 0);
+	context->OMSetDepthStencilState(quadDepthState, 0);
 	context->OMSetRenderTargets(1, &mainRTV, nullptr);
 	context->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 
@@ -173,9 +173,9 @@ void Game::Draw()
 
 	//LightComponent::Instance->Draw();
 
-	context->PSSetShaderResources(0, 1, gBuffer_.albedoSrv_.GetAddressOf());
-	context->PSSetShaderResources(1, 1, gBuffer_.positionSrv_.GetAddressOf());
-	context->PSSetShaderResources(2, 1, gBuffer_.normalSrv_.GetAddressOf());
+	context->PSSetShaderResources(0, 1, &gBuffer->diffuseSRV);
+	context->PSSetShaderResources(1, 1, &gBuffer->positionSRV);
+	context->PSSetShaderResources(2, 1, &gBuffer->normalSRV);
 	context->PSSetShaderResources(3, 1, &shadowSRV);
 
 	auto lights = FindGameObjects("Light");
@@ -185,9 +185,8 @@ void Game::Draw()
 		lightComp->Draw();
 
 		context->Draw(4, 0);
-		context->OMSetBlendState(blendState_.Get(), nullptr, 0xffffffff);
+		context->OMSetBlendState(blendState, nullptr, 0xffffffff);
 	}
-
 
 	EndFrame();
 }

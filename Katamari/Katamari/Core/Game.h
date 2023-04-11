@@ -32,11 +32,11 @@ public:
 	ID3D11ShaderResourceView* shadowSRV;
 
 	ID3D11RasterizerState* rastState;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> defaultDepthState_;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> quadDepthState_;
+	ID3D11DepthStencilState* defaultDepthState;
+	ID3D11DepthStencilState* quadDepthState;
+	ID3D11BlendState* blendState;
 
-	GBuffer gBuffer_;
-	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState_;
+	GBuffer* gBuffer;
 
 public:
 	ShaderManager* ShaderManager;

@@ -10,8 +10,8 @@ bool Game::Initialize()
 	ShaderManager = new ::ShaderManager();
 	InputDevice = new ::InputDevice(this);
 
-	gBuffer_ = GBuffer();
-	gBuffer_.Initialize();
+	gBuffer = new GBuffer();
+	gBuffer->Initialize();
 
 	return true;
 }
@@ -263,7 +263,7 @@ bool Game::CreateDepthStencilStates()
 	defaultDepthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	defaultDepthDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-	HRESULT res = device->CreateDepthStencilState(&defaultDepthDesc, defaultDepthState_.GetAddressOf());
+	HRESULT res = device->CreateDepthStencilState(&defaultDepthDesc, &defaultDepthState);
 	if (FAILED(res))
 	{
 		MessageBoxA(0, "CreateDepthStencilStates() for default failed", "Fatal Error", MB_OK);
@@ -275,7 +275,7 @@ bool Game::CreateDepthStencilStates()
 	defaultDepthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	defaultDepthDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-	HRESULT res2 = device->CreateDepthStencilState(&quadDepthDesc, quadDepthState_.GetAddressOf());
+	HRESULT res2 = device->CreateDepthStencilState(&quadDepthDesc, &quadDepthState);
 
 	if (FAILED(res2))
 	{
@@ -294,7 +294,7 @@ bool Game::CreateDepthStencilStates()
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D10_COLOR_WRITE_ENABLE_ALL;
 	blendDesc.AlphaToCoverageEnable = false;
 
-	HRESULT res3 = device->CreateBlendState(&blendDesc, blendState_.GetAddressOf());
+	HRESULT res3 = device->CreateBlendState(&blendDesc, &blendState);
 
 	if (FAILED(res3))
 	{

@@ -10,16 +10,18 @@ public:
     void Initialize();
 
 public:
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> albedoBuffer_;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> albedoSrv_;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> albedoRtv_;
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> normalBuffer_;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> normalSrv_;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> normalRtv_;
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> positionBuffer_;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> positionSrv_;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> positionRtv_;
+    ID3D11Texture2D* diffuseBuffer;
+    ID3D11ShaderResourceView* diffuseSRV;
+    ID3D11RenderTargetView* diffuseRTV;
+
+    ID3D11Texture2D* normalBuffer;
+    ID3D11ShaderResourceView* normalSRV;
+    ID3D11RenderTargetView* normalRTV;
+
+    ID3D11Texture2D* positionBuffer;
+    ID3D11ShaderResourceView* positionSRV;
+    ID3D11RenderTargetView* positionRTV;
 
 private:
-    Game* game_;
+    Game* game;
 };
