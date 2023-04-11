@@ -55,11 +55,16 @@ void LightComponent::Update(float deltaTime)
 {
 	Vector3 viewVector = Camera->Transform->GetModel().Backward();
 
+    Vector3 scale, pos;
+    Quaternion rot;
+    Transform->GetModel().Decompose(scale, rot, pos);
+
 	LightingData lightProps = {};
-	lightProps.Lights = {
-		Vector4(-1.0f, -1.0f, 0.0f, 0.0f), //direction
-		Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f //color
-	};
+    lightProps.Lights[0].Position = Vector4(pos);
+    lightProps.Lights[0].Direction = Vector4(-1.0f, -1.0f, 0.0f, 0.0f);
+    lightProps.Lights[0].Color = Vector4(1.0f, 1.0f, 1.0f, 1.0f) * 0.2f;
+    lightProps.Lights[0].Enabled = true;
+
     lightProps.ViewMatrix = Camera->GetViewMatrix();
 	lightProps.ViewVector = viewVector;
 	lightProps.Intensity = 5.0f;

@@ -4,6 +4,13 @@
 #define CASCADE_COUNT 4
 #endif
 
+#define MAX_LIGHTS 8
+
+// Light types.
+#define DIRECTIONAL_LIGHT 0
+#define POINT_LIGHT 1
+#define SPOT_LIGHT 2
+
 struct PS_IN
 {
 	float4 pos : SV_POSITION;
@@ -23,13 +30,32 @@ PS_IN VSMain(uint id: SV_VertexID)
 
 struct Light
 {
-	float4 Direction;
-	float4 Color;
-};
+	float4      Position;               // 16 bytes
+	//----------------------------------- (16 byte boundary)
+	float4      Direction;              // 16 bytes
+	//----------------------------------- (16 byte boundary)
+	float4      Color;                  // 16 bytes
+	//----------------------------------- (16 byte boundary)
+	float       SpotAngle;              // 4 bytes
+	float       ConstantAttenuation;    // 4 bytes
+	float       LinearAttenuation;      // 4 bytes
+	float       QuadraticAttenuation;   // 4 bytes
+	//----------------------------------- (16 byte boundary)
+	int         LightType;              // 4 bytes
+	bool        Enabled;                // 4 bytes
+	int2        Padding;                // 8 bytes
+	//----------------------------------- (16 byte boundary)
+};  // Total:                           // 80 bytes (5 * 16)
+
+//struct Light
+//{
+//	float4 Direction;
+//	float4 Color;
+//};
 
 struct LightingData
 {
-	Light Lights;
+	Light Lights[MAX_LIGHTS];
 	float4x4 ViewMatrix;
 	float3 ViewVector;
 	float Intensity;
@@ -83,13 +109,13 @@ float4 PSMain( PS_IN input ) : SV_Target
 
 	LightingResult lightResult = ComputeLighting(input.pos, worldPos, worldViewPos, norm);
 
-	float4 ambient = LightsData.Lights.Color; //TODO: multiply to material
+	float4 ambient = LightsData.Lights[0].Color; //TODO: multiply to material
 	float4 diffuse = lightResult.Diffuse * LightsData.Intensity; //TODO: multiply to material
 	float4 specular = lightResult.Specular * LightsData.Intensity; //TODO: multiply to material
 
 	//texture color
-	//float4 objColor = float4(DiffuseTex.Load(int3(input.pos.xy, 0)).xyz, 1.0f);
-	float4 objColor = GetColor(worldViewPos);
+	float4 objColor = float4(DiffuseTex.Load(int3(input.pos.xy, 0)).xyz, 1.0f);
+	//float4 objColor = GetColor(worldViewPos);
 
 	float4 result = (ambient + (diffuse + specular)) * objColor;
 	return result;
@@ -114,7 +140,28 @@ float4 DoSpecular(Light light, float3 V, float3 L, float3 N)
 	return light.Color * pow(RdotV, 32); //TODO: change power to material
 }
 
-LightingResult DoDirectionalLight(Light light, float3 V, float3 N)
+float DoAttenuation(Light light, float d)
+{
+	return 1.0f / (light.ConstantAttenuation + light.LinearAttenuation * d + light.QuadraticAttenuation * d * d);
+}
+
+LightingResult DoPointLight(Light light, float3 V, float4 P, float3 N)
+{
+	LightingResult result;
+
+	float3 L = (light.Position - P).xyz;
+	float distance = length(L);
+	L = L / distance;
+
+	float attenuation = DoAttenuation(light, distance);
+
+	result.Diffuse = DoDiffuse(light, L, N) * attenuation;
+	result.Specular = DoSpecular(light, V, L, N) * attenuation;
+
+	return result;
+}
+
+LightingResult DoDirectionalLight(Light light, float3 V, float4 P, float3 N)
 {
 	LightingResult result;
 
@@ -126,17 +173,73 @@ LightingResult DoDirectionalLight(Light light, float3 V, float3 N)
 	return result;
 }
 
+float DoSpotCone(Light light, float3 L)
+{
+	float minCos = cos(light.SpotAngle);
+	float maxCos = (minCos + 1.0f) / 2.0f;
+	float cosAngle = dot(light.Direction.xyz, -L);
+	return smoothstep(minCos, maxCos, cosAngle);
+}
+
+LightingResult DoSpotLight(Light light, float3 V, float4 P, float3 N)
+{
+	LightingResult result;
+
+	float3 L = (light.Position - P).xyz;
+	float distance = length(L);
+	L = L / distance;
+
+	float attenuation = DoAttenuation(light, distance);
+	float spotIntensity = DoSpotCone(light, L);
+
+	result.Diffuse = DoDiffuse(light, L, N) * attenuation * spotIntensity;
+	result.Specular = DoSpecular(light, V, L, N) * attenuation * spotIntensity;
+
+	return result;
+}
+
 LightingResult ComputeLighting(float4 P, float4 worldPos, float4 worldViewPos, float3 N)
 {
-	//float3 V = normalize(EyePosition - P).xyz;
+	float3 V = LightsData.ViewVector;
+	P = worldPos;
 
 	LightingResult totalResult = { {0, 0, 0, 0}, {0, 0, 0, 0} };
-	totalResult = DoDirectionalLight(LightsData.Lights, LightsData.ViewVector, N);
+
+	[unroll]
+	for (int i = 0; i < MAX_LIGHTS; ++i)
+	{
+		LightingResult result = { {0, 0, 0, 0}, {0, 0, 0, 0} };
+
+		if (!LightsData.Lights[i].Enabled) continue;
+
+		switch (LightsData.Lights[i].LightType)
+		{
+		case DIRECTIONAL_LIGHT:
+		{
+			result = DoDirectionalLight(LightsData.Lights[i], V, P, N);
+		}
+		break;
+		case POINT_LIGHT:
+		{
+			result = DoPointLight(LightsData.Lights[i], V, P, N);
+		}
+		break;
+		case SPOT_LIGHT:
+		{
+			result = DoSpotLight(LightsData.Lights[i], V, P, N);
+		}
+		break;
+		}
+		totalResult.Diffuse += result.Diffuse;
+		totalResult.Specular += result.Specular;
+	}
+
+	//totalResult = DoDirectionalLight(LightsData.Lights, LightsData.ViewVector, N);
 
 	//totalResult.Diffuse = saturate(totalResult.Diffuse);
 	//totalResult.Specular = saturate(totalResult.Specular);
 
-	float shadow = 1.0f - ShadowCalculation(worldPos, worldViewPos, N, LightsData.Lights);
+	float shadow = 1.0f - ShadowCalculation(worldPos, worldViewPos, N, LightsData.Lights[0]);
 
 	totalResult.Diffuse *= shadow;
 	totalResult.Specular *= shadow;

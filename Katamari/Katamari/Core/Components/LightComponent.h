@@ -9,13 +9,22 @@ using namespace SimpleMath;
 
 struct Light
 {
+	Vector4 Position = Vector4::Zero;
 	Vector4 Direction;
 	Vector4 Color;
+	float SpotAngle = 1.0f;              // 4 bytes
+	float ConstantAttenuation = 1.0f;    // 4 bytes
+	float LinearAttenuation = 1.0f;      // 4 bytes
+	float QuadraticAttenuation = 1.0f;
+
+	int LightType = 0;              // 4 bytes
+	bool Enabled = false;                // 4 bytes
+	int Padding[2];
 };
 
 struct LightingData
 {
-	Light Lights;
+	Light Lights[8];
 	Matrix ViewMatrix;
 	Vector3 ViewVector;
 	float Intensity;
