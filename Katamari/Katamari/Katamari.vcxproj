@@ -103,6 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -202,6 +203,7 @@
     <ClCompile Include="Core\GameComponent.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\GBuffer.cpp" />
+    <ClCompile Include="Core\Managers\ParticleSystem.cpp" />
     <ClCompile Include="Core\Managers\ShaderManager.cpp" />
     <ClCompile Include="KatamariScripts\KatamariBall.cpp" />
     <ClCompile Include="KatamariScripts\KatamariBallController.cpp" />
@@ -234,6 +236,8 @@
     <ClInclude Include="Core\GameComponent.h" />
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\GBuffer.h" />
+    <ClInclude Include="Core\magic_enum.hpp" />
+    <ClInclude Include="Core\Managers\ParticleSystem.h" />
     <ClInclude Include="Core\Managers\ShaderManager.h" />
     <ClInclude Include="Core\MinimalCore.h" />
     <ClInclude Include="KatamariScripts\KatamariBall.h" />
