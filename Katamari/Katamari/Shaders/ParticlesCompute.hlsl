@@ -1,10 +1,5 @@
 #pragma pack_matrix(row_major)
 
-float nrand(float2 uv)
-{
-    return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453);
-}
-
 struct Particle
 {
     float4 Position;
@@ -67,15 +62,6 @@ void CSMain(
         p.Velocity += float4(0.0f, -9.8f * gDeltaTimeMaxParticlesGroupdim.x, 0.0f, 0.0f);
 #endif
         p.Position.xyz += p.Velocity * gDeltaTimeMaxParticlesGroupdim.x;
-
-        if (p.Position.y <= -(gWorld[3].y - 0.1f))
-        {
-            p.Velocity.y /= -4;
-            p.Velocity.x = 2 * p.Velocity.y * (nrand(p.Position.xy) - 0.5f);
-            p.Velocity.z = 2 * p.Velocity.y * (nrand(p.Position.xy) - 0.5f);
-        }
-
-
         particlesBufDst.Append(p);
 
         sortedBufSrc[id].Index = id;

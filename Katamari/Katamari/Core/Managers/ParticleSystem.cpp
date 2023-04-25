@@ -29,7 +29,7 @@ std::vector<D3D_SHADER_MACRO> ParticleSystem::GetMacros(T flags)
 
 static float RandomFloatInRange(float low, float high)
 {
-    return (high - low) * rand() / RAND_MAX + low;
+    return (high - low) * static_cast<float>(rand()) / RAND_MAX + low;
 }
 
 static Vector4 RandomVectorInRange(Vector3 range)
@@ -91,12 +91,8 @@ void ParticleSystem::Initialize()
 void ParticleSystem::Emit(float deltaTime)
 {
     accumulatedTime += deltaTime;
-
-    int spawned = 0;
     while (accumulatedTime > ParticleSettings.SpawnInterval)
     {
-        //srand(std::time(nullptr) + spawned);
-
         Particle p = {};
         p.Position.x = RandomFloatInRange(-Width, Width);
         p.Position.y = RandomFloatInRange(-Height, Height);
@@ -110,14 +106,13 @@ void ParticleSystem::Emit(float deltaTime)
         p.LifeTime = ParticleSettings.LifeTime;
         AddParticle(p);
         accumulatedTime -= ParticleSettings.SpawnInterval;
-        spawned++;
     }
 }
 
 void ParticleSystem::Update(float deltaTime)
 {
     deltaTime /= 1000;
-    //std::cout << deltaTime << std::endl;
+    std::cout << deltaTime << std::endl;
     Emit(deltaTime);
     
 
