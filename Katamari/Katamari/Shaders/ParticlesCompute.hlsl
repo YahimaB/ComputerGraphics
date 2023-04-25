@@ -7,16 +7,15 @@ struct Particle
     float4 Color0;
     float2 Size0Size1;
     float LifeTime;
-    float MaxLifeTime;
 };
 
 struct ParticleDepths
 {
-    uint Index;
+    float Index;
     float Depth;
 };
 
-cbuffer CB1 : register(b0)
+cbuffer ConstBuff : register(b0)
 {
     float4x4 gWorld;
     float4x4 gView;
@@ -24,7 +23,6 @@ cbuffer CB1 : register(b0)
     float4 gDeltaTimeMaxParticlesGroupdim;
 };
 
-StructuredBuffer<Particle> renderBufSrc : register(t0);
 ConsumeStructuredBuffer<Particle> particlesBufSrc : register(u0);
 AppendStructuredBuffer<Particle> particlesBufDst : register(u1);
 RWStructuredBuffer<ParticleDepths> sortedBufSrc : register(u2);

@@ -104,7 +104,6 @@ void ParticleSystem::Emit(float deltaTime)
         p.Size0Size1 = ParticleSettings.Size0Size1;
 
         p.LifeTime = ParticleSettings.LifeTime;
-        p.MaxLifeTime = p.LifeTime;
         AddParticle(p);
         accumulatedTime -= ParticleSettings.SpawnInterval;
     }

@@ -7,12 +7,11 @@ struct Particle
     float4 Color0;
     float2 Size0Size1;
     float LifeTime;
-    float MaxLifeTime;
 };
 
 struct ParticleDepths
 {
-    uint Index;
+    int Index;
     float Depth;
 };
 
@@ -23,7 +22,7 @@ struct PS_IN
     float2 tex : TEXCOORD;
 };
 
-cbuffer CB1 : register(b0)
+cbuffer ConstBuff : register(b0)
 {
     float4x4 gWorld;
     float4x4 gView;
@@ -46,9 +45,14 @@ PS_IN VSMain(uint vertexID: SV_VertexID)
     output.color = p.Color0;
     output.tex = float2(0.0f, 0.0f);
 
+    if (p.LifeTime <= 0.0f)
+    {
+        output.color = float4(1.0f, 0.0f, 0.0f, 1.0f);
+    }
+
     uint corner = vertexID % 4;
 
-    float pSize = lerp(p.Size0Size1.x, p.Size0Size1.y, saturate(1.0f - p.LifeTime / p.MaxLifeTime));
+    float pSize = p.Size0Size1.x;
 
     [flatten]
     if (corner == 0)

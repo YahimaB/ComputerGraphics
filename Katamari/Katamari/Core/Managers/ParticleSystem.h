@@ -51,7 +51,6 @@ public:
         Vector4 Color0;
         Vector2 Size0Size1;
         float LifeTime;
-        float MaxLifeTime = 1.0f;
     };
 #pragma pack(pop)
 
