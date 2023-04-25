@@ -10,6 +10,7 @@ enum EShaderType
 	ST_Vertex = 1 << 0,
 	ST_Pixel = 1 << 1,
 	ST_Geometry = 1 << 2,
+	ST_Compute = 1 << 3,
 };
 DEFINE_ENUM_FLAG_OPERATORS(EShaderType)
 
@@ -24,6 +25,7 @@ struct FShader
 	ID3D11VertexShader* VShader = nullptr;
 	ID3D11PixelShader* PShader = nullptr;
 	ID3D11GeometryShader* GShader = nullptr;
+	ID3D11ComputeShader* CShader = nullptr;
 };
 
 struct Texture

@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <WinUser.h>
 #include <wrl.h>
+#include <wrl/client.h>
 
 /*----------------------------------------------------------------------------
 	DirectX includes.

@@ -188,6 +188,12 @@ void Game::Draw()
 		context->OMSetBlendState(blendState, nullptr, 0xffffffff);
 	}
 
+	auto particles = FindGameObjects("Particle");
+	for (auto particle : particles)
+	{
+		particle->Draw();
+	}
+
 	EndFrame();
 }
 

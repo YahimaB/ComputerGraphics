@@ -203,6 +203,7 @@
     <ClCompile Include="Core\GameComponent.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\GBuffer.cpp" />
+    <ClCompile Include="Core\Managers\BitonicSort.cpp" />
     <ClCompile Include="Core\Managers\ParticleSystem.cpp" />
     <ClCompile Include="Core\Managers\ShaderManager.cpp" />
     <ClCompile Include="KatamariScripts\KatamariBall.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\GBuffer.h" />
     <ClInclude Include="Core\magic_enum.hpp" />
+    <ClInclude Include="Core\Managers\BitonicSort.h" />
     <ClInclude Include="Core\Managers\ParticleSystem.h" />
     <ClInclude Include="Core\Managers\ShaderManager.h" />
     <ClInclude Include="Core\MinimalCore.h" />

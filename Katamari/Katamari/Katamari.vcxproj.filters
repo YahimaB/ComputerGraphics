@@ -94,6 +94,14 @@
     <ClCompile Include="Core\Game.Init.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\External\ScreenGrab11.cpp" />
+    <ClCompile Include="Core\GBuffer.cpp" />
+    <ClCompile Include="Core\Managers\BitonicSort.cpp">
+      <Filter>Core\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Managers\ParticleSystem.cpp">
+      <Filter>Core\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\External\Delegates.h">
@@ -179,6 +187,15 @@
     </ClInclude>
     <ClInclude Include="Core\Components\RendererComponents\PlaneComponent.h">
       <Filter>Core\Components\RendererComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\External\ScreenGrab11.h" />
+    <ClInclude Include="Core\GBuffer.h" />
+    <ClInclude Include="Core\magic_enum.hpp" />
+    <ClInclude Include="Core\Managers\BitonicSort.h">
+      <Filter>Core\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Managers\ParticleSystem.h">
+      <Filter>Core\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

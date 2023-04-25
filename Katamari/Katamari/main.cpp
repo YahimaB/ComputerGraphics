@@ -4,6 +4,7 @@
 
 #include "Core/Components/Camera.h"
 #include "Core/Components/LightComponent.h"
+#include "Core/Managers/ParticleSystem.h"
 
 #include "Core/Components/RendererComponents/GridComponent.h"
 #include "Core/Components/RendererComponents/PlaneComponent.h"
@@ -84,6 +85,18 @@ int main()
 		mesh->Transform->Scale = Vector3::One * 30.0f;
 		std::cout << mesh->AddComponent(new MeshComponent("Models/hamburger.obj", "Textures/hamburger.dds")) << std::endl;
 		MyGame->AddGameObject(mesh);
+
+		auto emitter = new GameObject("Particle");
+		emitter->Transform->Position = Vector3::Up * 5.0f;
+		auto particleSystemComp = new ParticleSystem();
+		particleSystemComp->Width = 1.5f;
+		particleSystemComp->Length = 4.0f;
+		particleSystemComp->ParticleSettings.Size0Size1 = Vector2(0.1f, 0.1f);
+		particleSystemComp->ParticleSettings.LifeTime = 1.0f;
+		particleSystemComp->ParticleSettings.SpawnInterval = 0.001f;
+		particleSystemComp->ParticleSettings.Color0 = Vector4(0.0f, 1.0f, 1.0f, 1.0f);
+		emitter->AddComponent(particleSystemComp);
+		MyGame->AddGameObject(emitter);
 
 		MyGame->Run();
 	}
