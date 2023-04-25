@@ -181,7 +181,7 @@ void ParticleSystem::Update(float deltaTime)
 
     SwapBuffers();
 
-    bitonicSort->Sort();
+    //bitonicSort->Sort();
 }
 
 void ParticleSystem::Draw()

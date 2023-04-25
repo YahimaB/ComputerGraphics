@@ -48,6 +48,9 @@ void CSMain(
     [flatten]
     if (id >= (uint)gDeltaTimeMaxParticlesGroupdim.y)
         return;
+
+    sortedBufSrc[id].Index = id;
+    sortedBufSrc[id].Depth = 100000.0f;
     
 #ifdef INJECTION
     Particle p = particlesBufSrc.Consume();
@@ -75,13 +78,14 @@ void CSMain(
             p.Velocity.z = 2 * p.Velocity.y * (nrand(p.Position.xy) - 0.5f);
         }
 
-
-        particlesBufDst.Append(p);
-
         sortedBufSrc[id].Index = id;
         float4 tmpDepth = mul(float4(p.Position.xyz, 1.0f), gWorld);
         tmpDepth = mul(tmpDepth, gView);
         sortedBufSrc[id].Depth = tmpDepth.z;
+        sortedBufSrc.IncrementCounter();
+
+        particlesBufDst.Append(p);
+
     }
 #endif
 }

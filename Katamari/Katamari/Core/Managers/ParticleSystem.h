@@ -38,7 +38,7 @@ public:
     float Length;
 
     const unsigned int MaxParticlesCount = 256 * 256;
-    const unsigned int MaxParticlesInjectionCount = 1000;
+    const unsigned int MaxParticlesInjectionCount = 600;
 
     unsigned int InjectionCount = 0;
     unsigned int ParticlesCount = MaxParticlesCount;
