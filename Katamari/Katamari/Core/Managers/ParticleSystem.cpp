@@ -286,6 +286,12 @@ void ParticleSystem::LoadShaders()
             0,
             &comRes,
             &error);
+        
+        if (error != nullptr)
+        {
+            char* compileErrors = (char*)(error->GetBufferPointer());
+            std::cout << compileErrors << std::endl;
+        }
 
         ID3D11ComputeShader* compShader;
         game->device->CreateComputeShader(comRes->GetBufferPointer(), comRes->GetBufferSize(), nullptr, &compShader);

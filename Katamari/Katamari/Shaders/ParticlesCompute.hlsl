@@ -35,7 +35,16 @@ RWStructuredBuffer<ParticleDepths> sortedBufSrc : register(u2);
 
 Texture2D DepthMap : register(t1);
 Texture2D NormalMap : register(t2);
-SamplerState DepthSampler : register(s0);
+//SamplerState DepthSampler : register(s0);
+
+SamplerState TextureSampler
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = Wrap;
+    AddressV = Wrap;
+    AddressW = Wrap;
+};
+
 
 #define BLOCK_SIZE 256
 #define THREAD_IN_GROUP_TOTAL 256
@@ -76,39 +85,29 @@ void CSMain(
 #endif
         p.Position.xyz += p.Velocity * gDeltaTimeMaxParticlesGroupdim.x;
 
-        if (p.Position.y <= -(gWorld[3].y - 0.1f))
-        {
-            p.Velocity.y /= -4;
-            p.Velocity.x = 2 * p.Velocity.y * (nrand(p.Position.xy) - 0.5f);
-            p.Velocity.z = 2 * p.Velocity.y * (nrand(p.Position.xy) - 0.5f);
-        }
-
         sortedBufSrc[id].Index = id;
-        float4 tmpDepth = mul(float4(p.Position.xyz, 1.0f), gWorld);
-        tmpDepth = mul(tmpDepth, gView);
-        sortedBufSrc[id].Depth = tmpDepth.z;
+        float4 pDepth = mul(float4(p.Position.xyz, 1.0f), gWorld);
+        pDepth = mul(pDepth, gView);
+        sortedBufSrc[id].Depth = pDepth.z;
         sortedBufSrc.IncrementCounter();
 
-        float4 tmpNdc = mul(tmpDepth, gProj);
-        tmpNdc /= tmpNdc.w;
+        pDepth = mul(pDepth, gProj);
+        pDepth /= pDepth.w;
 
-        float4x4 T = {
-            0.5f, 0.0f, 0.0f, 0.0f,
-            0.0f, -0.5f, 0.0f, 0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 1.0f };
+        // transform to [0,1] range
+        float2 texcoords = pDepth.xy;
+        texcoords.x = texcoords.x * 0.5f + 0.5f;
+        texcoords.y = texcoords.y * -0.5f + 0.5f;
 
-        float2 texcoords = mul(tmpNdc, T).rg;
+        float worldDepth = DepthMap.SampleLevel(TextureSampler, texcoords, 0).x;
 
-        float readDepth = DepthMap.SampleLevel(DepthSampler, texcoords, 0).r;
-
-        [flatten]
-        if (abs(tmpNdc.z - readDepth) <= 0.005f)
+        if (abs(pDepth.z - worldDepth) <= 0.0005f)
         {
-            float3 norm = NormalMap.SampleLevel(DepthSampler, texcoords, 0).rgb;
+            float3 norm = NormalMap.SampleLevel(TextureSampler, texcoords, 0).xyz;
             norm = mul(float4(norm, 0.0f), transpose(gView));
             norm = normalize(norm);
-            p.Velocity.xyz = reflect(p.Velocity.xyz, norm) / 2.0f;
+
+            p.Velocity.xyz = reflect(p.Velocity.xyz, norm) / 1.5f;
             p.Position.xyz += p.Velocity.xyz * gDeltaTimeMaxParticlesGroupdim.x;
         }
 
