@@ -111,11 +111,11 @@ bool Game::CreateMainRenderResources()
 	depthStencilDesc.Height = Display->ClientHeight;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
-	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R24G8_TYPELESS;
 	depthStencilDesc.SampleDesc.Count = 1;
 	depthStencilDesc.SampleDesc.Quality = 0;
 	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
@@ -127,14 +127,31 @@ bool Game::CreateMainRenderResources()
 		return false;
 	}
 
-	res = device->CreateDepthStencilView(depthTex, nullptr, &mainDSV);
-	depthTex->Release();
+	D3D11_DEPTH_STENCIL_VIEW_DESC ddesc = {};
+	ddesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	ddesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//ddesc.Texture2D.MipSlice = 0;
+
+	res = device->CreateDepthStencilView(depthTex, &ddesc, &mainDSV);
 	if (FAILED(res))
 	{
 		MessageBoxA(0, "CreateDepthStencilView() for mainDSV failed", "Fatal Error", MB_OK);
 		return false;
 	}
 
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd = {};
+	srvd.Format = DXGI_FORMAT::DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MipLevels = 1;
+
+	res = device->CreateShaderResourceView(depthTex, &srvd, &depthSRV);
+	if (FAILED(res))
+	{
+		MessageBoxA(0, "CreateShaderResourceView() for mainDSV failed", "Fatal Error", MB_OK);
+		return false;
+	}
+
+	depthTex->Release();
 	return true;
 }
 

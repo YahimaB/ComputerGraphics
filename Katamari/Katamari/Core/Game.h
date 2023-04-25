@@ -27,6 +27,7 @@ public:
 
 	ID3D11RenderTargetView* mainRTV;
 	ID3D11DepthStencilView* mainDSV;
+	ID3D11ShaderResourceView* depthSRV;
 
 	ID3D11DepthStencilView* shadowDSV;
 	ID3D11ShaderResourceView* shadowSRV;
