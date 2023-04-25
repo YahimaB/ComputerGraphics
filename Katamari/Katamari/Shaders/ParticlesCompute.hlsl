@@ -26,7 +26,6 @@ cbuffer ConstBuff : register(b0)
     float4x4 gView;
     float4x4 gProj;
     float4 gDeltaTimeMaxParticlesGroupdim;
-    //float4x4 gInvView;
 };
 
 ConsumeStructuredBuffer<Particle> particlesBufSrc : register(u0);
@@ -35,7 +34,6 @@ RWStructuredBuffer<ParticleDepths> sortedBufSrc : register(u2);
 
 Texture2D DepthMap : register(t1);
 Texture2D NormalMap : register(t2);
-//SamplerState DepthSampler : register(s0);
 
 SamplerState TextureSampler
 {
@@ -91,6 +89,7 @@ void CSMain(
         sortedBufSrc[id].Depth = pDepth.z;
         sortedBufSrc.IncrementCounter();
 
+        // Normalized device coordinates
         pDepth = mul(pDepth, gProj);
         pDepth /= pDepth.w;
 
@@ -104,11 +103,9 @@ void CSMain(
         if (abs(pDepth.z - worldDepth) <= 0.0005f)
         {
             float3 norm = NormalMap.SampleLevel(TextureSampler, texcoords, 0).xyz;
-            norm = mul(float4(norm, 0.0f), transpose(gView));
-            norm = normalize(norm);
 
             p.Velocity.xyz = reflect(p.Velocity.xyz, norm) / 1.5f;
-            p.Position.xyz += p.Velocity.xyz * gDeltaTimeMaxParticlesGroupdim.x;
+            //p.Position.xyz += p.Velocity.xyz * gDeltaTimeMaxParticlesGroupdim.x;
         }
 
         particlesBufDst.Append(p);

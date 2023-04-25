@@ -141,18 +141,6 @@ void ParticleSystem::Update(float deltaTime)
     game->context->CSSetShaderResources(1, 1, &game->depthSRV);
     game->context->CSSetShaderResources(2, 1, &game->gBuffer->normalSRV);
 
-    D3D11_SAMPLER_DESC samplerStateDesc = {};
-    samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerStateDesc.MinLOD = 0.0f;
-    samplerStateDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-    ID3D11SamplerState* samplerState;
-    game->device->CreateSamplerState(&samplerStateDesc, &samplerState);
-    game->context->CSSetSamplers(0, 1, &samplerState);
-
     game->context->CSSetShader(ComputeShaders[ComputeFlags::SIMULATION | ComputeFlags::ADD_GRAVITY], nullptr, 0);
 
     if (groupSizeX > 0)
