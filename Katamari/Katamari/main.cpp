@@ -92,7 +92,7 @@ int main()
 		particleSystemComp->Width = 1.5f;
 		particleSystemComp->Length = 4.0f;
 		particleSystemComp->ParticleSettings.Size0Size1 = Vector2(0.1f, 0.1f);
-		particleSystemComp->ParticleSettings.LifeTime = 1.0f;
+		particleSystemComp->ParticleSettings.LifeTime = 3.0f;
 		particleSystemComp->ParticleSettings.SpawnInterval = 0.001f;
 		particleSystemComp->ParticleSettings.Color0 = Vector4(0.0f, 1.0f, 1.0f, 1.0f);
 		emitter->AddComponent(particleSystemComp);
