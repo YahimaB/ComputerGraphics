@@ -17,8 +17,8 @@ protected:
     std::string ModelName;
     std::string TextureName;
 
-    void ProcessNode(aiNode* node, const aiScene* scene);
-    void ProcessMesh(aiMesh* mesh, const aiScene* scene);
+    bool ProcessNode(aiNode* node, const aiScene* scene);
+    void ProcessMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 trans);
 
     std::string GetTextureName() override { return TextureName; }
 };

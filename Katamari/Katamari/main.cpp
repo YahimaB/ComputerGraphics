@@ -81,9 +81,9 @@ int main()
 		}
 
 		auto mesh = new GameObject("BigBoy");
-		mesh->Transform->Position = Vector3::Forward * 30.0f;
-		mesh->Transform->Scale = Vector3::One * 30.0f;
-		std::cout << mesh->AddComponent(new MeshComponent("Models/hamburger.obj", "Textures/hamburger.dds")) << std::endl;
+		mesh->Transform->Position = Vector3::Forward * 30.0f + Vector3::Up * 5.0f;
+		mesh->Transform->Scale = Vector3::One * 0.1f;
+		std::cout << mesh->AddComponent(new MeshComponent("Models/teapots.dae", "Textures/default.dds")) << std::endl;
 		MyGame->AddGameObject(mesh);
 
 		auto emitter = new GameObject("Particle");
